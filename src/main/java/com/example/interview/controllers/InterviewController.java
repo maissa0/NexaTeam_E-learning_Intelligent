@@ -1,0 +1,52 @@
+package com.example.interview.controllers;
+
+import com.example.interview.model.Interview;
+import com.example.interview.service.InterviewService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/interviews")
+public class InterviewController {
+
+    @Autowired
+    private InterviewService interviewService;
+
+    @PostMapping("/create")
+    public ResponseEntity<Interview> createInterview(@RequestBody Interview interview) {
+        Interview createdInterview = interviewService.createInterview(interview);
+        return null;
+    }
+
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<Interview> getInterviewById(@PathVariable String id) {
+        Optional<Interview> interview = interviewService.getInterviewById(id);
+        return interview.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Interview>> getAllInterviews() {
+        List<Interview> interviews = interviewService.getAllInterviews();
+        return ResponseEntity.ok(interviews);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Interview> updateInterview(@PathVariable String id, @RequestBody Interview interview) {
+        try {
+            Interview updatedInterview = interviewService.updateInterview(id, interview);
+            return ResponseEntity.ok(updatedInterview);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteInterview(@PathVariable String id) {
+        interviewService.deleteInterview(id);
+        return ResponseEntity.noContent().build();
+    }
+}
