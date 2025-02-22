@@ -13,7 +13,7 @@ import { HeaderComponent } from '../header/header.component';
 @Component({
   selector: 'app-addchapter',
   standalone: true,  // Marks this as a standalone component
-  imports: [CommonModule, FormsModule,HeaderComponent, FooterComponent],  // Import CommonModule for structural directives and FormsModule for ngModel
+  imports: [CommonModule, FormsModule,HeaderComponent],  // Import CommonModule for structural directives and FormsModule for ngModel
   templateUrl: './addchapter.component.html',
   styleUrls: ['./addchapter.component.css']
 })

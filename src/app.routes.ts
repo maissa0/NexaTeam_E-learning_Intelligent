@@ -4,8 +4,10 @@ import { Dashboard } from './app/pages/dashboard/dashboard';
 import { Documentation } from './app/pages/documentation/documentation';
 import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
+import { AddchapterComponent } from './app/addchapter/addchapter.component';
 import { HeaderFrontOfComponent } from './app/front_office/header-front-of/header-front-of.component';
 import { FooterFrontOfComponent } from './app/front_office/footer-front-of/footer-front-of.component';
+import { AddcourseComponent } from './app/addcourse/addcourse.component';
 
 export const appRoutes: Routes = [
     {
@@ -21,6 +23,9 @@ export const appRoutes: Routes = [
     { path :'header', component : HeaderFrontOfComponent},
     {path: 'footer', component : FooterFrontOfComponent},
     { path: 'landing', component: Landing },
+    { path: 'add-chapter', component: AddchapterComponent },
+    { path: 'add-course', component: AddcourseComponent },
+    { path: 'course-list', component: AddcourseComponent },
     { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }
