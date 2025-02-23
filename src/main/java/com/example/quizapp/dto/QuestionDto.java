@@ -1,6 +1,7 @@
 package com.example.quizapp.dto;
 
 
+import com.example.quizapp.Entities.Quiz;
 import lombok.Data;
 
 @Data
@@ -11,6 +12,8 @@ public class QuestionDto {
     private String optionB ;
     private String optionC ;
     private String optionD ;
+    private Long quizId;
+
 
     private String correctOption;
 
@@ -68,5 +71,13 @@ public class QuestionDto {
 
     public void setCorrectOption(String correctOption) {
         this.correctOption = correctOption;
+    }
+
+    public Long getQuizId() {
+        return quizId;
+    }
+
+    public void setQuizId(Long quizId) {
+        this.quizId = quizId;
     }
 }

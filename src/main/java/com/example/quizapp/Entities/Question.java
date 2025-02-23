@@ -11,17 +11,17 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String questionText;
-    private String optionA ;
-    private String optionB ;
-    private String optionC ;
-    private String optionD ;
+    private String optionA;
+    private String optionB;
+    private String optionC;
+    private String optionD;
 
     private String correctOption;
     @ManyToOne
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
-    public QuestionDto getDto(){
+    public QuestionDto getDto() {
         QuestionDto dto = new QuestionDto();
         dto.setId(id);
         dto.setQuestionText(questionText);
@@ -30,6 +30,7 @@ public class Question {
         dto.setOptionC(optionC);
         dto.setOptionD(optionD);
         dto.setCorrectOption(correctOption);
+
 
         return dto;
     }
@@ -98,4 +99,6 @@ public class Question {
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
     }
+
 }
+

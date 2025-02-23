@@ -4,6 +4,7 @@ package com.example.quizapp.Controllers;
 import com.example.quizapp.Services.QuizService;
 import com.example.quizapp.dto.QuestionDto;
 import com.example.quizapp.dto.QuizDto;
+import com.example.quizapp.dto.SubmitQuizDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,4 +41,20 @@ public class QuizRestController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getAllQuestionsByQuiz(@PathVariable Long id){
+        try{
+            return new ResponseEntity<>(quizService.getAllQuestionsByQuiz(id), HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/submit-quiz")
+    public ResponseEntity<?> submitTest(@RequestBody SubmitQuizDto dto) {
+        try {
+            return new ResponseEntity<>(quizService.submitTest(dto), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
