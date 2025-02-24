@@ -10,7 +10,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-test.component.css']
 })
 export class CreateTestComponent implements OnInit {
-
+  message:string='';
+  messageType:string='';
   constructor(private fb: FormBuilder,
     private devicesService: AdminService,
     private router: Router,
@@ -18,32 +19,51 @@ export class CreateTestComponent implements OnInit {
     QuizForm!: FormGroup;
     ngOnInit(): void {
       this.QuizForm = this.fb.group({
-        title: ['', Validators.required],           // Ensure 'title' matches backend
-        descrption: ['', Validators.required],     // Ensure 'description' matches backend
-        time: ['', Validators.required], // Time should be at least 1 second
+        title: ['', [
+          Validators.required, 
+          Validators.minLength(3)  // Ensure 'title' has a minimum length of 3 characters
+        ]], 
+      
+        descrption: ['', [
+          Validators.required, 
+          Validators.minLength(10)  // Ensure 'description' has a minimum length of 10 characters
+        ]],
+      
+        time: ['', [
+          Validators.required, 
+          Validators.min(5), // Minimum 5 seconds per question
+          Validators.pattern('^[0-9]+$')  // Ensure time is a valid number
+        ]]
       });
+      
     }
   
     onSubmit() {
       if (this.QuizForm.valid) {
         console.log('Submitting quiz:', this.QuizForm.value);
-        
-        console.log('Quiz data being sent:', this.QuizForm.value);
-        this.devicesService.createQuiz(this.QuizForm.value).subscribe(
-          (res) => {
-            console.log('Test successfully created', res);
-            console.log('Response from server:', res);
-            this.router.navigate(['/']);
+    
+        this.devicesService.createQuiz(this.QuizForm.value).subscribe({
+          next: (res) => {
+            console.log('Quiz successfully created:', res);
+            this.message = 'Quiz created successfully!';
+            this.messageType = 'success';
+    
+            // Redirect to dashboard after 2 seconds
+            setTimeout(() => this.router.navigate(['/']), 2000);
           },
-          (error) => {
+          error: (error) => {
             console.error('Error occurred:', error);
-            alert('Error: ' + (error.message || 'Unknown error'));
+            this.message = 'Failed to create quiz. Please try again.';
+            this.messageType = 'error';
           }
-        );
+        });
+    
       } else {
-        alert('Form is invalid. Please check your inputs.');
+        this.message = 'Form is invalid. Please check your inputs.';
+        this.messageType = 'error';
       }
     }
+    
     
   
 

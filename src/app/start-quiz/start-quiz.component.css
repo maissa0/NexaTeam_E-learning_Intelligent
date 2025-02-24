@@ -42,4 +42,35 @@
     color: #721c24;
     border: 1px solid #f5c6cb;
   }
+  .submit-btn {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .submit-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #003d82);
+    transform: scale(1.05);
+  }
+  
+  .submit-btn:disabled {
+    background: gray;
+    cursor: not-allowed;
+  }
+  
+  .submit-btn i {
+    font-size: 18px;
+  }
+  
   

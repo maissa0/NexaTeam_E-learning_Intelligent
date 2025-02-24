@@ -2,6 +2,9 @@
   <div class="parent">
     <div class="child">
       <form [formGroup]="QuizForm" class="login-form" (ngSubmit)="onSubmit()">
+        <div *ngIf="message" class="notification" [ngClass]="messageType">
+          {{ message }}
+        </div>
         
        <!-- Title field -->
 <div class="form-item">
@@ -12,8 +15,9 @@
       class="input-field" 
     />
     <div *ngIf="QuizForm.get('title')?.invalid && QuizForm.get('title')?.touched" class="error-message">
-      This input is required!
-    </div>
+      <span *ngIf="QuizForm.get('title')?.errors?.['required']">Title is required.</span>
+      <span *ngIf="QuizForm.get('title')?.errors?.['minlength']">Title must be at least 3 characters.</span>
+      <span *ngIf="QuizForm.get('title')?.errors?.['pattern']">Title cannot be only spaces.</span>    </div>
   </div>
 </div>
 
@@ -29,8 +33,8 @@
       rows="5"
     ></textarea>
     <div *ngIf="QuizForm.get('descrption')?.invalid && QuizForm.get('descrption')?.touched" class="error-message">
-      This input is required!
-    </div>
+      <span *ngIf="QuizForm.get('descrption')?.errors?.['required']">Description is required.</span>
+      <span *ngIf="QuizForm.get('descrption')?.errors?.['minlength']">Description must be at least 10 characters.</span>    </div>
   </div>
 </div>
 
@@ -46,8 +50,9 @@
       class="input-field" 
     />
     <div *ngIf="QuizForm.get('time')?.invalid && QuizForm.get('time')?.touched" class="error-message">
-      This input is required!
-    </div>
+      <span *ngIf="QuizForm.get('time')?.errors?.['required']">Time is required.</span>
+      <span *ngIf="QuizForm.get('time')?.errors?.['min']">Time must be at least 5 seconds.</span>
+      <span *ngIf="QuizForm.get('time')?.errors?.['pattern']">Enter a valid number.</span>    </div>
   </div>
 </div>
     

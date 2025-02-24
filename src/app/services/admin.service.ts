@@ -48,5 +48,13 @@ export class AdminService {
   getQuizQuestion(id:number): Observable<any>{
     return this.http.get(`${this.BASIC_URL}/api/${id}`);
   }
+  updateQuiz(id: number, QuizDto: QuizDto): Observable<any> {
+    return this.http.put(`${this.BASIC_URL}/api/quiz/${id}`, QuizDto);
+  }
+  
+  deleteQuiz(id: number): Observable<any> {
+    return this.http.delete(`${this.BASIC_URL}/api/quiz/${id}`);
+  }
+  
     
 }

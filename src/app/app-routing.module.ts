@@ -7,6 +7,7 @@ import { AddQuestionInQuizComponent } from './add-question-in-quiz/add-question-
 import { ViewQuizComponent } from './view-quiz/view-quiz.component';
 import { UserdashboardComponent } from './dashboard/userdashboard/userdashboard.component';
 import { StartQuizComponent } from './start-quiz/start-quiz.component';
+import { UpdateQuizComponent } from './update-quiz/update-quiz.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -16,6 +17,8 @@ const routes: Routes = [
   { path: 'view-quiz/:id', component: ViewQuizComponent },
   { path: 'user-dashboard', component: UserdashboardComponent },  
   { path: 'start-quiz/:id', component: StartQuizComponent },
+  { path: 'update-quiz/:id', component: UpdateQuizComponent },
+
 
 
   

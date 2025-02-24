@@ -20,6 +20,7 @@ import { AddQuestionInQuizComponent } from './add-question-in-quiz/add-question-
 import { ViewQuizComponent } from './view-quiz/view-quiz.component';
 import { UserdashboardComponent } from './dashboard/userdashboard/userdashboard.component';
 import { StartQuizComponent } from './start-quiz/start-quiz.component';
+import { UpdateQuizComponent } from './update-quiz/update-quiz.component';
 
 
 
@@ -34,7 +35,8 @@ registerLocaleData(en);
     AddQuestionInQuizComponent,
     ViewQuizComponent,
     UserdashboardComponent,
-    StartQuizComponent
+    StartQuizComponent,
+    UpdateQuizComponent
 
   ],
   imports: [

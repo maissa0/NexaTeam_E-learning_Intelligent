@@ -7,26 +7,39 @@
   </div>
 </header>
 
-
 <div class="main">
-  <div class="row" style="margin-bottom: 20px;">
+  <div class="row justify-content-center">
     <div class="col-12 col-md-6 col-lg-4" *ngFor="let quiz of Quizes" style="margin: 20px;">
-      <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
           <h5>{{ quiz.title }}</h5>
         </div>
         <div class="card-body">
           <p><strong>Time:</strong> <span class="badge bg-info">{{ getFormattedTime(quiz.time) }} seconds</span></p>
           <p><strong>Description:</strong> {{ quiz.descrption }}</p>
           <div class="d-flex justify-content-between">
-            <button class="btn btn-primary btn-sm" routerLink="view-quiz/{{quiz.id}}" >View Quiz</button>
-            <button class="btn btn-secondary btn-sm" routerLink="/add-question/{{quiz.id}}">Add Question</button>
+            <button class="btn btn-outline-primary btn-sm" routerLink="view-quiz/{{quiz.id}}">
+              <i class="fas fa-eye"></i> View
+            </button>
+            <button class="btn btn-outline-success btn-sm" routerLink="/add-question/{{quiz.id}}">
+              <i class="fas fa-plus-circle"></i> Add Question
+            </button>
           </div>
+          <div class="d-flex justify-content-between mt-2">
+            <a class="icon-link" [routerLink]="'update-quiz/' + quiz.id" title="Update">
+              <i class="bi bi-pencil-square text-warning"></i>
+            </a>                       
+            <a class="icon-link" (click)="deleteQuiz(quiz.id)" title="Delete">
+              <i class="fas fa-trash-alt text-danger"></i>
+            </a>
+          </div>
+          
         </div>
       </div>
     </div>
   </div>
 </div>
+
 
 
 

@@ -26,24 +26,24 @@
 .logo-link:hover {
   color: #ff6f61; /* Hover color */
 }
-/* Menu container styling */
 .menu-container {
   display: flex;
   justify-content: flex-start; /* Align items to the right */
   align-items: center;
-  gap: 990px; /* Increased gap between menu items */
-  margin-left: 700px; /* Add space between the menu items and the logo */
+  gap: 50px; /* Adjust gap between menu items */
+  margin-left: auto; /* Push menu items to the right */
   padding-right: 20px; /* Adds some padding to the right */
   padding-top: 10px; /* Adds some padding to the top */
 }
 
+/* Menu item styling */
 .menu-item {
-  font-size: 20px; /* Increased font size for better readability */
-  color: white; /* White color for the menu items */
+  font-size: 20px;
+  color: white;
   text-decoration: none;
-  font-weight: 600; /* Slightly bolder font weight for emphasis */
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 2.5px; /* Increased letter spacing */
+  letter-spacing: 2.5px;
   transition: color 0.3s ease, transform 0.2s ease;
 }
 
@@ -51,27 +51,7 @@
 .menu-item:hover {
   color: #3498db; /* Blue hover color */
   text-decoration: underline;
-  transform: scale(1.1); /* Slightly larger on hover for better focus */
-}
-
-/* Media query for smaller screens */
-@media (max-width: 768px) {
-  .menu-container {
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin-left: 0;
-    padding: 0; /* Remove unnecessary padding */
-  }
-
-  .menu-item {
-    font-size: 18px; /* Slightly smaller font size for mobile */
-    margin-bottom: 50px; /* Adjusted margin for vertical spacing */
-  }
-
-  .menu-item:hover {
-    color: #ff6f61; /* Change hover color for mobile */
-  }
+  transform: scale(1.1); /* Slightly larger on hover */
 }
 
 
@@ -189,6 +169,22 @@ button {
 .btn-secondary:hover {
   background-color: #7f8c8d;
 }
+.icon-link {
+  font-size: 1.5rem; /* Taille des icônes */
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  margin: 0 20px;
+}
+
+.icon-link:hover {
+  transform: scale(1.2); /* Zoom léger au survol */
+}
+
+.text-primary:hover { color: #ff0008 !important; }
+.text-success:hover { color: #28a745 !important; }
+.text-warning:hover { color: #ffc107 !important; }
+.text-danger:hover { color: #dc3545 !important; }
+
 
 
   

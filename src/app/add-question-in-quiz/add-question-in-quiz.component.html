@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Question to Quiz</title>
+  <!-- Message Display -->
+
 </head>
 <body>
   <div class="container">
     <div class="form-container">
       <h2>Add Question</h2>
+      <div *ngIf="message" class="alert" [ngClass]="messageType === 'success' ? 'alert-success' : 'alert-danger'">
+        {{ message }}
+      </div>
       <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label for="questionText">Question</label>

@@ -13,6 +13,8 @@ import { ActivatedRoute, Router } from '@angular/router';
     styleUrls: ['./add-question-in-quiz.component.css']
 })
 export class AddQuestionInQuizComponent {
+  message:string='';
+  messageType:string='';
   constructor(
     private fb: FormBuilder,
     private devicesService: AdminService,
@@ -35,7 +37,7 @@ export class AddQuestionInQuizComponent {
     });
     this.id=this.activatedRoute.snapshot.params["id"];
   }
-  onSubmit(){
+  onSubmit() {
     if (this.questionForm.valid) {
       console.log('Submitting question:', this.questionForm.value);
       
@@ -44,17 +46,31 @@ export class AddQuestionInQuizComponent {
         (res: any) => {
           console.log('Question successfully added', res);
           console.log('Response from server:', res);
-          this.router.navigate(['/']);
+          
+          // Set success message
+          this.message = 'Question added successfully!';
+          this.messageType = 'success';
+  
+          // Redirect after a short delay (optional)
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 2000);
         },
         (error) => {
           console.error('Error occurred:', error);
-          alert('Error: ' + (error.message || 'Unknown error'));
+          
+          // Set error message
+          this.message = 'Error adding question. Please try again!';
+          this.messageType = 'error';
         }
       );
     } else {
-      alert('Form is invalid. Please check your inputs.');
+      // Form is invalid, show error message
+      this.message = 'Form is invalid. Please check your inputs.';
+      this.messageType = 'error';
     }
   }
+  
   
   }
   
