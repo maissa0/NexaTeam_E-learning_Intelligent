@@ -42,6 +42,9 @@ export class AdminService {
     return this.http.post(`${this.BASIC_URL}/api/question`, QuestionDto)
     
   }
+  getQuizResults(): Observable<any> {
+    return this.http.get(this.BASIC_URL + `/api/quiz-result`);
+}
   getQuizQuestion(id:number): Observable<any>{
     return this.http.get(`${this.BASIC_URL}/api/${id}`);
   }
