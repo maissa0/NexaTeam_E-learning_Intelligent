@@ -1,0 +1,118 @@
+/* Background style */
+.bg {
+    background-color: #f4f4f4;
+    padding: 50px 20px; /* Added padding around */
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Vertically center the content */
+  }
+  
+  /* Centering the form */
+  .parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+  
+  /* Child container (form) style */
+  .child {
+    width: 100%;
+    max-width: 500px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Improved box-shadow */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between form fields */
+  }
+  
+  /* Form layout */
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between form items */
+  }
+  
+  /* Style for each form item */
+  .form-item {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Label styling */
+  .form-label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333; /* Darker color for label */
+  }
+  
+  /* Form control styling (inputs and textareas) */
+  .form-control {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* Space between input and error message */
+  }
+  
+  .input-field {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input-field:focus {
+    border-color: #003973; /* Focus effect on input */
+    outline: none;
+  }
+  
+  .description-field {
+    resize: vertical; /* Allow vertical resizing */
+    min-height: 100px;
+  }
+  
+  /* Error message style */
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  
+  /* Submit button style */
+  .submit-button {
+    padding: 12px;
+    background-color: #003973;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-button:hover {
+    background-color: #002851; /* Darker blue on hover */
+  }
+  
+  .submit-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  /* Responsiveness */
+  @media (max-width: 768px) {
+    .child {
+      width: 90%; /* Adjust form width on smaller screens */
+      padding: 20px;
+    }
+  
+    .input-field {
+      font-size: 14px;
+    }
+  }
+  
+  
+  

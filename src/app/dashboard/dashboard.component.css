@@ -1,0 +1,194 @@
+/* Header styles */
+/* Header styles */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e3d58; /* Darker blue background */
+  padding: 20px 50px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid #3498db; /* Accent blue */
+}
+
+.logo-container {
+  flex: 1;
+}
+
+.logo-link {
+  color: white;
+  font-size: 32px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 3px;
+  transition: color 0.3s ease;
+}
+
+.logo-link:hover {
+  color: #ff6f61; /* Hover color */
+}
+/* Menu container styling */
+.menu-container {
+  display: flex;
+  justify-content: flex-start; /* Align items to the right */
+  align-items: center;
+  gap: 990px; /* Increased gap between menu items */
+  margin-left: 700px; /* Add space between the menu items and the logo */
+  padding-right: 20px; /* Adds some padding to the right */
+  padding-top: 10px; /* Adds some padding to the top */
+}
+
+.menu-item {
+  font-size: 20px; /* Increased font size for better readability */
+  color: white; /* White color for the menu items */
+  text-decoration: none;
+  font-weight: 600; /* Slightly bolder font weight for emphasis */
+  text-transform: uppercase;
+  letter-spacing: 2.5px; /* Increased letter spacing */
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* Hover effect for better interaction */
+.menu-item:hover {
+  color: #3498db; /* Blue hover color */
+  text-decoration: underline;
+  transform: scale(1.1); /* Slightly larger on hover for better focus */
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  .menu-container {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-left: 0;
+    padding: 0; /* Remove unnecessary padding */
+  }
+
+  .menu-item {
+    font-size: 18px; /* Slightly smaller font size for mobile */
+    margin-bottom: 50px; /* Adjusted margin for vertical spacing */
+  }
+
+  .menu-item:hover {
+    color: #ff6f61; /* Change hover color for mobile */
+  }
+}
+
+
+
+/* General body styling */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f7fc;
+  margin: 0;
+  padding: 0;
+}
+
+/* Main container styling */
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 30px;
+}
+
+/* Row styling for responsive layout */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+/* Enhance the card layout */
+.card {
+  padding: 10px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  margin-top: 30px;
+  border-radius: 5px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Improve spacing and responsiveness */
+.main {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.card-header {
+  font-size: 1.25rem;
+  text-align: center;
+  padding: 15px;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-body p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.badge {
+  font-size: 1rem;
+}
+
+/* Button styling */
+button {
+  margin-top: 10px;
+  padding: 8px 15px;
+}
+
+.d-flex {
+  margin-top: 10px;
+}
+
+/* Make cards responsive */
+@media (max-width: 767px) {
+  .col-12 {
+    margin: 10px;
+  }
+}
+
+/* Button styling */
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Styling for primary button */
+.btn-primary {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  margin-right: 10px;
+}
+
+/* Hover effect for primary button */
+.btn-primary:hover {
+  background-color: #2980b9;
+}
+
+/* Styling for secondary button */
+.btn-secondary {
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+}
+
+/* Hover effect for secondary button */
+.btn-secondary:hover {
+  background-color: #7f8c8d;
+}
+
+
+  

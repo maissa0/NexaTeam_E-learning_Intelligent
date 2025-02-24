@@ -1,0 +1,65 @@
+<div class="bg">
+  <div class="parent">
+    <div class="child">
+      <form [formGroup]="QuizForm" class="login-form" (ngSubmit)="onSubmit()">
+        
+       <!-- Title field -->
+<div class="form-item">
+  <label for="title" class="form-label">Title</label>
+  <div class="form-control">
+    <input type="text" id="title" formControlName="title" 
+      placeholder="Enter the title" 
+      class="input-field" 
+    />
+    <div *ngIf="QuizForm.get('title')?.invalid && QuizForm.get('title')?.touched" class="error-message">
+      This input is required!
+    </div>
+  </div>
+</div>
+
+<!-- Description field -->
+<div class="form-item">
+  <label for="descrption" class="form-label">descrption </label>
+  <div class="form-control">
+    <textarea 
+      id="descrption" 
+      formControlName="descrption" 
+      placeholder="Describe the quiz..." 
+      class="input-field descrption -field" 
+      rows="5"
+    ></textarea>
+    <div *ngIf="QuizForm.get('descrption')?.invalid && QuizForm.get('descrption')?.touched" class="error-message">
+      This input is required!
+    </div>
+  </div>
+</div>
+
+<!-- Time field -->
+<div class="form-item">
+  <label for="time" class="form-label">Time Per Question</label>
+  <div class="form-control">
+    <input 
+      type="number" 
+      id="time" 
+      formControlName="time" 
+      placeholder="Enter time in seconds" 
+      class="input-field" 
+    />
+    <div *ngIf="QuizForm.get('time')?.invalid && QuizForm.get('time')?.touched" class="error-message">
+      This input is required!
+    </div>
+  </div>
+</div>
+    
+        <!-- Submit button -->
+        <div class="form-item">
+          <button type="submit" [disabled]="QuizForm.invalid" class="submit-button">Submit</button>
+        </div>
+    
+      </form>
+    </div>
+  </div>
+</div>
+
+  
+  
