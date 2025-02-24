@@ -145,4 +145,25 @@ public class QuizServiceImpl implements QuizService {
     public List<QuizResultDto> getAllQuizResultsOfUser(Long userId){
         return quizResultRepository.findAllByUserId(userId).stream().map(QuizResult::getDto).collect(Collectors.toList());
     }
+    public QuizDto updateQuiz(Long id, QuizDto dto) {
+        Quiz quiz = quizRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Quiz not found with ID: " + id));
+
+        quiz.setTitle(dto.getTitle());
+        quiz.setDescrption(dto.getDescrption());
+        quiz.setTime(dto.getTime());
+
+        return quizRepository.save(quiz).getDto();
+    }
+    @Transactional
+    public void deleteQuiz(Long id) {
+        quizResultRepository.deleteByQuizId(id);
+        Optional<Quiz> quiz = quizRepository.findById(id);
+        if (quiz.isEmpty()) {
+            throw new EntityNotFoundException("Quiz not found with ID: " + id);
+        }
+        quizRepository.delete(quiz.get());
+    }
+
+
 }

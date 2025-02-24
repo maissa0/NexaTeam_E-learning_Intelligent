@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
@@ -69,6 +73,22 @@ public class QuizRestController {
     public ResponseEntity<?> getAllTestResultsOfUser(@PathVariable Long id) {
         try {
             return new ResponseEntity<>(quizService.getAllQuizResultsOfUser(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("/quiz/{id}")
+    public ResponseEntity<?> deleteQuiz(@PathVariable Long id) {
+
+            quizService.deleteQuiz(id);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Quiz deleted successfully");
+            return ResponseEntity.ok(response);
+    }
+    @PutMapping("/quiz/{id}")
+    public ResponseEntity<?> updateQuiz(@PathVariable Long id, @RequestBody QuizDto dto) {
+        try {
+            return new ResponseEntity<>(quizService.updateQuiz(id, dto), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

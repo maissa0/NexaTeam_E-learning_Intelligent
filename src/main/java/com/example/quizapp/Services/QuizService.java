@@ -14,4 +14,6 @@ public interface QuizService {
     QuizResultDto submitTest(SubmitQuizDto request);
     List<QuizResultDto> getALLQuizesults();
     List<QuizResultDto> getAllQuizResultsOfUser(Long userId);
+    void deleteQuiz(Long id);
+    QuizDto updateQuiz(Long id, QuizDto dto);
 }

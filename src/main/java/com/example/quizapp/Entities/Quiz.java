@@ -17,7 +17,7 @@ public class Quiz {
     private String title;
     private String descrption ;
     private Long time;
-    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions;
 
    public QuizDto  getDto(){

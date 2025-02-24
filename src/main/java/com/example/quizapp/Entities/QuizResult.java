@@ -15,7 +15,7 @@ public class QuizResult {
     private int correctAnswers;
     private double percentage ;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="quiz_id")
     private Quiz quiz;
     @ManyToOne
