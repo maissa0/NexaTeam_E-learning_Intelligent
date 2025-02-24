@@ -123,8 +123,10 @@ public class QuizServiceImpl implements QuizService {
 
         int totalQuestions = quiz.getQuestions().size();
         System.out.println("Total Questions: " + totalQuestions);
+        System.out.println("============================================="+totalQuestions);
+        System.out.println("///////////////////////////////"+correctAnswers);
         double percentage = ((double) correctAnswers / totalQuestions) * 100;
-
+        System.out.println("============================================="+percentage);
         QuizResult quizResult = new QuizResult();
         quizResult.setQuiz(quiz);
         quizResult.setUser(user);
@@ -133,5 +135,14 @@ public class QuizServiceImpl implements QuizService {
         quizResult.setPercentage(percentage);
 
         return quizResultRepository.save(quizResult).getDto();
+    }
+    public List<QuizResultDto> getALLQuizesults(){
+
+        return quizResultRepository.findAll().stream()
+                .map(QuizResult::getDto)
+                .collect(Collectors.toList());
+    }
+    public List<QuizResultDto> getAllQuizResultsOfUser(Long userId){
+        return quizResultRepository.findAllByUserId(userId).stream().map(QuizResult::getDto).collect(Collectors.toList());
     }
 }

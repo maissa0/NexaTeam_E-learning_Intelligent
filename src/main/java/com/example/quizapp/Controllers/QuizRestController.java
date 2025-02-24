@@ -57,4 +57,20 @@ public class QuizRestController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/quiz-result")
+    public ResponseEntity<?> getAllTestResults() {
+        try {
+            return new ResponseEntity<>(quizService.getALLQuizesults(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/quiz-result/{id}")
+    public ResponseEntity<?> getAllTestResultsOfUser(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(quizService.getAllQuizResultsOfUser(id), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

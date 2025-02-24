@@ -12,4 +12,6 @@ public interface QuizService {
     List<QuizDto> getAllQuizes();
     QuizDetailsDto getAllQuestionsByQuiz (Long id);
     QuizResultDto submitTest(SubmitQuizDto request);
+    List<QuizResultDto> getALLQuizesults();
+    List<QuizResultDto> getAllQuizResultsOfUser(Long userId);
 }
