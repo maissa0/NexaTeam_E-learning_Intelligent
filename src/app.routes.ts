@@ -6,19 +6,24 @@ import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
 import { HeaderFrontOfComponent } from './app/front_office/header-front-of/header-front-of.component';
 import { FooterFrontOfComponent } from './app/front_office/footer-front-of/footer-front-of.component';
-
+import { AddOfferComponent } from './app/add-offer/add-offer.component';
 export const appRoutes: Routes = [
     {
         path: '',
+        
         component: AppLayout,
+      
         children: [
+            
             { path: '', component: Dashboard },
+            { path: 'addOffer', component: AddOfferComponent },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
         ]
     },
     { path :'header', component : HeaderFrontOfComponent},
+    
     {path: 'footer', component : FooterFrontOfComponent},
     { path: 'landing', component: Landing },
     { path: 'notfound', component: Notfound },

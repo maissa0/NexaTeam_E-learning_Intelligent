@@ -1,0 +1,77 @@
+<!-- src/app/components/job-offers/job-offers.component.html -->
+<p-toolbar>
+    <ng-template #start>
+        <p-button label="New Job Offer" icon="pi pi-plus" (onClick)="openNew()" />
+    </ng-template>
+</p-toolbar>
+
+<p-table [value]="jobOffers()" [paginator]="true" [rows]="10" dataKey="id">
+    <ng-template #header>
+        <tr>
+            <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
+            <th pSortableColumn="contractType">Contract Type <p-sortIcon field="contractType" /></th>
+            <th pSortableColumn="location">Location <p-sortIcon field="location" /></th>
+            <th pSortableColumn="experienceLevel">Experience Level <p-sortIcon field="experienceLevel" /></th>
+            <th>Actions</th>
+        </tr>
+    </ng-template>
+
+    <ng-template #body let-jobOffer>
+        <tr>
+            <td>{{ jobOffer.title }}</td>
+            <td>{{ jobOffer.contractType }}</td>
+            <td>{{ jobOffer.location }}</td>
+            <td>{{ jobOffer.experienceLevel }}</td>
+            <td>
+                <p-button icon="pi pi-pencil" (click)="editJobOffer(jobOffer)" />
+                <p-button icon="pi pi-trash" severity="danger" (click)="deleteJobOffer(jobOffer)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="jobOfferDialog" header="Job Offer Details" [style]="{ width: '700px' }" [modal]="true">
+    <div class="p-fluid">
+        <!-- Title -->
+        <div class="p-field">
+            <label for="title">Title</label>
+            <input id="title" pInputText [(ngModel)]="jobOffer.title" required />
+        </div>
+
+        <!-- Description -->
+        <div class="p-field">
+            <label for="description">Description</label>
+            <textarea id="description" pInputTextarea [(ngModel)]="jobOffer.description" required></textarea>
+        </div>
+
+        <!-- Contract Type -->
+        <div class="p-field">
+            <label for="contractType">Contract Type</label>
+            <p-dropdown id="contractType" [(ngModel)]="jobOffer.contractType" [options]="contractTypes" optionLabel="label" optionValue="value"></p-dropdown>
+        </div>
+
+        <!-- Location -->
+        <div class="p-field">
+            <label for="location">Location</label>
+            <p-dropdown id="location" [(ngModel)]="jobOffer.location" [options]="jobLocations" optionLabel="label" optionValue="value"></p-dropdown>
+        </div>
+
+        <!-- Experience Level -->
+        <div class="p-field">
+            <label for="experienceLevel">Experience Level</label>
+            <p-dropdown id="experienceLevel" [(ngModel)]="jobOffer.experienceLevel" [options]="experienceLevels" optionLabel="label" optionValue="value"></p-dropdown>
+        </div>
+
+        <!-- Required Skills -->
+        <div class="p-field">
+            <label for="requiredSkills">Required Skills</label>
+            <input id="requiredSkills" pInputText [(ngModel)]="jobOffer.requiredSkills" required />
+        </div>
+
+        <!-- Buttons -->
+        <div class="p-d-flex p-jc-end">
+            <p-button label="Cancel" icon="pi pi-times" (click)="jobOfferDialog = false" class="p-button-text" />
+            <p-button label="Save" icon="pi pi-check" (click)="saveJobOffer()" />
+        </div>
+    </div>
+</p-dialog>
