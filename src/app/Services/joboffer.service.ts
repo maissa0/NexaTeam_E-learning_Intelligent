@@ -16,7 +16,7 @@ export class JobofferService {
     getAllJobOffers(): Observable<JobOffer[]> {
         return this.http.get<JobOffer[]>(`${this.BASE_URL}`);
     }
-
+   
     // Récupérer une offre d'emploi par son ID
     getJobOfferById(id: string): Observable<JobOffer> {
         return this.http.get<JobOffer>(`${this.BASE_URL}/${id}`);

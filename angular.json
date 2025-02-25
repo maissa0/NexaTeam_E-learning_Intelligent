@@ -9,6 +9,7 @@
                 "@schematics/angular:component": {
                     "style": "scss"
                 }
+                
             },
             "root": "",
             "sourceRoot": "src",
@@ -102,4 +103,5 @@
     "cli": {
       "analytics": "04795fa7-dc17-4971-b2d0-bad1dabef978"
     }
+    
 }

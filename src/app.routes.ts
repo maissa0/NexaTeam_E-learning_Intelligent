@@ -7,6 +7,7 @@ import { Notfound } from './app/pages/notfound/notfound';
 import { HeaderFrontOfComponent } from './app/front_office/header-front-of/header-front-of.component';
 import { FooterFrontOfComponent } from './app/front_office/footer-front-of/footer-front-of.component';
 import { AddOfferComponent } from './app/add-offer/add-offer.component';
+import { OffersComponent } from './app/offers/offers.component';
 export const appRoutes: Routes = [
     {
         path: '',
@@ -17,6 +18,8 @@ export const appRoutes: Routes = [
             
             { path: '', component: Dashboard },
             { path: 'addOffer', component: AddOfferComponent },
+            { path: 'JobOffers', component: OffersComponent },
+
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }

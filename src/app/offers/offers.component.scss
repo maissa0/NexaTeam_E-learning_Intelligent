@@ -1,0 +1,103 @@
+// Variables
+$primary-color: #007bff;
+$secondary-color: #0056b3;
+$background-color: #f9f9f9;
+$text-color: #333;
+$text-color-light: #777;
+$border-color: #ddd;
+$font-stack: Arial, sans-serif;
+$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+$border-radius: 8px;
+$padding: 20px;
+$margin-bottom: 20px;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin box-shadow($x, $y, $blur, $color) {
+  box-shadow: $x $y $blur $color;
+}
+
+@mixin button-style($bg-color, $text-color, $hover-bg-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  border: none;
+  border-radius: $border-radius;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $hover-bg-color;
+  }
+}
+
+/* Style général de la page */
+.offers-container {
+  font-family: $font-stack;
+  padding: $padding;
+  background-color: $background-color;
+
+  /* En-tête de la page */
+  .page-header {
+    text-align: center;
+    margin-bottom: $margin-bottom;
+
+    h1 {
+      font-size: 28px;
+      color: $text-color;
+    }
+  }
+
+  /* Indicateur de chargement */
+  .loading-spinner {
+    @include flex-center;
+    font-size: 18px;
+    color: $text-color-light;
+  }
+
+  /* Message si aucune offre n'est disponible */
+  .no-offers-message {
+    @include flex-center;
+    font-size: 18px;
+    color: $text-color-light;
+  }
+
+  /* Carte d'offre */
+  .offer-card {
+    background-color: #fff;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    padding: $padding;
+    margin-bottom: $margin-bottom;
+    @include box-shadow(0, 2px, 4px, rgba(0, 0, 0, 0.1));
+
+    .offer-title {
+      font-size: 22px;
+      color: $text-color;
+      margin-bottom: 10px;
+    }
+
+    .offer-description {
+      font-size: 16px;
+      color: $text-color-light;
+      margin-bottom: 15px;
+    }
+
+    .offer-detail {
+      font-size: 14px;
+      color: $text-color;
+      margin-bottom: 10px;
+    }
+
+    /* Bouton "Voir l'offre" */
+    .view-offer-button {
+      @include button-style($primary-color, #fff, $secondary-color);
+    }
+  }
+}

@@ -1,0 +1,27 @@
+<div class="offers-container">
+  <!-- En-tête de la page -->
+  <header class="page-header">
+    <h1>Consultez les dernières offres d'emploi</h1>
+  </header>
+
+  <!-- Indicateur de chargement -->
+  <div *ngIf="isLoading()" class="loading-spinner">
+    <p>Chargement en cours...</p>
+  </div>
+
+  <!-- Liste des offres -->
+  <div *ngIf="!isLoading()">
+    <!-- Message si aucune offre n'est disponible -->
+    <div *ngIf="jobOffers().length === 0" class="no-offers-message">
+      <p>Aucune offre disponible pour le moment.</p>
+    </div>
+
+    <!-- Boucle sur les offres -->
+    <div *ngFor="let offer of jobOffers()" class="offer-card">
+      <h2 class="offer-title">{{ offer.title }}</h2>
+      <p class="offer-detail"><strong>Type de contrat:</strong> {{ offer.contractType }}</p>
+      <p class="offer-detail"><strong>Date de création:</strong> {{ offer.createdAt | date: 'dd/MM/yyyy' }}</p>
+      <button class="view-offer-button">Voir l'offre</button>
+    </div>
+  </div>
+</div>
