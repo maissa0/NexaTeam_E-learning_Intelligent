@@ -1,13 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Wishlist } from 'src/app/models/wishlist';
-import { UserService } from 'src/app/services/user.service';
+import { Wishlist } from '../models/wishlist';
+import { UserService } from '../services/user.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { FooterComponent } from '../footer/footer.component';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-mywishlist',
   templateUrl: './mywishlist.component.html',
-  styleUrls: ['./mywishlist.component.css']
+  styleUrls: ['./mywishlist.component.css'],
+  imports: [CommonModule, FormsModule,FooterComponent,
+      HeaderComponent,
+      
+            RouterModule  ,
+          ],  
 })
 export class MywishlistComponent implements OnInit {
 

@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 //import * as $ from 'jquery';
 import { Observable } from 'rxjs';
 import { Chapter } from '../models/chapter';
@@ -8,12 +8,26 @@ import { Wishlist } from '../models/wishlist';
 import { ProfessorService } from '../services/professor.service';
 import { UserService } from '../services/user.service';
 import { Course } from '../models/course';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { FooterComponent } from '../footer/footer.component';
+import { OwlOptions } from 'ngx-owl-carousel-o';
+//import { YouTubePlayerModule } from '@angular/youtube-player';
 declare var $: any;
+import { CarouselModule } from 'ngx-owl-carousel-o';
+import { HeaderComponent } from '../header/header.component';
+
 
 @Component({
   selector: 'app-courselist',
   templateUrl: './courselist.component.html',
-  styleUrls: ['./courselist.component.css']
+  styleUrls: ['./courselist.component.css'],
+  imports: [CommonModule, FormsModule,FooterComponent,
+    
+          RouterModule  ,
+          //YouTubePlayerModule
+          CarouselModule,HeaderComponent
+        ],  
 })
 
 export class CourselistComponent implements OnInit  {

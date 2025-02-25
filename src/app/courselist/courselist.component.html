@@ -8,7 +8,7 @@
       <ng-template  carouselSlide class="card" style="width: 25rem;">
         <!--<iframe width="100%" ng-src="getSafeUrl(data.youtubeurl)" frameborder="0 " allowfullscreen></iframe>-->
         <!--<embed height="250" width="250" [src]="data.youtubeurl">-->
-          <youtube-player style="margin-right: 5%;" [videoId]="data.youtubeurl" suggestedQuality="highres" [height]="180" [width]="300"></youtube-player>
+          <!--<youtube-player style="margin-right: 5%;" [videoId]="data.youtubeurl" suggestedQuality="highres" [height]="180" [width]="300"></youtube-player>-->
           <div class="card-body" id="youtubecard" (click)="getcoursedetails(data.coursename)" style="box-shadow: 2px 2px 15px 8px rgb(147, 158, 147); margin-right: 5%; margin-bottom: 10%; width: 300px; background-color: white;">
           <h4 class="card-title text-center" style="margin-bottom: 4%;"><b>{{data.coursename}}</b></h4>
           <h6 class="text-center" style="margin-left: auto; margin-right: auto; padding: 5px 10px 5px 10px; background-color: darkgoldenrod; border-radius: 5px; font-weight: bold; width: 55%; color: white;">{{data.courseid}}</h6>
@@ -108,7 +108,7 @@
     <br>
     <div style="font-weight: bold; color: black; font-size: 20px;">Jump right into the course</div><br>
     <div style="background-color: rgb(29, 28, 28); border-radius: 10px; height: 260px; color: white; padding: 30px;">
-      <youtube-player style="margin-right: 5%;" [videoId]="enrolledURL" suggestedQuality="highres" [height]="200" [width]="400"></youtube-player>
+      <!--<youtube-player style="margin-right: 5%;" [videoId]="enrolledURL" suggestedQuality="highres" [height]="200" [width]="400"></youtube-player>-->
       <div style="margin-top: -18%; margin-left: 45%;">
         <h4 class="card-title text-left" style="margin-bottom: 2%;"><b style="font-size: 30px;">{{enrolledName}}</b></h4>
         <h6 class="text-center" style="padding: 5px 10px 5px 10px; background-color: darkgoldenrod; border-radius: 5px; font-weight: bold; margin-bottom: 2%; width: 35%; color: white;">{{enrolledID}}</h6>

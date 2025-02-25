@@ -14,7 +14,7 @@ import { HeaderComponent } from '../header/header.component';
 @Component({
   selector: 'app-addcourse',
   standalone: true,  // Marks this as a standalone component
-  imports: [CommonModule, FormsModule,HeaderComponent], 
+  imports: [CommonModule, FormsModule,HeaderComponent,FooterComponent], 
   templateUrl: './addcourse.component.html',
   styleUrls: ['./addcourse.component.css']
 })
