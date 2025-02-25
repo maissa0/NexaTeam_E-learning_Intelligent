@@ -1,11 +1,13 @@
-<!-- src/app/components/job-offers/job-offers.component.html -->
+<p-toast></p-toast> <!-- For displaying success/error messages -->
+<p-confirmDialog></p-confirmDialog> <!-- For confirmation dialogs -->
+
 <p-toolbar>
     <ng-template #start>
-        <p-button label="New Job Offer" icon="pi pi-plus" (onClick)="openNew()" />
+        <p-button label="New Job Offer" icon="pi pi-plus" (onClick)="openNew()" class="p-button-success" />
     </ng-template>
 </p-toolbar>
 
-<p-table [value]="jobOffers()" [paginator]="true" [rows]="10" dataKey="id">
+<p-table [value]="jobOffers()" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 20]" dataKey="id">
     <ng-template #header>
         <tr>
             <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
@@ -23,49 +25,52 @@
             <td>{{ jobOffer.location }}</td>
             <td>{{ jobOffer.experienceLevel }}</td>
             <td>
-                <p-button icon="pi pi-pencil" (click)="editJobOffer(jobOffer)" />
-                <p-button icon="pi pi-trash" severity="danger" (click)="deleteJobOffer(jobOffer)" />
+                <p-button icon="pi pi-pencil" (click)="editJobOffer(jobOffer)" class="p-button-rounded p-button-text p-button-primary" />
+                <p-button icon="pi pi-trash" (click)="deleteJobOffer(jobOffer)" class="p-button-rounded p-button-text p-button-danger" />
             </td>
         </tr>
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="jobOfferDialog" header="Job Offer Details" [style]="{ width: '700px' }" [modal]="true">
+<p-dialog [(visible)]="jobOfferDialog" [header]="jobOffer.id ? 'Edit Job Offer' : 'Add Job Offer'" [style]="{ width: '700px' }" [modal]="true">
     <div class="p-fluid">
         <!-- Title -->
         <div class="p-field">
-            <label for="title">Title</label>
-            <input id="title" pInputText [(ngModel)]="jobOffer.title" required />
+            <label for="titleInput">Title</label>
+            <input id="titleInput" pInputText [(ngModel)]="jobOffer.title" required />
+            <small *ngIf="submitted && !jobOffer.title?.trim()" class="p-error">Title is required.</small>
         </div>
 
         <!-- Description -->
         <div class="p-field">
-            <label for="description">Description</label>
-            <textarea id="description" pInputTextarea [(ngModel)]="jobOffer.description" required></textarea>
+            <label for="descriptionInput">Description</label>
+            <textarea id="descriptionInput" pInputTextarea [(ngModel)]="jobOffer.description" required></textarea>
+            <small *ngIf="submitted && !jobOffer.description?.trim()" class="p-error">Description is required.</small>
         </div>
 
         <!-- Contract Type -->
         <div class="p-field">
-            <label for="contractType">Contract Type</label>
-            <p-dropdown id="contractType" [(ngModel)]="jobOffer.contractType" [options]="contractTypes" optionLabel="label" optionValue="value"></p-dropdown>
+            <label for="contractTypeDropdown">Contract Type</label>
+            <p-dropdown id="contractTypeDropdown" [(ngModel)]="jobOffer.contractType" [options]="contractTypes" optionLabel="label" optionValue="value" placeholder="Select a contract type"></p-dropdown>
         </div>
 
         <!-- Location -->
         <div class="p-field">
-            <label for="location">Location</label>
-            <p-dropdown id="location" [(ngModel)]="jobOffer.location" [options]="jobLocations" optionLabel="label" optionValue="value"></p-dropdown>
+            <label for="locationDropdown">Location</label>
+            <p-dropdown id="locationDropdown" [(ngModel)]="jobOffer.location" [options]="jobLocations" optionLabel="label" optionValue="value" placeholder="Select a location"></p-dropdown>
         </div>
 
         <!-- Experience Level -->
         <div class="p-field">
-            <label for="experienceLevel">Experience Level</label>
-            <p-dropdown id="experienceLevel" [(ngModel)]="jobOffer.experienceLevel" [options]="experienceLevels" optionLabel="label" optionValue="value"></p-dropdown>
+            <label for="experienceLevelDropdown">Experience Level</label>
+            <p-dropdown id="experienceLevelDropdown" [(ngModel)]="jobOffer.experienceLevel" [options]="experienceLevels" optionLabel="label" optionValue="value" placeholder="Select an experience level"></p-dropdown>
         </div>
 
         <!-- Required Skills -->
         <div class="p-field">
-            <label for="requiredSkills">Required Skills</label>
-            <input id="requiredSkills" pInputText [(ngModel)]="jobOffer.requiredSkills" required />
+            <label for="requiredSkillsInput">Required Skills</label>
+            <input id="requiredSkillsInput" pInputText [(ngModel)]="jobOffer.requiredSkills" required />
+            <small *ngIf="submitted && !jobOffer.requiredSkills?.trim()" class="p-error">Required skills are mandatory.</small>
         </div>
 
         <!-- Buttons -->
