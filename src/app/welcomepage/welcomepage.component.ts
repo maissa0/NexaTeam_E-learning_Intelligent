@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as $ from 'jquery';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-welcomepage',
