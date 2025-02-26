@@ -7,6 +7,7 @@ import { FooterComponent } from '../footer/footer.component';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import $ from 'jquery';
 
 
 @Component({

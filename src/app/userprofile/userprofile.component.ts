@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Header } from 'primeng/api';
 import { HeaderComponent } from '../header/header.component';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-userprofile',
@@ -69,11 +70,11 @@ export class UserprofileComponent implements OnInit {
             this._router.navigate(['/userdashboard']);
           }, 6000);
       },
-      error => {
-        console.log("Profile Updation Failed");
-        console.log(error.error);
-        this.msg = "Profile Updation Failed !!!";
-      }
+      // error => {
+      //   console.log("Profile Updation Failed");
+      //   console.log(error.error);
+      //   this.msg = "Profile Updation Failed !!!";
+      // }
     )
   }
 
