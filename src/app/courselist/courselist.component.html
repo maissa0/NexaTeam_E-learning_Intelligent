@@ -1,23 +1,32 @@
 <div class="container">
-<app-header></app-header>  
+  <app-header></app-header>  
   <div class="row">
     <div class="col-md-4" *ngFor="let data of youtubecourselist | async">
       <div class="card" style="box-shadow: 2px 2px 15px 8px rgb(147, 158, 147); margin-bottom: 20px;">
         <div class="card-body">
-          <h4 class="card-title text-center"><b>{{data.coursename}}</b></h4>
+          <h4 class="card-title text-center"><b>{{ data.coursename }}</b></h4>
           <h6 class="text-center" style="background-color: green; color: white; padding: 5px; border-radius: 5px;">
-            {{data.courseid}}
+            {{ data.courseid }}
           </h6>
-          <p><b>Date:</b> {{data.enrolleddate}}</p>
-          <p><b>Instructor:</b> {{data.instructorname}}</p>
-          <p><b>Type:</b> {{data.coursetype}}</p>
-          <p><b>Level:</b> {{data.skilllevel}}</p>
-          <p><b>Language:</b> {{data.language}}</p>
-          <p class="card-text"><b style="color: darkblue;">{{data.description}}</b></p>
+          <p><b>Date:</b> {{ data.enrolleddate }}</p>
+          <p><b>Instructor:</b> {{ data.instructorname }}</p>
+          <p><b>Type:</b> {{ data.coursetype }}</p>
+          <p><b>Level:</b> {{ data.skilllevel }}</p>
+          <p><b>Language:</b> {{ data.language }}</p>
+          <p class="card-text"><b style="color: darkblue;">{{ data.description }}</b></p>
+          
           <a (click)="visitCourse(data.coursename)" class="btn btn-primary btn-block">Visit Course</a>
+
+<!-- Buttons stacked vertically with spacing -->
+<div class="mt-3">
+  <button (click)="addToWishList(data, loggedUser, currRole)" class="btn btn-success btn-block mb-2">Enroll</button>
+  <br>
+  <button (click)="enrollcourse(data, loggedUser, currRole)" class="btn btn-danger btn-block">Like</button>
+</div>
+
         </div>
       </div>
     </div>
   </div>
- <app-footer></app-footer> 
+  <app-footer></app-footer>
 </div>

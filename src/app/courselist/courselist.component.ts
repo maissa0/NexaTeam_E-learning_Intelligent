@@ -13,6 +13,7 @@ import { FooterComponent } from '../footer/footer.component';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { HeaderComponent } from '../header/header.component';
+import $ from 'jquery';
 
 @Component({
   selector: 'app-courselist',
@@ -21,16 +22,22 @@ import { HeaderComponent } from '../header/header.component';
   imports: [CommonModule, FormsModule, FooterComponent, RouterModule, CarouselModule, HeaderComponent],
 })
 export class CourselistComponent implements OnInit {
-  youtubecourselist: Observable<Course[]> | undefined;
-  websitecourselist: Observable<Course[]> | undefined;
-  courselist: Observable<Course[]> | undefined;
-  wishliststatus: Observable<any[]> | undefined;
+ 
+  youtubecourselist : Observable<Course[]> | undefined;
+  websitecourselist : Observable<Course[]> | undefined;
+  courselist : Observable<Course[]> | undefined;
+  enrollmentstatus : Observable<any[]> | undefined;
+  wishliststatus : Observable<any[]> | undefined;
   enrollment = new Enrollment();
   wishlist = new Wishlist();
-
   loggedUser = '';
   currRole = '';
-
+  enrolledID = '';
+  enrolledURL = '';
+  enrolledName = '';
+  enrolledInstructorName = '';
+  enrolledStatus : any;
+  enrolledStatus2 = '';
   @ViewChild('alertOne') alertOne: ElementRef | undefined;
 
   constructor(private _service: ProfessorService, private userService: UserService, private _router: Router) {}
@@ -55,6 +62,76 @@ export class CourselistComponent implements OnInit {
   gotoURL(url: string) {
     (window as any).open(url, '_blank');
   }
+  addToWishList(course : Course, loggedUser : string, currRole : string)
+{
+  this.wishlist.courseid = course.courseid;
+  this.wishlist.coursename = course.coursename;
+  this.wishlist.likeduser = loggedUser;
+  this.wishlist.likedusertype = currRole;
+  this.wishlist.instructorname = course.instructorname;
+  this.wishlist.instructorinstitution = course.instructorinstitution;
+  this.wishlist.enrolledcount = course.enrolledcount;
+  this.wishlist.coursetype = course.coursetype;
+  this.wishlist.websiteurl = course.websiteurl;
+  this.wishlist.skilllevel = course.skilllevel;
+  this.wishlist.language = course.language;
+  this.wishlist.description = course.description;
+  $("#wishlistbtn").hide();
+  $("#likedbtn").css('display','block');
+  this.userService.addToWishlist(this.wishlist).subscribe(
+    data => {
+      console.log("Added To Wishlist Successfully !!!");
+    },
+    error => {
+      console.log("Adding Process Failed !!!");
+      console.log(error.error);
+    }
+  );
+}
+backToCourseList()
+{
+    $("#youtubecoursecard").css('display','block');
+    $("#websitecoursecard").css('display','block');
+    $("#coursedetailscard").hide();
+}
+  enrollcourse(course : Course, loggedUser : string, currRole : string)
+{
+  this.enrollment.courseid = course.courseid;
+  this.enrollment.coursename = course.coursename;
+  this.enrollment.enrolledusertype = currRole;
+  this.enrollment.instructorname = course.instructorname;
+  this.enrollment.instructorinstitution = course.instructorinstitution;
+  this.enrollment.enrolledcount = course.enrolledcount;
+  this.enrollment.youtubeurl = course.youtubeurl;
+  this.enrollment.websiteurl = course.websiteurl;
+  this.enrollment.coursetype = course.coursetype;
+  this.enrollment.skilllevel = course.skilllevel;
+  this.enrollment.language = course.language;
+  this.enrollment.description = course.description;
+  this.enrolledID = course.courseid;
+  this.enrolledURL = course.youtubeurl;
+  this.enrolledName = course.coursename;
+  this.enrolledInstructorName = course.instructorname;
+  this.enrolledStatus2 = "enrolled"
+  $("#enrollbtn").hide();
+  $("#enrolledbtn").show();
+  setTimeout(() => {
+    $("#youtubecoursecard").css('display','none');
+    $("#websitecoursecard").css('display','none');
+    $("#coursedetailscard").hide();
+    $("#enrollsuccess").show();
+  },5000);
+  this.userService.enrollNewCourse(this.enrollment,loggedUser,currRole).subscribe(
+    data => {
+      console.log("Course enrolled Successfully !!!");
+    },
+    error => {
+      console.log("Enrollment Failed !!!");
+      console.log(error.error);
+    }
+  );
+}
+
 
   owlOptions: OwlOptions = {
     loop: true,
