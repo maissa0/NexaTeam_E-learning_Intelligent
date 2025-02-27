@@ -14,14 +14,24 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { JobofferService } from '../Services/joboffer.service';
-import { from } from 'rxjs';
 import { ToolbarModule } from 'primeng/toolbar'; // ✅ Importer ToolbarModule
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { RippleModule } from 'primeng/ripple';
+import { RatingModule } from 'primeng/rating';
+import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
+import { SelectModule } from 'primeng/select';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { TagModule } from 'primeng/tag';
+import { InputIconModule } from 'primeng/inputicon';
+import { IconFieldModule } from 'primeng/iconfield';
 @Component({
     
     selector: 'app-job-offers',
     templateUrl: './add-offer.component.html',
+    styleUrls: ['./add-offer.component.scss'], 
+
     providers: [MessageService, ConfirmationService],
     imports: [
         CommonModule,

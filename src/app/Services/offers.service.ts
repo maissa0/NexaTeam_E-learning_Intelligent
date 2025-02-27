@@ -2,18 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JobOffer } from '../models/job-offer.model';
-import { offer } from '../models/offer.model';
-
 
 @Injectable({
-    providedIn: 'root' // ✅ Fourni au niveau racine pour une utilisation globale
+  providedIn: 'root', // Le service est disponible dans toute l'application
 })
-
 export class OffersService {
-  private BASE_URL = 'http://localhost:8084/api/offersDisponibles'; // ✅ URL de base de l'API
+  private BASE_URL = 'http://localhost:8084/api/offersDisponibles'; // URL de base de l'API
+
   constructor(private http: HttpClient) {}
 
-  getOffers(): Observable<offer[]> {
-    return this.http.get<offer[]>(`${this.BASE_URL}`);
-}
+  // Récupérer toutes les offres d'emploi
+  getOffers(): Observable<JobOffer[]> {
+    return this.http.get<JobOffer[]>(this.BASE_URL);
+  }
+
+  // Récupérer les détails complets d'une offre d'emploi par son ID
+  getOfferDetails(id: string): Observable<JobOffer> {
+    return this.http.get<JobOffer>(`${this.BASE_URL}/${id}`);
+  }
 }

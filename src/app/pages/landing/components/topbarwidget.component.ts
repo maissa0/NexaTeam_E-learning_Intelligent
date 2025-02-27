@@ -40,8 +40,8 @@ import { ButtonModule } from 'primeng/button';
                     </a>
                 </li>
                 <li>
-                    <a (click)="router.navigate(['/landing'], { fragment: 'features' })" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
-                        <span>Features</span>
+                    <a (click)="router.navigate(['/landing'], { fragment: 'OffersComponent' })" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
+                        <span>Job Offers</span>
                     </a>
                 </li>
                 <li>

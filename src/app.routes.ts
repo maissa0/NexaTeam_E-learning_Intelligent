@@ -18,6 +18,7 @@ export const appRoutes: Routes = [
             
             { path: '', component: Dashboard },
             { path: 'addOffer', component: AddOfferComponent },
+
             { path: 'JobOffers', component: OffersComponent },
 
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },

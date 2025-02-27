@@ -1,0 +1,154 @@
+/* Style général pour le formulaire */
+.p-dialog {
+    .p-fluid {
+      .p-field {
+        margin-bottom: 1.5rem;
+  
+        label {
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+          display: block;
+        }
+  
+        input, textarea, .p-dropdown {
+          width: 100%;
+          padding: 0.5rem;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          font-size: 1rem;
+  
+          &:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+          }
+        }
+  
+        .p-error {
+          color: #dc3545;
+          font-size: 0.875rem;
+          margin-top: 0.25rem;
+        }
+      }
+  
+      .p-d-flex {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+  
+        .p-button {
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          font-size: 1rem;
+  
+          &.p-button-text {
+            background-color: transparent;
+            color: #007bff;
+            border: none;
+  
+            &:hover {
+              background-color: rgba(0, 123, 255, 0.1);
+            }
+          }
+  
+          &.p-button-success {
+            background-color: #28a745;
+            border-color: #28a745;
+  
+            &:hover {
+              background-color: #218838;
+              border-color: #1e7e34;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  /* Style pour le tableau */
+  .p-table {
+    margin-top: 2rem;
+  
+    .p-datatable-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+  
+      h5 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: bold;
+      }
+  
+      .p-input-icon-left {
+        position: relative;
+  
+        .pi-search {
+          position: absolute;
+          top: 50%;
+          left: 0.5rem;
+          transform: translateY(-50%);
+          color: #6c757d;
+        }
+  
+        input {
+          padding-left: 2rem;
+          width: 100%;
+          border-radius: 4px;
+          border: 1px solid #ccc;
+          font-size: 1rem;
+  
+          &:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+          }
+        }
+      }
+    }
+  
+    .p-datatable-tbody {
+      tr {
+        td {
+          padding: 1rem;
+          border-bottom: 1px solid #dee2e6;
+  
+          .p-button {
+            margin-right: 0.5rem;
+  
+            &.p-button-rounded {
+              border-radius: 50%;
+              width: 2.5rem;
+              height: 2.5rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+  
+              .pi {
+                font-size: 1rem;
+              }
+            }
+  
+            &.p-button-text {
+              background-color: transparent;
+              border: none;
+  
+              &:hover {
+                background-color: rgba(0, 123, 255, 0.1);
+              }
+            }
+  
+            &.p-button-danger {
+              color: #dc3545;
+  
+              &:hover {
+                background-color: rgba(220, 53, 69, 0.1);
+              }
+            }
+          }
+        }
+      }
+    }
+  }

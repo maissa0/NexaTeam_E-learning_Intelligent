@@ -2,13 +2,13 @@
 <p-confirmDialog></p-confirmDialog> <!-- For confirmation dialogs -->
 
 <p-toolbar>
-    <ng-template #start>
+    <ng-template pTemplate="start">
         <p-button label="New Job Offer" icon="pi pi-plus" (onClick)="openNew()" class="p-button-success" />
     </ng-template>
 </p-toolbar>
 
 <p-table [value]="jobOffers()" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 20]" dataKey="id">
-    <ng-template #header>
+    <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
             <th pSortableColumn="contractType">Contract Type <p-sortIcon field="contractType" /></th>
@@ -18,7 +18,7 @@
         </tr>
     </ng-template>
 
-    <ng-template #body let-jobOffer>
+    <ng-template pTemplate="body" let-jobOffer>
         <tr>
             <td>{{ jobOffer.title }}</td>
             <td>{{ jobOffer.contractType }}</td>

@@ -1,103 +1,63 @@
-// Variables
-$primary-color: #007bff;
-$secondary-color: #0056b3;
-$background-color: #f9f9f9;
-$text-color: #333;
-$text-color-light: #777;
-$border-color: #ddd;
-$font-stack: Arial, sans-serif;
-$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-$border-radius: 8px;
-$padding: 20px;
-$margin-bottom: 20px;
-
-// Mixins
-@mixin flex-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-@mixin box-shadow($x, $y, $blur, $color) {
-  box-shadow: $x $y $blur $color;
-}
-
-@mixin button-style($bg-color, $text-color, $hover-bg-color) {
-  background-color: $bg-color;
-  color: $text-color;
-  border: none;
-  border-radius: $border-radius;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: $hover-bg-color;
-  }
-}
-
-/* Style général de la page */
 .offers-container {
-  font-family: $font-stack;
-  padding: $padding;
-  background-color: $background-color;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
 
-  /* En-tête de la page */
-  .page-header {
-    text-align: center;
-    margin-bottom: $margin-bottom;
+.page-header {
+  text-align: center;
+  margin-bottom: 20px;
 
-    h1 {
-      font-size: 28px;
-      color: $text-color;
-    }
+  h1 {
+    font-size: 28px;
+    color: #333;
+  }
+}
+
+.loading-spinner {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+}
+
+.no-offers-message {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+}
+
+.offer-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .offer-title {
+    font-size: 22px;
+    color: #555;
+    margin-bottom: 10px;
   }
 
-  /* Indicateur de chargement */
-  .loading-spinner {
-    @include flex-center;
-    font-size: 18px;
-    color: $text-color-light;
+  .offer-detail {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 10px;
   }
 
-  /* Message si aucune offre n'est disponible */
-  .no-offers-message {
-    @include flex-center;
-    font-size: 18px;
-    color: $text-color-light;
-  }
+  .view-offer-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 
-  /* Carte d'offre */
-  .offer-card {
-    background-color: #fff;
-    border: 1px solid $border-color;
-    border-radius: $border-radius;
-    padding: $padding;
-    margin-bottom: $margin-bottom;
-    @include box-shadow(0, 2px, 4px, rgba(0, 0, 0, 0.1));
-
-    .offer-title {
-      font-size: 22px;
-      color: $text-color;
-      margin-bottom: 10px;
-    }
-
-    .offer-description {
-      font-size: 16px;
-      color: $text-color-light;
-      margin-bottom: 15px;
-    }
-
-    .offer-detail {
-      font-size: 14px;
-      color: $text-color;
-      margin-bottom: 10px;
-    }
-
-    /* Bouton "Voir l'offre" */
-    .view-offer-button {
-      @include button-style($primary-color, #fff, $secondary-color);
+    &:hover {
+      background-color: #0056b3;
     }
   }
 }
