@@ -33,39 +33,39 @@ export class AddQuestionInQuizComponent {
       optionC: ['', [Validators.required]],
       optionD: ['', [Validators.required]],
       correctOption: ['', [Validators.required]],
-      quizId: ['', Validators.required]
+  
     });
     this.id=this.activatedRoute.snapshot.params["id"];
   }
   onSubmit() {
-    if (this.questionForm.valid) {
-      console.log('Submitting question:', this.questionForm.value);
-      
-      console.log('Question data being sent:', this.questionForm.value);
-      this.devicesService.addQuestionInQuiz(this.questionForm.value).subscribe(
+    if (this.questionForm.valid && this.id) {
+      // Add the quiz ID before submission
+      const formData = {
+        ...this.questionForm.value,
+        quizId: this.id,  // Attach the quiz ID
+      };
+
+      console.log('Submitting question:', formData);
+
+      this.devicesService.addQuestionInQuiz(formData).subscribe(
         (res: any) => {
           console.log('Question successfully added', res);
-          console.log('Response from server:', res);
-          
-          // Set success message
+
           this.message = 'Question added successfully!';
           this.messageType = 'success';
-  
-          // Redirect after a short delay (optional)
+
+          // Redirect after a short delay
           setTimeout(() => {
             this.router.navigate(['/']);
           }, 2000);
         },
         (error) => {
           console.error('Error occurred:', error);
-          
-          // Set error message
           this.message = 'Error adding question. Please try again!';
           this.messageType = 'error';
         }
       );
     } else {
-      // Form is invalid, show error message
       this.message = 'Form is invalid. Please check your inputs.';
       this.messageType = 'error';
     }

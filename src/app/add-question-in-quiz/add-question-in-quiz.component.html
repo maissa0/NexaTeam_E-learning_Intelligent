@@ -50,10 +50,8 @@
             <option value="D">Option D</option>
           </select>
         </div>
-        <div class="form-group">
-  <label for="quizId">Quiz ID</label>
-  <input type="number" id="quizId" formControlName="quizId" placeholder="Enter the quiz ID" required>
-</div>
+        <input type="hidden" formControlName="quizId">
+
 
         <button type="submit" [disabled]="!questionForm.valid" class="submit-btn">Submit Question</button>
       </form>

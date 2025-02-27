@@ -51,7 +51,6 @@
     />
     <div *ngIf="QuizForm.get('time')?.invalid && QuizForm.get('time')?.touched" class="error-message">
       <span *ngIf="QuizForm.get('time')?.errors?.['required']">Time is required.</span>
-      <span *ngIf="QuizForm.get('time')?.errors?.['min']">Time must be at least 5 seconds.</span>
       <span *ngIf="QuizForm.get('time')?.errors?.['pattern']">Enter a valid number.</span>    </div>
   </div>
 </div>

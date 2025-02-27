@@ -3,6 +3,7 @@ import { Router } from '@angular/router';  // <-- Add this line
 import { AdminService } from '../services/admin.service';
 import { Quiz } from '../models/quiz';
 
+declare var bootstrap: any; // To use Bootstrap modal
 
 @Component({
   selector: 'app-dashboard',
@@ -13,12 +14,17 @@ import { Quiz } from '../models/quiz';
 export class DashboardComponent implements OnInit {
   constructor(private router: Router,private QuizService: AdminService, ) {}
 
-  navigateToCreateTest() {
-    this.router.navigate(['/create-test']); // Navigate to Create Test page
+  openCreateQuizModal() {
+    let modal = new bootstrap.Modal(document.getElementById('createQuizModal'));
+    modal.show();
+  }
+  navigateToManualQuiz() {
+    this.router.navigate(['/create-test']);
   }
 
-  navigateToViewResults() {
-    this.router.navigate(['/view-results']); // Navigate to View Results page
+  // Placeholder function for generated quiz
+  generateQuiz() {
+    alert("Quiz generation feature is coming soon!");
   }
   
   Quizes: Quiz[] = [];

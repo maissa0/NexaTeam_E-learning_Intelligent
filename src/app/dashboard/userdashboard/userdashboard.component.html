@@ -1,26 +1,31 @@
 <header class="main-header">
-    <div class="logo-container">
-      <a href="/" class="logo-link">L'EARN</a>
-      <a href="/view-results" class="menu-item">View Results</a>
-    </div>
-  </header>
-  
-  
-  <div class="main">
-    <div class="row" style="margin-bottom: 20px;">
-      <div class="col-12 col-md-6 col-lg-4" *ngFor="let quiz of Quizes" style="margin: 20px;">
-        <div class="card shadow-sm">
-          <div class="card-header bg-primary text-white">
-            <h5>{{ quiz.title }}</h5>
-          </div>
-          <div class="card-body">
-            <p><strong>Time:</strong> <span class="badge bg-info">{{ getFormattedTime(quiz.time) }} seconds</span></p>
-            <p><strong>Description:</strong> {{ quiz.descrption }}</p>
-            <div class="d-flex justify-content-between">
-              <button class="btn btn-primary btn-sm" routerLink="/start-quiz/{{quiz.id}}" >Start Quiz</button>
-            </div>
+  <div class="logo-container">
+    <a href="/" class="logo-link">L'EARN</a>
+  </div>
+</header>
+
+<div class="main">
+  <div class="row" style="margin-bottom: 20px;">
+    <div class="col-12 col-md-6 col-lg-4" *ngFor="let quiz of Quizes" style="margin: 20px;">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5>{{ quiz.title }}</h5>
+        </div>
+        <div class="card-body">
+          <p><strong>Time:</strong> <span class="badge bg-info">{{ getFormattedTime(quiz.time) }} seconds</span></p>
+          <p><strong>Description:</strong> {{ quiz.descrption }}</p>
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-primary btn-sm" routerLink="/start-quiz/{{quiz.id}}">Start Quiz</button>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- View Results Button - Modern & Centered -->
+  <div class="text-center mt-4">
+    <a routerLink="/view-results" class="btn btn-outline-primary btn-lg">
+      <i class="fas fa-chart-line"></i> View Results
+    </a>
+  </div>
+</div>

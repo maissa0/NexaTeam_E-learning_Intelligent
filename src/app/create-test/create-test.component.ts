@@ -31,8 +31,8 @@ export class CreateTestComponent implements OnInit {
       
         time: ['', [
           Validators.required, 
-          Validators.min(5), // Minimum 5 seconds per question
-          Validators.pattern('^[0-9]+$')  // Ensure time is a valid number
+          Validators.pattern('^[0-9]+$'),
+          Validators.min(1)  // Ensure time is a valid number
         ]]
       });
       
@@ -40,15 +40,17 @@ export class CreateTestComponent implements OnInit {
   
     onSubmit() {
       if (this.QuizForm.valid) {
-        console.log('Submitting quiz:', this.QuizForm.value);
+        let formData = this.QuizForm.value;
+        formData.time = Number(formData.time);  // Ensure time is a number
     
-        this.devicesService.createQuiz(this.QuizForm.value).subscribe({
+        console.log('Submitting quiz:', formData);
+    
+        this.devicesService.createQuiz(formData).subscribe({
           next: (res) => {
             console.log('Quiz successfully created:', res);
             this.message = 'Quiz created successfully!';
             this.messageType = 'success';
     
-            // Redirect to dashboard after 2 seconds
             setTimeout(() => this.router.navigate(['/']), 2000);
           },
           error: (error) => {
@@ -63,6 +65,7 @@ export class CreateTestComponent implements OnInit {
         this.messageType = 'error';
       }
     }
+    
     
     
   
