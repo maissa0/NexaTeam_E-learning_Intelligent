@@ -58,6 +58,7 @@ public class JobOfferService implements IjobOfferService{
         jobOffer.setRequiredSkills(dto.getRequiredSkills());
         //jobOffer.setBenefits(dto.getBenefits());
         jobOffer.setEnterpriseId(dto.getEnterpriseId());
+        jobOffer.setCreatedAt(dto.getCreatedAt());
         return jobOffer;
     }}
 
