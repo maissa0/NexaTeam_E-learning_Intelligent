@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
   logout()
   {
     sessionStorage.clear();
-    this._router.navigate(['/login']);
+    this._router.navigate(['/']);
   }
 
   navigateHome()
