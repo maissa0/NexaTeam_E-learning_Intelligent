@@ -3,21 +3,20 @@
 <div class="heading-text"><b>User List</b></div>
 <div class="row">
     <div  *ngFor="let user of users | async" class="col-4 card" id="bloodCards">
-        <div class="img-block">
-            <div class="circle">
+        <div >
+            <div >
                 <img *ngIf="user.gender === 'Male' || user.gender === 'male'"  class="bloodimg" [src]="'assets/img/maleuser.png'" width="100" height="100">
-                <img *ngIf="user.gender === 'Female' || user.gender === 'female'"  class="bloodimg" [src]="'assets/img/femaleuser.png'" width="100" height="120">
+                <img *ngIf="user.gender === 'Female' || user.gender === 'female'"  width="100" height="500">
             </div>
         </div>
         <div class="card-block">
-            <div class="text"><b style="color: maroon;"> {{user.username}} </b></div>
-            <div class="text"><b style="color: darkblue;"> {{user.userid}} </b></div>
-            <div class="text"><b style="color: maroon;"> {{user.email}} </b></div>
-            <div class="text"><b style="color: maroon;"> {{user.profession}} </b></div>
-            <div class="text"><b style="color: maroon;"> {{user.gender}} </b></div>
-            <div class="text"><b style="color: maroon;"> {{user.mobile}} </b></div>
-        </div>
-    </div>
+            <div class="text"><b class="text-center bg-[var(--p-primary-400)] text-white py-1 px-3 rounded-lg mt-2"> {{user.username}} </b></div>
+            <div class="text"><b class="text-center bg-[var(--p-primary-400)] text-white py-1 px-3 rounded-lg mt-2"> {{user.userid}} </b></div>
+            <div class="text"><b class="text-center bg-[var(--p-primary-400)] text-white py-1 px-3 rounded-lg mt-2"> {{user.email}} </b></div>
+            <div class="text"><b class="text-center bg-[var(--p-primary-400)] text-white py-1 px-3 rounded-lg mt-2"> {{user.profession}} </b></div>
+            <div class="text"><b class="text-center bg-[var(--p-primary-400)] text-white py-1 px-3 rounded-lg mt-2"> {{user.gender}} </b></div>
+            <div class="text"><b class="text-center bg-[var(--p-primary-400)] text-white py-1 px-3 rounded-lg mt-2"> {{user.mobile}} </b></div>
+        </div>    </div>
   </div>
 
 <br><br><br>
