@@ -9,13 +9,21 @@ import { LoginService } from '../../services/login.service';
 import $ from 'jquery';
 import { HeaderComponent } from '../../header/header.component';
 import { CommonModule } from '@angular/common';
+import { AppTopbar } from '../../layout/component/app.topbar';
+import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { RippleModule } from 'primeng/ripple';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,  // Marks this as a standalone component
     imports: [CommonModule, FormsModule,
 
-      RouterModule  ,
+      RouterModule  ,AppTopbar,PasswordModule,RippleModule,InputTextModule,ButtonModule, CheckboxModule,AppFloatingConfigurator,HeaderComponent
     ],  
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -27,6 +35,18 @@ export class LoginComponent implements OnInit {
   msg = "";
   adminEmail = "";
   adminPassword = "";
+  showUserLogin: boolean = true;
+  showProfessorLogin: boolean = false;
+
+  showUserForm() {
+      this.showUserLogin = true;
+      this.showProfessorLogin = false;
+  }
+
+  showProfessorForm() {
+      this.showUserLogin = false;
+      this.showProfessorLogin = true;
+  }
   
   constructor(private _service : LoginService, private _router : Router) { }
 
