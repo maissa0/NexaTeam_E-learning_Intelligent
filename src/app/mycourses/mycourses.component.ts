@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { MenuItem } from 'primeng/api';
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 @Component({
   selector: 'app-mycourses',
@@ -21,11 +23,12 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
     FooterComponent,
     RouterModule, 
     HeaderComponent,
-    CarouselModule
+    CarouselModule,
+    PanelMenuModule
   ],  
 })
 export class MycoursesComponent implements OnInit {
-
+model: MenuItem[] = [];
   myenrollments: Observable<Enrollment[]> | undefined;
   loggedUser = '';
   currRole = '';
