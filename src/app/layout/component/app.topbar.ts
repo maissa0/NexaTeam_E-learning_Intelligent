@@ -5,16 +5,22 @@ import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
-
+import { ActivatedRoute, Router } from '@angular/router';
+/*
+<div class="sidebar-logo">
+    <div class="welcometxt" style="float: left;"><b style="color: white;">{{title}}</b></div>
+    <button class="logoutbtn" style="margin-right: 1%;" (click)="navigateHome()"><i class="fa fa-home"></i> Home</button>
+    <b class="sidebar-text" style="color: whitesmoke;"><i class="fa fa-user"></i> Welcome {{loggedUser}}</b>
+    <button class="logoutbtn" (click)="logout()"><i class="fa fa-sign-out"></i> Logout</button>
+</div>
+*/
 @Component({
     selector: 'app-topbar',
     standalone: true,
     imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
     template: ` <div class="layout-topbar">
         <div class="layout-topbar-logo-container">
-            <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
-                <i class="pi pi-bars"></i>
-            </button>
+            
             <a class="layout-topbar-logo" routerLink="/">
                 <svg viewBox="0 0 54 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -40,7 +46,6 @@ import { LayoutService } from '../service/layout.service';
         <div class="layout-topbar-actions">
             <div class="layout-config-menu">
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
-                    <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
                 </button>
                 <div class="relative">
                     <button
@@ -72,10 +77,7 @@ import { LayoutService } from '../service/layout.service';
                         <i class="pi pi-inbox"></i>
                         <span>Messages</span>
                     </button>
-                    <button type="button" class="layout-topbar-action">
-                        <i class="pi pi-user"></i>
-                        <span>Profile</span>
-                    </button>
+                    <span>Welcome {{loggedUser}}</span>
                 </div>
             </div>
         </div>
@@ -84,9 +86,51 @@ import { LayoutService } from '../service/layout.service';
 export class AppTopbar {
     items!: MenuItem[];
 
-    constructor(public layoutService: LayoutService) {}
 
     toggleDarkMode() {
-        this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
     }
+      loggedUser = '';
+      currRole = '';
+      title = '';
+    
+      constructor(private activatedRoute: ActivatedRoute, private _router : Router) { }
+    
+      ngOnInit(): void 
+      {
+        this.loggedUser = JSON.stringify(sessionStorage.getItem('loggedUser')|| '{}');
+        this.loggedUser = this.loggedUser.replace(/"/g, '');
+    
+        this.currRole = JSON.stringify(sessionStorage.getItem('ROLE')|| '{}'); 
+        this.currRole = this.currRole.replace(/"/g, '');
+    
+        if(this.loggedUser === "admin@gmail.com"){
+          this.title = "Admin Dashboard";
+        }
+        else if(this.currRole === "professor"){
+          this.title = "";
+        }
+        else if(this.currRole === "user"){
+          this.title = "";
+        }
+      }
+    
+      logout()
+      {
+        sessionStorage.clear();
+        this._router.navigate(['/login']);
+      }
+    
+      navigateHome()
+      {
+        if(this.loggedUser === "admin@gmail.com"){
+          this._router.navigate(['/admindashboard']);
+        }
+        else if(this.currRole === "professor"){
+          this._router.navigate(['/professordashboard']);
+        }
+        else if(this.currRole === "user"){
+          this._router.navigate(['/userdashboard']);
+        }
+      }
+    
 }
