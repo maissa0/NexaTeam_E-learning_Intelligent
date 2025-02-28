@@ -1,58 +1,55 @@
 <app-header></app-header>
 
-<div *ngIf="currRole === 'user'" class="heading-text text-success">
-    <b><i class="fa fa-heart text-danger"></i> User WishList</b>
-</div>
-<div *ngIf="currRole === 'professor'" class="heading-text text-success">
-    <b><i class="fa fa-heart text-danger"></i> Professor WishList</b>
+<!-- Wishlist Heading -->
+<div *ngIf="currRole === 'user'" class="heading-text text-center">
+    <b class="bg-[var(--p-primary-400)] text-white py-2 px-4 rounded-lg">
+        <i class="fa fa-heart"></i> User WishList
+    </b>
 </div>
 
+<div *ngIf="currRole === 'professor'" class="heading-text text-center" img >
+    <img src="/assets/img/maleprofessor.png" width="55" height="50">
+    <b class="bg-[var(--p-primary-400)] text-white py-2 px-4 rounded-lg">
+        <i class="fa fa-heart text-white"></i> Professor WishList
+    </b>
+</div>
+<br>    
+<br>    
+
 <!-- Show message if wishlist is empty -->
-<div *ngIf="(wishlist | async)?.length === 0" class="text-center text-muted">
+<div *ngIf="(wishlist | async)?.length === 0" class="text-center text-gray-500">
     No courses found in your wishlist.
 </div>
 
-<div class="row">
-    <div *ngFor="let course of wishlist | async; let i = index" class="col-md-4 card" id="bloodCards">
-        <div class="img-block">
-            <div class="circle">
-                <img *ngIf="course.coursetype === 'Youtube'" class="bloodimg" src="assets/img/youtube.png" width="140" height="140">
-                <img *ngIf="course.coursetype === 'Website'" class="bloodimg" src="assets/img/website.png" width="140" height="140">
-            </div>
+<div class="row flex flex-wrap justify-center gap-6">
+    <div *ngFor="let course of wishlist | async; let i = index" class="col-md-4 card shadow-lg p-6 rounded-lg bg-white text-center" id="bloodCards">
+        
+        <!-- Course Type Icon -->
+        <div class="img-block flex justify-center mb-4">
+            <img *ngIf="course.coursetype === 'Youtube'" class="bloodimg" src="/src/assets/img/femaleuser.png" width="100" height="100">
+            <img *ngIf="course.coursetype === 'Website'" class="bloodimg" src="assets/img/website.png" width="100" height="100">
         </div>
 
-        <div class="card-block">
-            <div class="text">
-                <b class="text-danger">Course:</b> {{ course.coursename }}
-            </div>
-            <div class="text">
-                <b class="text-danger">Course ID:</b>
-                <small class="badge bg-dark">{{ course.courseid }}</small>
-            </div>
-            <div class="text">
-                <b class="text-danger">Instructor:</b> {{ course.instructorname }}
-            </div>
-            <div class="text">
-                <b class="text-danger">Learners:</b> {{ course.enrolledcount }} enrolled already
-            </div>
-            <div class="text">
-                <b class="text-danger">Type:</b> {{ course.coursetype }} Tutorials
-            </div>
-            <div class="text">
-                <b class="text-danger">Level:</b> {{ course.skilllevel }}
-            </div>
-            <div class="text">
-                <b class="text-danger">Language:</b> {{ course.language }}
-            </div>
-
-            <!-- Visit Course Button -->
-            <a *ngIf="course.coursetype === 'Youtube'" (click)="visitCourse(course.coursename)" class="btn btn-primary mt-3">
-                Visit Course
-            </a>
-            <a *ngIf="course.coursetype === 'Website'" (click)="openURL(course.websiteurl)" class="btn btn-primary mt-3">
-                Visit Course
-            </a>
+        <!-- Course Details -->
+        <div class="card-block space-y-3 flex flex-col items-center">
+            <b class="w-full bg-[var(--p-primary-400)] text-white py-2 px-4 rounded-lg"> Course: {{ course.coursename }} </b>
+            <b class="w-full bg-[var(--p-primary-400)] text-white py-2 px-4 rounded-lg"> Course ID: <small class="badge bg-dark">{{ course.courseid }}</small> </b>
+            <b class="w-full bg-[var(--p-primary-400)] text-white py-2 px-4 rounded-lg"> Instructor: {{ course.instructorname }} </b>
+            <b class="w-full bg-[var(--p-primary-400)] text-white py-2 px-4 rounded-lg"> Learners: {{ course.enrolledcount }} enrolled </b>
+            <b class="w-full bg-[var(--p-primary-400)] text-white py-2 px-4 rounded-lg"> Type: {{ course.coursetype }} Tutorials </b>
+            <b class="w-full bg-[var(--p-primary-400)] text-white py-2 px-4 rounded-lg"> Level: {{ course.skilllevel }} </b>
+            <b class="w-full bg-[var(--p-primary-400)] text-white py-2 px-4 rounded-lg"> Language: {{ course.language }} </b>
         </div>
+
+        <!-- Visit Course Button -->
+        <a *ngIf="course.coursetype === 'Youtube'" (click)="visitCourse(course.coursename)" 
+           class="btn bg-[var(--p-primary-400)] text-white font-semibold mt-3 px-5 py-2 rounded-lg">
+            Visit Course
+        </a>
+        <a *ngIf="course.coursetype === 'Website'" (click)="openURL(course.websiteurl)" 
+           class="btn bg-[var(--p-primary-400)] text-white font-semibold mt-3 px-5 py-2 rounded-lg">
+            Visit Course
+        </a>
     </div>
 </div>
 
