@@ -5,7 +5,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    height: 120%;
+    height: 115%;
     width: 78px;
     background: green;
     padding: 6px 14px;
@@ -275,7 +275,7 @@ border-radius: 50%;
 width: 30%;
 height: 80px;
 float: right;
-background-color: rgb(233, 169, 126);
+background-color: rgb(126, 233, 224);
 }
 #icons
 {
