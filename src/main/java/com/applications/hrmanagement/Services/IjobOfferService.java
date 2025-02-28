@@ -13,7 +13,9 @@ public interface IjobOfferService {
 
     jobOffer createJobOffer(JobOfferDto jobOfferDTO);
 
+    public jobOffer incrementViewCount(String id);
     jobOffer updateJobOffer(String id, JobOfferDto jobOfferDTO);
 
     void deleteJobOffer(String id);
+    public List<jobOffer> searchJobOffers(JobOfferDto searchDTO);
 }

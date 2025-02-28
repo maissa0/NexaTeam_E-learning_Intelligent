@@ -25,4 +25,6 @@ public class jobOffer {
     private String requiredSkills;
     private String enterpriseId;
     private LocalDate createdAt;
+    private int viewCount = 0; // Nouveau champ pour suivre les vues
+
 }

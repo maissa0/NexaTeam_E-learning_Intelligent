@@ -18,5 +18,6 @@ public class offersDTO {
 
 
         private LocalDate createdAt;
+    private int viewCount = 0;
     }
 

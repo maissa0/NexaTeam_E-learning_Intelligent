@@ -3,6 +3,7 @@ import com.applications.hrmanagement.DTO.JobOfferDto;
 import com.applications.hrmanagement.Entities.jobOffer;
 import com.applications.hrmanagement.Services.IjobOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,4 +42,20 @@ public class JobOfferController {
     public void deleteJobOffer(@PathVariable String id) {
         jobOfferService.deleteJobOffer(id);
     }
+    @PostMapping("/search")
+    public ResponseEntity<List<jobOffer>> searchJobOffers(@RequestBody JobOfferDto searchDTO) {
+        List<jobOffer> jobOffers = jobOfferService.searchJobOffers(searchDTO);
+        return ResponseEntity.ok(jobOffers);
+    }
+    @GetMapping("/{id}/view")
+    public ResponseEntity<jobOffer> viewJobOfferDetails(@PathVariable String id) {
+        jobOffer jobOffer = jobOfferService.incrementViewCount(id);
+        return ResponseEntity.ok(jobOffer);
+    }
+    /*@GetMapping("/most-viewed")
+    public ResponseEntity<List<jobOffer>> getMostViewedJobOffers(
+            @RequestParam(defaultValue = "5") int limit) {
+        List<jobOffer> mostViewedJobOffers = jobOfferService.getMostViewedJobOffers(limit);
+        return ResponseEntity.ok(mostViewedJobOffers);
+    }*/
 }

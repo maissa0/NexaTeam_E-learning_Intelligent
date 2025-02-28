@@ -3,6 +3,8 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 
 @Document(collection = "favoriteJobOffers")
 
@@ -15,7 +17,8 @@ public class FavoriteJobOffer {
     private String id;
     private String userId;   // ID de l'utilisateur
     private String jobOfferId;  // ID de l'offre d'emploi
+    private LocalDate createdat;
+    private String Location;   // ID de l'utilisateur
+    private String Title;
 
-    public FavoriteJobOffer(String userId, String jobOfferId) {
-    }
 }
