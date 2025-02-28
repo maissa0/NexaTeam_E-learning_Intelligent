@@ -43,7 +43,10 @@ import { IconFieldModule } from 'primeng/iconfield';
       ButtonModule,
       ToastModule,
       ConfirmDialogModule,
-      ToolbarModule 
+      ToolbarModule ,
+      InputTextModule, 
+      RippleModule,     
+      TextareaModule    
 
   ],
 })
@@ -91,6 +94,7 @@ export class AddOfferComponent implements OnInit {
 
     ngOnInit() {
         this.loadJobOffers();
+        
     }
 
     loadJobOffers() {

@@ -1,86 +1,107 @@
 <div class="offers-container">
-  <!-- En-tête de la page -->
   <header class="page-header">
     <h1>Explore the Latest Job Offers</h1>
   </header>
 
-  <!-- Indicateur de chargement -->
   <div *ngIf="isLoading()" class="loading-spinner">
-    <p>Loading job offers...</p>
+    <div class="spinner">
+      <div class="spinner-inner">
+        <div class="spinner-circle"></div>
+        <div class="spinner-circle"></div>
+        <div class="spinner-circle"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- Liste des offres -->
-  <div *ngIf="!isLoading()">
-    <!-- Message si aucune offre n'est disponible -->
+  <div class="job-cards-container" *ngIf="!isLoading()">
     <div *ngIf="jobOffers().length === 0" class="no-offers-message">
-      <p>No job offers available at the moment.</p>
+      <div class="p-message p-message-info w-full">
+        <div class="p-message-text">No job offers available at the moment.</div>
+      </div>
     </div>
 
-    <!-- Boucle sur les offres -->
-    <div *ngFor="let offer of jobOffers()" class="offer-card">
-      <h2 class="offer-title">{{ offer.title }}</h2>
-      
-      <p class="offer-detail">
-        <strong>Location:</strong> {{ offer.createdAt }}
-      </p>
-      <p class="offer-detail">
-        <strong>Created At :</strong> {{ offer.createdAt }}
-      </p>
-      <button class="view-offer-button" (click)="openJobDetails(offer.id)">View Offer</button>
+    <div class="grid">
+      <div *ngFor="let offer of jobOffers()" class="col-12 md:col-6 lg:col-4">
+        <div class="job-card">
+          <div class="card-header">
+            
+            <button class="favorite-button">
+              <i class="pi pi-heart"></i>
+            </button>
+          </div>
+
+          <div class="card-content">
+            <h3 class="job-title">{{ offer.title }}</h3>
+            
+            <div class="job-details">
+              <span class="location">
+                <i class="pi pi-map-marker"></i>
+                {{ offer.location }}
+              </span>
+              <span class="contract-type">{{ offer.contractType }}</span>
+            </div>
+
+            <div class="card-footer">
+              <span class="posted-date">Posted {{ offer.createdAt | date:'dd/MM/yyyy' }}</span>
+              <p-button 
+                label="View Details" 
+                (click)="openJobDetails(offer.id)"
+                styleClass="p-button-rounded">
+              </p-button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Dialog pour les détails de l'offre -->
-<p-dialog
-  header="Job Details"
-  [(visible)]="displayJobDetails"
-  [breakpoints]="{ '960px': '75vw' }"
-  [style]="{ width: '50vw' }"
-  [modal]="true"
->
-  <!-- Accordion inside the dialog -->
+<p-dialog [header]="selectedJobDetails?.title" [(visible)]="displayJobDetails" [modal]="true"
+  [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}">
   <p-accordion>
     <p-accordion-panel value="0">
-      <p-accordion-header>Job Description</p-accordion-header>
+      <p-accordion-header>Description du poste</p-accordion-header>
       <p-accordion-content>
         <p class="m-0">
-          {{ selectedJobDetails?.description || 'No description available.' }}
+          {{ selectedJobDetails?.description || 'Aucune description disponible.' }}
         </p>
       </p-accordion-content>
     </p-accordion-panel>
 
     <p-accordion-panel value="1">
-      <p-accordion-header>Requirements</p-accordion-header>
+      <p-accordion-header>Exigences</p-accordion-header>
       <p-accordion-content>
         <p class="m-0">
-          <strong>Required Skills:</strong> {{ selectedJobDetails?.requiredSkills || 'No requirements available.' }}
+          <strong>Compétences requises:</strong> {{ selectedJobDetails?.requiredSkills || 'Aucune exigence spécifiée.' }}
         </p>
       </p-accordion-content>
     </p-accordion-panel>
 
     <p-accordion-panel value="2">
-      <p-accordion-header>Additional Information</p-accordion-header>
+      <p-accordion-header>Informations complémentaires</p-accordion-header>
       <p-accordion-content>
         <p class="m-0">
-          <strong>Contract Type:</strong> {{ selectedJobDetails?.contractType }}
+          <strong>Type de contrat:</strong> {{ selectedJobDetails?.contractType }}
         </p>
         <p class="m-0">
-          <strong>Location:</strong> {{ selectedJobDetails?.location }}
+          <strong>Lieu:</strong> {{ selectedJobDetails?.location }}
         </p>
         <p class="m-0">
-          <strong>Experience Level:</strong> {{ selectedJobDetails?.experienceLevel }}
+          <strong>Niveau d'expérience:</strong> {{ selectedJobDetails?.experienceLevel }}
         </p>
         <p class="m-0">
-          <strong>Created At:</strong> {{ selectedJobDetails?.createdAt | date: 'dd/MM/yyyy' }}
+          <strong>Date de publication:</strong> {{ selectedJobDetails?.createdAt | date: 'dd/MM/yyyy' }}
         </p>
       </p-accordion-content>
     </p-accordion-panel>
   </p-accordion>
-  <ng-template #footer>
-    <p-button label="Close" (click)="closeJobDetails()" />
+  
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+      <p-button label="Postuler" styleClass="p-button-success mr-2"></p-button>
+      <p-button label="Fermer" styleClass="p-button-secondary" (click)="closeJobDetails()"></p-button>
+    </div>
   </ng-template>
 </p-dialog>
 
-<!-- Toast pour les notifications -->
-<p-toast />
+<p-toast></p-toast>

@@ -1,82 +1,81 @@
-<p-toast></p-toast> <!-- For displaying success/error messages -->
-<p-confirmDialog></p-confirmDialog> <!-- For confirmation dialogs -->
+<div class="card">
+    <p-toolbar styleClass="mb-4 gap-2">
+        <ng-template pTemplate="left">
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+        </ng-template>
+    </p-toolbar>
 
-<p-toolbar>
-    <ng-template pTemplate="start">
-        <p-button label="New Job Offer" icon="pi pi-plus" (onClick)="openNew()" class="p-button-success" />
+    <p-table #dt [value]="jobOffers()" [rows]="10" [paginator]="true" 
+        [globalFilterFields]="['title','description','contractType','location']" 
+        [tableStyle]="{'min-width': '75rem'}" [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+        [showCurrentPageReport]="true">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
+                <th pSortableColumn="contractType">Contract Type <p-sortIcon field="contractType"></p-sortIcon></th>
+                <th pSortableColumn="location">Location <p-sortIcon field="location"></p-sortIcon></th>
+                <th pSortableColumn="experienceLevel">Experience <p-sortIcon field="experienceLevel"></p-sortIcon></th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-offer>
+            <tr>
+                <td>{{offer.title}}</td>
+                <td>{{offer.contractType}}</td>
+                <td>{{offer.location}}</td>
+                <td>{{offer.experienceLevel}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editJobOffer(offer)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteJobOffer(offer)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="jobOfferDialog" [style]="{width: '450px'}" header="Job Offer Details" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="field">
+            <label for="title">Title</label>
+            <input type="text" pInputText id="title" [(ngModel)]="jobOffer.title" required autofocus />
+            <small class="p-error" *ngIf="submitted && !jobOffer.title">Title is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="description">Description</label>
+            <textarea id="description" pInputTextarea [(ngModel)]="jobOffer.description" required rows="3" cols="20"></textarea>
+            <small class="p-error" *ngIf="submitted && !jobOffer.description">Description is required.</small>
+        </div>
+
+        <div class="field">
+            <label for="contractType">Contract Type</label>
+            <p-dropdown id="contractType" [options]="contractTypes" [(ngModel)]="jobOffer.contractType" optionLabel="label" optionValue="value"></p-dropdown>
+        </div>
+
+        <div class="field">
+            <label for="location">Location</label>
+            <p-dropdown id="location" [options]="jobLocations" [(ngModel)]="jobOffer.location" optionLabel="label" optionValue="value"></p-dropdown>
+        </div>
+
+        <div class="field">
+            <label for="experienceLevel">Experience Level</label>
+            <p-dropdown id="experienceLevel" [options]="experienceLevels" [(ngModel)]="jobOffer.experienceLevel" optionLabel="label" optionValue="value"></p-dropdown>
+        </div>
+
+        <div class="field">
+            <label for="skills">Required Skills</label>
+            <textarea id="skills" pInputTextarea [(ngModel)]="jobOffer.requiredSkills" required rows="3" cols="20"></textarea>
+            <small class="p-error" *ngIf="submitted && !jobOffer.requiredSkills">Required skills are required.</small>
+        </div>
     </ng-template>
-</p-toolbar>
 
-<p-table [value]="jobOffers()" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 20]" dataKey="id">
-    <ng-template pTemplate="header">
-        <tr>
-            <th pSortableColumn="title">Title <p-sortIcon field="title" /></th>
-            <th pSortableColumn="contractType">Contract Type <p-sortIcon field="contractType" /></th>
-            <th pSortableColumn="location">Location <p-sortIcon field="location" /></th>
-            <th pSortableColumn="experienceLevel">Experience Level <p-sortIcon field="experienceLevel" /></th>
-            <th>Actions</th>
-        </tr>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="jobOfferDialog = false"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveJobOffer()"></button>
     </ng-template>
-
-    <ng-template pTemplate="body" let-jobOffer>
-        <tr>
-            <td>{{ jobOffer.title }}</td>
-            <td>{{ jobOffer.contractType }}</td>
-            <td>{{ jobOffer.location }}</td>
-            <td>{{ jobOffer.experienceLevel }}</td>
-            <td>
-                <p-button icon="pi pi-pencil" (click)="editJobOffer(jobOffer)" class="p-button-rounded p-button-text p-button-primary" />
-                <p-button icon="pi pi-trash" (click)="deleteJobOffer(jobOffer)" class="p-button-rounded p-button-text p-button-danger" />
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
-
-<p-dialog [(visible)]="jobOfferDialog" [header]="jobOffer.id ? 'Edit Job Offer' : 'Add Job Offer'" [style]="{ width: '700px' }" [modal]="true">
-    <div class="p-fluid">
-        <!-- Title -->
-        <div class="p-field">
-            <label for="titleInput">Title</label>
-            <input id="titleInput" pInputText [(ngModel)]="jobOffer.title" required />
-            <small *ngIf="submitted && !jobOffer.title?.trim()" class="p-error">Title is required.</small>
-        </div>
-
-        <!-- Description -->
-        <div class="p-field">
-            <label for="descriptionInput">Description</label>
-            <textarea id="descriptionInput" pInputTextarea [(ngModel)]="jobOffer.description" required></textarea>
-            <small *ngIf="submitted && !jobOffer.description?.trim()" class="p-error">Description is required.</small>
-        </div>
-
-        <!-- Contract Type -->
-        <div class="p-field">
-            <label for="contractTypeDropdown">Contract Type</label>
-            <p-dropdown id="contractTypeDropdown" [(ngModel)]="jobOffer.contractType" [options]="contractTypes" optionLabel="label" optionValue="value" placeholder="Select a contract type"></p-dropdown>
-        </div>
-
-        <!-- Location -->
-        <div class="p-field">
-            <label for="locationDropdown">Location</label>
-            <p-dropdown id="locationDropdown" [(ngModel)]="jobOffer.location" [options]="jobLocations" optionLabel="label" optionValue="value" placeholder="Select a location"></p-dropdown>
-        </div>
-
-        <!-- Experience Level -->
-        <div class="p-field">
-            <label for="experienceLevelDropdown">Experience Level</label>
-            <p-dropdown id="experienceLevelDropdown" [(ngModel)]="jobOffer.experienceLevel" [options]="experienceLevels" optionLabel="label" optionValue="value" placeholder="Select an experience level"></p-dropdown>
-        </div>
-
-        <!-- Required Skills -->
-        <div class="p-field">
-            <label for="requiredSkillsInput">Required Skills</label>
-            <input id="requiredSkillsInput" pInputText [(ngModel)]="jobOffer.requiredSkills" required />
-            <small *ngIf="submitted && !jobOffer.requiredSkills?.trim()" class="p-error">Required skills are mandatory.</small>
-        </div>
-
-        <!-- Buttons -->
-        <div class="p-d-flex p-jc-end">
-            <p-button label="Cancel" icon="pi pi-times" (click)="jobOfferDialog = false" class="p-button-text" />
-            <p-button label="Save" icon="pi pi-check" (click)="saveJobOffer()" />
-        </div>
-    </div>
 </p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-toast></p-toast>
