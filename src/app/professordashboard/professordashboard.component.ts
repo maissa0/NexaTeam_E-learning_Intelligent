@@ -7,19 +7,22 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
+import { MenuItem } from 'primeng/api';
+import { Footer } from 'primeng/api';
+import { CardModule } from 'primeng/card'; 
+import { PanelMenuModule } from 'primeng/panelmenu'; //
 
 @Component({
   selector: 'app-professordashboard',
   templateUrl: './professordashboard.component.html',
-  imports: [CommonModule, FormsModule,FooterComponent,
-  
+  imports: [CommonModule, FormsModule,FooterComponent,PanelMenuModule,CardModule,
         RouterModule  ,HeaderComponent
       ],  
       
   styleUrls: ['./professordashboard.component.css']
 })
 export class ProfessordashboardComponent implements OnInit {
-
+  model: MenuItem[] = [];
   loggedUser = '';
   currRole = '';
   courses : Observable<any[]> | undefined;
