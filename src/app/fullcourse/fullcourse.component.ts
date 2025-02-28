@@ -10,10 +10,12 @@ import { FooterComponent } from '../footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 import { HeaderComponent } from '../header/header.component';
+import * as FileSaver from 'file-saver';
+
+
 
 
 declare var require: any;
-//const FileSaver = require('file-saver');
 
 @Component({
   selector: 'app-fullcourse',
@@ -161,14 +163,18 @@ export class FullcourseComponent implements OnInit {
   }
 
   downloadPdf() {
-    const pdfUrl = './assets/TP WEB_2023-2024 (1).pdf';
-    const pdfName = 'Introduction to Spring MVC';
-    //FileSaver.saveAs(pdfUrl, pdfName);
+    const pdfUrl = 'one.pdf';
+    const pdfName = 'one';
+
+    fetch(pdfUrl)
+      .then(response => response.blob()) // Convert to blob
+      .then(blob => FileSaver.saveAs(blob, pdfName))
+      .catch(error => console.error('Error downloading PDF:', error));
   }
+
 
   openDoc() {
-    const pdfUrl = './assets/TP WEB_2023-2024 (1).pdf';
-    //window.open(pdfUrl + '#page=1', '_blank', '', true);
+    const pdfUrl = './assets/one.pdf';
+    window.open(pdfUrl + '#page=1', '_blank', '');
   }
-
-}
+}  
