@@ -8,6 +8,8 @@ import { HeaderFrontOfComponent } from './app/front_office/header-front-of/heade
 import { FooterFrontOfComponent } from './app/front_office/footer-front-of/footer-front-of.component';
 import { AddOfferComponent } from './app/add-offer/add-offer.component';
 import { OffersComponent } from './app/offers/offers.component';
+import { JobApplicationFormComponent } from './app/Components/job-application-form/job-application-form.component';
+import { JobApplicationsListComponent } from './app/Components/job-applications-list/job-applications-list.component';
 export const appRoutes: Routes = [
     {
         path: '',
@@ -20,6 +22,10 @@ export const appRoutes: Routes = [
             { path: 'addOffer', component: AddOfferComponent },
 
             { path: 'JobOffers', component: OffersComponent },
+            { path: 'Application', component: JobApplicationFormComponent},
+
+            { path: 'application', component: JobApplicationsListComponent},
+
 
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },

@@ -4,11 +4,19 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JobOffer } from '../models/job-offer.model';
 
+// Add this interface export
+export interface JobOfferSearchDTO {
+    keyword?: string;
+    contractType?: string;
+    location?: string;
+    experienceLevel?: string;
+}
+
 @Injectable({
-    providedIn: 'root' // ✅ Fourni au niveau racine pour une utilisation globale
+    providedIn: 'root'
 })
 export class JobofferService {
-    private BASE_URL = 'http://localhost:8084/api/job-offers'; // ✅ URL de base de l'API
+    private BASE_URL = 'http://localhost:8084/api/job-offers';
 
     constructor(private http: HttpClient) {}
 
@@ -35,5 +43,14 @@ export class JobofferService {
     // Supprimer une offre d'emploi
     deleteJobOffer(id: string): Observable<void> {
         return this.http.delete<void>(`${this.BASE_URL}/Delete/${id}`);
+    }
+
+    // Rechercher des offres d'emploi
+    searchJobOffers(searchDTO: JobOfferSearchDTO): Observable<JobOffer[]> {
+        return this.http.post<JobOffer[]>(`${this.BASE_URL}/search`, searchDTO);
+    }
+    // Increment and get view count for a job offer
+    viewJobOfferDetails(id: string): Observable<JobOffer> {
+        return this.http.get<JobOffer>(`${this.BASE_URL}/${id}/view`);
     }
 }

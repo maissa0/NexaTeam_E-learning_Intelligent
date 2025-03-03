@@ -1,0 +1,73 @@
+<div class="container mt-4">
+  <h2>Job Application Form</h2>
+
+  <!-- Messages -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success">
+    {{ successMessage }}
+  </div>
+
+  <form [formGroup]="applicationForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="name" class="form-label">Full Name</label>
+      <input type="text" class="form-control" id="name" formControlName="name">
+      <div *ngIf="applicationForm.get('name')?.invalid && applicationForm.get('name')?.touched" class="text-danger">
+        <small *ngIf="applicationForm.get('name')?.errors?.['required']">Name is required.</small>
+        <small *ngIf="applicationForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters.</small>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" formControlName="email">
+      <div *ngIf="applicationForm.get('email')?.invalid && applicationForm.get('email')?.touched" class="text-danger">
+        <small *ngIf="applicationForm.get('email')?.errors?.['required']">Email is required.</small>
+        <small *ngIf="applicationForm.get('email')?.errors?.['email']">Please enter a valid email address.</small>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="telephone" class="form-label">Phone Number</label>
+      <input type="tel" class="form-control" id="telephone" formControlName="telephone">
+      <div *ngIf="applicationForm.get('telephone')?.invalid && applicationForm.get('telephone')?.touched" class="text-danger">
+        <small>Please enter a valid 8-digit phone number.</small>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="resume" class="form-label">Resume</label>
+      <input type="file" 
+             class="form-control" 
+             id="resume" 
+             (change)="onFileChange($event, 'resume')"
+             accept=".pdf,.doc,.docx">
+      <div *ngIf="applicationForm.get('resume')?.invalid && applicationForm.get('resume')?.touched" class="text-danger">
+        <small>Resume is required.</small>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="coverLetter" class="form-label">Cover Letter (Optional)</label>
+      <input type="file" 
+             class="form-control" 
+             id="coverLetter" 
+             (change)="onFileChange($event, 'coverLetter')"
+             accept=".pdf,.doc,.docx">
+    </div>
+
+    <div class="d-flex gap-2">
+      <button type="submit" 
+              class="btn btn-primary flex-grow-1" 
+              [disabled]="!applicationForm.valid || isSubmitting">
+        {{ isSubmitting ? 'Submitting...' : 'Submit Application' }}
+      </button>
+      <button type="button" 
+              class="btn btn-secondary"
+              (click)="resetForm()">
+        Reset
+      </button>
+    </div>
+  </form>
+</div>

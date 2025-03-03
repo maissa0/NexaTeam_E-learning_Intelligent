@@ -158,3 +158,42 @@
   background-color: #e3f2fd;
   color: #2196F3;
 }
+.search-filters-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+}
+
+.stats-container {
+  .stats-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+    i {
+      font-size: 2rem;
+      color: #2196F3;
+    }
+
+    .stats-info {
+      display: flex;
+      flex-direction: column;
+
+      .stats-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .stats-label {
+        color: #666;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}

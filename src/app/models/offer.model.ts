@@ -1,12 +1,15 @@
-export interface offer {
+export interface Offer {
     id: string;
     title: string;
-     contractType: ContractType;
-     createdAt: Date;
-    }
-    export enum ContractType {
-        FULL_TIME = 'FULL_TIME',
-        PART_TIME = 'PART_TIME',
-        INTERNSHIP = 'INTERNSHIP',
-        FREELANCE = 'FREELANCE'
-    }
+    description?: string;
+    contractType: ContractType;
+    createdAt: Date;
+    viewCount?: number;  // Add this for view tracking
+}
+
+export enum ContractType {
+    FULL_TIME = 'FULL_TIME',
+    PART_TIME = 'PART_TIME',
+    INTERNSHIP = 'INTERNSHIP',
+    FREELANCE = 'FREELANCE'
+}

@@ -1,4 +1,3 @@
-// src/app/models/job-offer.model.ts
 export interface JobOffer {
     id: string;
     title: string;
@@ -7,8 +6,8 @@ export interface JobOffer {
     location: JobLocation;
     experienceLevel: ExperienceLevel;
     requiredSkills: string;
-    //enterpriseId: string;
     createdAt: Date;
+  //  viewCount?: number; // Add this line
 }
 
 export enum ContractType {
@@ -30,3 +29,4 @@ export enum ExperienceLevel {
     SENIOR = 'SENIOR',
     EXPERT = 'EXPERT'
 }
+

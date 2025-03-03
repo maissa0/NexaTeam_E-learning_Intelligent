@@ -4,6 +4,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { JobOffer, ContractType, JobLocation, ExperienceLevel } from '../models/job-offer.model';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +14,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { JobofferService } from '../Services/joboffer.service';
+// Add this to your imports at the top
+import { JobofferService, JobOfferSearchDTO } from '../Services/joboffer.service';
 import { ToolbarModule } from 'primeng/toolbar'; // ✅ Importer ToolbarModule
 import { ReactiveFormsModule } from '@angular/forms';
 import { RippleModule } from 'primeng/ripple';
@@ -26,29 +28,38 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
+import { Router } from '@angular/router';
+
 @Component({
-    
     selector: 'app-job-offers',
     templateUrl: './add-offer.component.html',
-    styleUrls: ['./add-offer.component.scss'], 
-
+    styleUrls: ['./add-offer.component.scss'],
+    standalone: true, // Add this line
     providers: [MessageService, ConfirmationService],
     imports: [
         CommonModule,
-      HttpClientModule,
-      FormsModule,
-      TableModule,
-      DialogModule,
-      DropdownModule,
-      ButtonModule,
-      ToastModule,
-      ConfirmDialogModule,
-      ToolbarModule ,
-      InputTextModule, 
-      RippleModule,     
-      TextareaModule    
-
-  ],
+        HttpClientModule,
+        FormsModule,
+        TableModule,
+        DialogModule,
+        DropdownModule,
+        ButtonModule,
+        ToastModule,
+        ConfirmDialogModule,
+        ToolbarModule,
+        InputTextModule,
+        RippleModule,
+        TextareaModule,
+        // Add these missing imports
+        ReactiveFormsModule,
+        RatingModule,
+        SelectModule,
+        RadioButtonModule,
+        InputNumberModule,
+        TagModule,
+        InputIconModule,
+        IconFieldModule
+    ],
 })
 export class AddOfferComponent implements OnInit {
     jobOfferDialog: boolean = false;
@@ -85,8 +96,18 @@ export class AddOfferComponent implements OnInit {
         { label: 'Senior', value: ExperienceLevel.SENIOR },
         { label: 'Expert', value: ExperienceLevel.EXPERT }
     ];
+    // Remove the duplicate searchCriteria declarations and keep only one
+    searchCriteria = {
+        keyword: '',
+        contractType: null as ContractType | null,
+        location: null as JobLocation | null,
+        experienceLevel: null as ExperienceLevel | null
+    };
+    searchResults: JobOffer[] = [];
 
     constructor(
+        private router: Router,
+
         private JobofferService: JobofferService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService
@@ -94,7 +115,51 @@ export class AddOfferComponent implements OnInit {
 
     ngOnInit() {
         this.loadJobOffers();
-        
+    }
+
+    // Update searchCriteria to include more search parameters
+    searchCriteriaForm = {
+        keyword: '',
+        contractType: null as ContractType | null,
+        location: null as JobLocation | null,
+        experienceLevel: null as ExperienceLevel | null
+    };
+
+    searchOffers(): void {
+        const searchParams: JobOfferSearchDTO = {
+            keyword: this.searchCriteria.keyword,
+            contractType: this.searchCriteria.contractType?.toString(),
+            location: this.searchCriteria.location?.toString(),
+            experienceLevel: this.searchCriteria.experienceLevel?.toString()
+        };
+    
+        if (Object.values(searchParams).some(value => value)) {
+            this.JobofferService.searchJobOffers(searchParams).subscribe({
+                next: (results) => {
+                    this.searchResults = results;
+                    this.jobOffers.set(results);
+                    if (results.length === 0) {
+                        this.messageService.add({
+                            severity: 'info',
+                            summary: 'Search Results',
+                            detail: 'No matching job offers found',
+                            life: 3000
+                        });
+                    }
+                },
+                error: (error) => {
+                    console.error('Error searching job offers:', error);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Failed to search job offers',
+                        life: 3000
+                    });
+                }
+            });
+        } else {
+            this.loadJobOffers();
+        }
     }
 
     loadJobOffers() {
@@ -153,6 +218,14 @@ export class AddOfferComponent implements OnInit {
             }
         });
     }
+    
+viewApplicants(offerId: number) {
+    this.router.navigate(['/application'], { 
+        queryParams: { 
+            offerId: offerId 
+        }
+    });
+}
 
     saveJobOffer() {
         this.submitted = true;

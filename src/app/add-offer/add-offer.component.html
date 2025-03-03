@@ -3,38 +3,102 @@
         <ng-template pTemplate="left">
             <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
         </ng-template>
+        <ng-template pTemplate="right">
+            <div class="search-section p-fluid">
+                <div class="p-grid">
+                    <div class="p-col">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input 
+                                type="text" 
+                                pInputText 
+                                [(ngModel)]="searchCriteria.keyword" 
+                                placeholder="Search by keyword..."
+                            />
+                        </span>
+                    </div>
+                    <div class="p-col">
+                        <p-dropdown 
+                            [options]="contractTypes" 
+                            [(ngModel)]="searchCriteria.contractType"
+                            placeholder="Contract Type"
+                            [showClear]="true"
+                        ></p-dropdown>
+                    </div>
+                    <div class="p-col">
+                        <p-dropdown 
+                            [options]="jobLocations" 
+                            [(ngModel)]="searchCriteria.location"
+                            placeholder="Location"
+                            [showClear]="true"
+                        ></p-dropdown>
+                    </div>
+                    <div class="p-col">
+                        <p-dropdown 
+                            [options]="experienceLevels" 
+                            [(ngModel)]="searchCriteria.experienceLevel"
+                            placeholder="Experience Level"
+                            [showClear]="true"
+                        ></p-dropdown>
+                    </div>
+                    <div class="p-col">
+                        <p-button label="Search" icon="pi pi-search" (onClick)="searchOffers()"></p-button>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="jobOffers()" [rows]="10" [paginator]="true" 
-        [globalFilterFields]="['title','description','contractType','location']" 
-        [tableStyle]="{'min-width': '75rem'}" [rowHover]="true" dataKey="id"
+    <p-table #dt [value]="jobOffers()" 
+        [rows]="10" 
+        [paginator]="true" 
+        [globalFilterFields]="['title','description','contractType','location','experienceLevel','requiredSkills']" 
+        [tableStyle]="{'min-width': '75rem'}" 
+        [rowHover]="true" 
+        dataKey="id"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
-        [showCurrentPageReport]="true">
+        [showCurrentPageReport]="true"
+        styleClass="p-datatable-gridlines">
 
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
-                <th pSortableColumn="contractType">Contract Type <p-sortIcon field="contractType"></p-sortIcon></th>
-                <th pSortableColumn="location">Location <p-sortIcon field="location"></p-sortIcon></th>
-                <th pSortableColumn="experienceLevel">Experience <p-sortIcon field="experienceLevel"></p-sortIcon></th>
-                <th>Actions</th>
+                <th class="text-center" style="min-width:200px" pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
+                <th class="text-center" style="min-width:300px" pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+                <th class="text-center" style="min-width:150px" pSortableColumn="contractType">Contract Type <p-sortIcon field="contractType"></p-sortIcon></th>
+                <th class="text-center" style="min-width:150px" pSortableColumn="location">Location <p-sortIcon field="location"></p-sortIcon></th>
+                <th class="text-center" style="min-width:150px" pSortableColumn="experienceLevel">Experience <p-sortIcon field="experienceLevel"></p-sortIcon></th>
+                <th class="text-center" style="min-width:200px" pSortableColumn="requiredSkills">Required Skills <p-sortIcon field="requiredSkills"></p-sortIcon></th>
+                <th class="text-center" style="min-width:150px" pSortableColumn="createdAt">Created At <p-sortIcon field="createdAt"></p-sortIcon></th>
+                <th class="text-center" style="min-width:100px">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-offer>
             <tr>
                 <td>{{offer.title}}</td>
-                <td>{{offer.contractType}}</td>
-                <td>{{offer.location}}</td>
-                <td>{{offer.experienceLevel}}</td>
-                <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editJobOffer(offer)"></button>
-                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteJobOffer(offer)"></button>
+                <td class="description-cell">{{offer.description}}</td>
+                <td class="text-center"><p-tag [value]="offer.contractType"></p-tag></td>
+                <td class="text-center">{{offer.location}}</td>
+                <td class="text-center">{{offer.experienceLevel}}</td>
+                <td class="skills-cell">{{offer.requiredSkills}}</td>
+                <td class="text-center">{{offer.createdAt | date:'medium'}}</td>
+                <td class="text-center">
+                    <div class="action-buttons">
+                        <button pButton pRipple icon="pi pi-users" 
+                                class="p-button-rounded p-button-info mr-2" 
+                                (click)="viewApplicants(offer.id)"
+                                pTooltip="View Applicants"></button>
+                        <button pButton pRipple icon="pi pi-pencil" 
+                                class="p-button-rounded p-button-success mr-2" 
+                                (click)="editJobOffer(offer)"></button>
+                        <button pButton pRipple icon="pi pi-trash" 
+                                class="p-button-rounded p-button-danger" 
+                                (click)="deleteJobOffer(offer)"></button>
+                    </div>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
-
 <p-dialog [(visible)]="jobOfferDialog" [style]="{width: '450px'}" header="Job Offer Details" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div class="field">
