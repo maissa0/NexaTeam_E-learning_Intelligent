@@ -51,11 +51,23 @@ public class SecurityConfig {
         );
         //http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests((requests)
+<<<<<<< HEAD
                 -> requests
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")//genere auto ROLE_
                 .requestMatchers("/api/csrf-token").permitAll()
                 .requestMatchers("/api/auth/public/**").permitAll()
                 .anyRequest().authenticated());
+=======
+                        -> requests
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/csrf-token").permitAll()
+                        .requestMatchers("/api/auth/public/**").permitAll()
+                        .requestMatchers("/oauth2/**").permitAll()
+                        .anyRequest().authenticated())
+                .oauth2Login(oauth -> {
+
+                });
+>>>>>>> 65d5bd8 (oauth2 first attempt)
         http.exceptionHandling(exception
                 -> exception.authenticationEntryPoint(unauthorizedHandler));
         http.addFilterBefore(authenticationJwtTokenFilter(),
