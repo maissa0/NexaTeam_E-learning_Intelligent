@@ -49,7 +49,7 @@ public class JobOfferService implements IjobOfferService {
     public jobOffer incrementViewCount(String id) {
         jobOffer jobOffer = jobOfferRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("JobOffer not found"));
-        jobOffer.setViewCount(jobOffer.getViewCount() + 1); // Incrémenter le compteur de vues
+        jobOffer.setViewCount(jobOffer.getViewCount() + 1);
         return jobOfferRepository.save(jobOffer);
     }
 

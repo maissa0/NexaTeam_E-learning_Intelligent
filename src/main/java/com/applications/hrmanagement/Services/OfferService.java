@@ -1,5 +1,4 @@
 package com.applications.hrmanagement.Services;
-import com.applications.hrmanagement.DTO.JobOfferDto;
 import com.applications.hrmanagement.Repositories.offersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

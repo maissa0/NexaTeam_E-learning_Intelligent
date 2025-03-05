@@ -1,5 +1,7 @@
 package com.applications.hrmanagement.Services;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.applications.hrmanagement.DTO.JobApplicationDTO;
+
 import org.springframework.stereotype.Service;
 import com.applications.hrmanagement.Repositories.JobApplicationRepository;
 import com.applications.hrmanagement.Entities.JobApplication;
@@ -9,15 +11,59 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class JobApplicationService implements  IJobApplicationService{
-
+public class JobApplicationService implements  IJobApplicationService {
+    @Autowired
+    private IEmailService emailService;
     @Autowired
     private JobApplicationRepository jobApplicationRepository;
 
+    @Override
     public JobApplicationDTO createJobApplication(JobApplicationDTO jobApplicationDTO) {
+        // Convertir DTO en entité
         JobApplication jobApplication = convertToEntity(jobApplicationDTO);
+
+        // Enregistrer la candidature dans la base de données
         jobApplication = jobApplicationRepository.save(jobApplication);
+
+        // Envoyer un e-mail de confirmation
+        String to = jobApplication.getEmail();
+        String subject = "Confirmation de candidature";
+        String name = jobApplication.getName();
+
+        // Envoyer l'e-mail personnalisé
+        emailService.sendEmail(to, subject, name);
+
+        // Retourner le DTO
         return convertToDTO(jobApplication);
+    }
+
+    // Méthodes de conversion DTO/Entité
+
+
+    private JobApplication convertToEntity(JobApplicationDTO jobApplicationDTO) {
+        JobApplication jobApplication = new JobApplication();
+        jobApplication.setIdjobApp(jobApplicationDTO.getIdjobApp());
+        jobApplication.setName(jobApplicationDTO.getName());
+        jobApplication.setEmail(jobApplicationDTO.getEmail());
+        jobApplication.setTelephone(jobApplicationDTO.getTelephone());
+        jobApplication.setResumeUrl(jobApplicationDTO.getResumeUrl());
+        jobApplication.setCoverLetterUrl(jobApplicationDTO.getCoverLetterUrl());
+        jobApplication.setStatus(jobApplicationDTO.getStatus());
+        jobApplication.setSubmissionDate(jobApplicationDTO.getSubmissionDate());
+        return jobApplication;
+    }
+    private JobApplicationDTO convertToDTO(JobApplication jobApplication) {
+        JobApplicationDTO dto = new JobApplicationDTO();
+        dto.setIdjobApp(jobApplication.getIdjobApp());
+        dto.setName(jobApplication.getName());
+        dto.setEmail(jobApplication.getEmail());
+        dto.setTelephone(jobApplication.getTelephone());
+        dto.setResumeUrl(jobApplication.getResumeUrl());
+        dto.setCoverLetterUrl(jobApplication.getCoverLetterUrl());
+        dto.setStatus(jobApplication.getStatus());
+        dto.setSubmissionDate(jobApplication.getSubmissionDate());
+        dto.setJobOfferTitle(jobApplication.getJobOfferTitle());
+        return dto;
     }
 
     public JobApplicationDTO getJobApplicationById(String id) {
@@ -44,29 +90,7 @@ public class JobApplicationService implements  IJobApplicationService{
         jobApplicationRepository.deleteById(id);
     }
 
-    private JobApplication convertToEntity(JobApplicationDTO jobApplicationDTO) {
-        JobApplication jobApplication = new JobApplication();
-        jobApplication.setIdjobApp(jobApplicationDTO.getIdjobApp());
-        jobApplication.setName(jobApplicationDTO.getName());
-        jobApplication.setEmail(jobApplicationDTO.getEmail());
-        jobApplication.setTelephone(jobApplicationDTO.getTelephone());
-        jobApplication.setResumeUrl(jobApplicationDTO.getResumeUrl());
-        jobApplication.setCoverLetterUrl(jobApplicationDTO.getCoverLetterUrl());
-        jobApplication.setStatus(jobApplicationDTO.getStatus());
-        jobApplication.setSubmissionDate(jobApplicationDTO.getSubmissionDate());
-        return jobApplication;
-    }
 
-    private JobApplicationDTO convertToDTO(JobApplication jobApplication) {
-        JobApplicationDTO jobApplicationDTO = new JobApplicationDTO();
-        jobApplicationDTO.setIdjobApp(jobApplication.getIdjobApp());
-        jobApplicationDTO.setName(jobApplication.getName());
-        jobApplicationDTO.setEmail(jobApplication.getEmail());
-        jobApplicationDTO.setTelephone(jobApplication.getTelephone());
-        jobApplicationDTO.setResumeUrl(jobApplication.getResumeUrl());
-        jobApplicationDTO.setCoverLetterUrl(jobApplication.getCoverLetterUrl());
-        jobApplicationDTO.setStatus(jobApplication.getStatus());
-        jobApplicationDTO.setSubmissionDate(jobApplication.getSubmissionDate());
-        return jobApplicationDTO;
-    }
+
+
 }
