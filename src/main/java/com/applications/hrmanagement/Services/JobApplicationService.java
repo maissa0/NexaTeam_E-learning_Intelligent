@@ -1,17 +1,16 @@
 package com.applications.hrmanagement.Services;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import com.applications.hrmanagement.DTO.JobApplicationDTO;
-
 import org.springframework.stereotype.Service;
 import com.applications.hrmanagement.Repositories.JobApplicationRepository;
 import com.applications.hrmanagement.Entities.JobApplication;
-import com.applications.hrmanagement.DTO.JobApplicationDTO;
-import com.applications.hrmanagement.Services.IJobApplicationService;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors; // Importez Collectors pour toList()
 
 @Service
-public class JobApplicationService implements  IJobApplicationService {
+public class JobApplicationService implements IJobApplicationService {
     @Autowired
     private IEmailService emailService;
     @Autowired
@@ -19,26 +18,17 @@ public class JobApplicationService implements  IJobApplicationService {
 
     @Override
     public JobApplicationDTO createJobApplication(JobApplicationDTO jobApplicationDTO) {
-        // Convertir DTO en entité
         JobApplication jobApplication = convertToEntity(jobApplicationDTO);
-
-        // Enregistrer la candidature dans la base de données
         jobApplication = jobApplicationRepository.save(jobApplication);
 
-        // Envoyer un e-mail de confirmation
         String to = jobApplication.getEmail();
         String subject = "Confirmation de candidature";
         String name = jobApplication.getName();
 
-        // Envoyer l'e-mail personnalisé
         emailService.sendEmail(to, subject, name);
 
-        // Retourner le DTO
         return convertToDTO(jobApplication);
     }
-
-    // Méthodes de conversion DTO/Entité
-
 
     private JobApplication convertToEntity(JobApplicationDTO jobApplicationDTO) {
         JobApplication jobApplication = new JobApplication();
@@ -52,6 +42,7 @@ public class JobApplicationService implements  IJobApplicationService {
         jobApplication.setSubmissionDate(jobApplicationDTO.getSubmissionDate());
         return jobApplication;
     }
+
     private JobApplicationDTO convertToDTO(JobApplication jobApplication) {
         JobApplicationDTO dto = new JobApplicationDTO();
         dto.setIdjobApp(jobApplication.getIdjobApp());
@@ -62,7 +53,6 @@ public class JobApplicationService implements  IJobApplicationService {
         dto.setCoverLetterUrl(jobApplication.getCoverLetterUrl());
         dto.setStatus(jobApplication.getStatus());
         dto.setSubmissionDate(jobApplication.getSubmissionDate());
-        dto.setJobOfferTitle(jobApplication.getJobOfferTitle());
         return dto;
     }
 
@@ -75,6 +65,7 @@ public class JobApplicationService implements  IJobApplicationService {
         List<JobApplication> jobApplications = jobApplicationRepository.findAll();
         return jobApplications.stream().map(this::convertToDTO).toList();
     }
+
 
     public JobApplicationDTO updateJobApplication(String id, JobApplicationDTO updatedJobApplicationDTO) {
         if (jobApplicationRepository.existsById(id)) {
@@ -89,8 +80,4 @@ public class JobApplicationService implements  IJobApplicationService {
     public void deleteJobApplication(String id) {
         jobApplicationRepository.deleteById(id);
     }
-
-
-
-
 }

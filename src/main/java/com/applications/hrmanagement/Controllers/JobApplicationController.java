@@ -1,4 +1,5 @@
 package com.applications.hrmanagement.Controllers;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.applications.hrmanagement.DTO.JobApplicationDTO;
@@ -12,15 +13,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/jobApp")
-
 public class JobApplicationController {
 
     @Autowired
     private JobApplicationService jobApplicationService;
 
-
     private static final Logger logger = LoggerFactory.getLogger(JobApplicationController.class);
-
 
     @Autowired
     public JobApplicationController(JobApplicationService jobApplicationService) {
@@ -39,8 +37,9 @@ public class JobApplicationController {
     public JobApplicationDTO getJobApplication(@PathVariable String id) {
         return jobApplicationService.getJobApplicationById(id);
     }
+
     @GetMapping("/all")
     public List<JobApplicationDTO> getAllJobApplications(){
-    return jobApplicationService.getAllJobApplications();
-}}
-
+        return jobApplicationService.getAllJobApplications();
+    }
+}
