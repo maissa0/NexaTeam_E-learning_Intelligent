@@ -17,19 +17,17 @@ import java.time.LocalDateTime;
 public class Interview {
 
     @Id
-    private String interviewId;  // MongoDB uses String (ObjectId)
+    private String interviewId;
 
-    private String applicationId; // Store applicationId as String instead of referencing JobApplication
+    private String applicationId;
 
-    private LocalDateTime scheduledDateTime; // Date & Time of the interview
+    private LocalDateTime scheduledDateTime;
 
+    private String meetingLink;
 
-    private String meetingLink; // Online meeting link (Zoom, Google Meet, etc.)
+    private String recordingLink;
 
-    private String recordingLink; // Link to the interview recording
-
-    private InterviewStatus status; // Enum: SCHEDULED, COMPLETED, CANCELED
-
+    private InterviewStatus status;
 
     private LocalDateTime createdAt;
 

@@ -1,4 +1,4 @@
-package com.example.interview.repository;
+package com.example.interview.repositories;
 
 import com.example.interview.model.Interview;
 import org.springframework.data.mongodb.repository.MongoRepository;

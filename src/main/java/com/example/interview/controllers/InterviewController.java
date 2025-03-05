@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/interviews")
 public class InterviewController {
@@ -18,9 +20,15 @@ public class InterviewController {
 
     @PostMapping("/create")
     public ResponseEntity<Interview> createInterview(@RequestBody Interview interview) {
-        Interview createdInterview = interviewService.createInterview(interview);
-        return null;
+        try {
+            Interview savedInterview = interviewService.createInterview(interview);
+            return ResponseEntity.ok(savedInterview);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
+
+
 
     @GetMapping("/getById/{id}")
     public ResponseEntity<Interview> getInterviewById(@PathVariable String id) {
