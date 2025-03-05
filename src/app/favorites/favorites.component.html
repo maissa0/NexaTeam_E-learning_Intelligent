@@ -1,9 +1,9 @@
 <div class="offers-container">
   <header class="page-header">
-    <h1>Explore the Latest Job Offers</h1>
+    <h1>My Favorite Job Offers</h1>
   </header>
 
-  <div *ngIf="isLoading()" class="loading-spinner">
+  <div *ngIf="isLoading" class="loading-spinner">
     <div class="spinner">
       <div class="spinner-inner">
         <div class="spinner-circle"></div>
@@ -13,40 +13,40 @@
     </div>
   </div>
 
-  <div class="job-cards-container" *ngIf="!isLoading()">
-    <div *ngIf="jobOffers().length === 0" class="no-offers-message">
+  <div class="job-cards-container" *ngIf="!isLoading">
+    <div *ngIf="favorites.length === 0" class="no-offers-message">
       <div class="p-message p-message-info w-full">
-        <div class="p-message-text">No job offers available at the moment.</div>
+        <div class="p-message-text">You haven't added any job offers to your favorites yet.</div>
       </div>
     </div>
 
     <div class="grid">
-      <div *ngFor="let offer of jobOffers()" class="col-12 md:col-6 lg:col-4">
+      <div *ngFor="let favorite of favorites" class="col-12 md:col-6 lg:col-4">
         <div class="job-card">
           <div class="card-header">
-            <button class="favorite-button" (click)="onToggleFavorite(offer)">
-              <i class="pi" [ngClass]="{'pi-heart-fill': offer.isFavorite, 'pi-heart': !offer.isFavorite}"></i>
+            <button class="favorite-button" (click)="removeFromFavorites(favorite.jobOfferId)">
+              <i class="pi pi-trash"></i>
             </button>
           </div>
 
           <div class="card-content">
-            <h3 class="job-title">{{ offer.title }}</h3>
+            <h3 class="job-title">{{ favorite.title }}</h3>
             
             <div class="job-details">
               <span class="location">
                 <i class="pi pi-map-marker"></i>
-                {{ offer.location }}
+                {{ favorite.location }}
               </span>
-              <span class="contract-type">{{ offer.contractType }}</span>
+              <span class="contract-type">{{ favorite.contractType }}</span>
             </div>
 
             <div class="card-footer">
-              <span class="posted-date">Posted {{ offer.createdAt | date:'dd/MM/yyyy' }}</span>
-              <p-button 
+              <span class="posted-date">Posted {{ favorite.createdAt | date:'dd/MM/yyyy' }}</span>
+              <button pButton 
                 label="View Details" 
-                (click)="openJobDetails(offer.id)"
-                styleClass="p-button-rounded">
-              </p-button>
+                (click)="openJobDetails(favorite.jobOfferId)"
+                class="p-button-rounded">
+              </button>
             </div>
           </div>
         </div>
@@ -94,13 +94,11 @@
       </p-accordion-content>
     </p-accordion-panel>
   </p-accordion>
-  
   <ng-template pTemplate="footer">
     <div class="dialog-footer">
-      <p-button label="Postuler" styleClass="p-button-success mr-2"></p-button>
-      <p-button label="Fermer" styleClass="p-button-secondary" (click)="closeJobDetails()"></p-button>
+      <button pButton label="Postuler" class="p-button-success mr-2" (click)="applyForJob(selectedJobDetails?.jobOfferId || selectedJobDetails?.id)"></button>
+      <button pButton label="Fermer" class="p-button-secondary" (click)="closeJobDetails()"></button>
     </div>
   </ng-template>
 </p-dialog>
 
-<p-toast></p-toast>

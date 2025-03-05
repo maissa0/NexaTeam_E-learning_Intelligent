@@ -10,6 +10,8 @@ import { AddOfferComponent } from './app/add-offer/add-offer.component';
 import { OffersComponent } from './app/offers/offers.component';
 import { JobApplicationFormComponent } from './app/Components/job-application-form/job-application-form.component';
 import { JobApplicationsListComponent } from './app/Components/job-applications-list/job-applications-list.component';
+import { JobOffersStatsComponent } from './app/add-offer/job-offers-stats.component';
+import { FavoritesComponent } from './app/favorites/favorites.component';
 export const appRoutes: Routes = [
     {
         path: '',
@@ -25,7 +27,10 @@ export const appRoutes: Routes = [
             { path: 'Application', component: JobApplicationFormComponent},
 
             { path: 'application', component: JobApplicationsListComponent},
-
+            { path: 'stat', component: JobOffersStatsComponent},
+            {path : 'job-application-form', component: JobApplicationFormComponent},
+              
+            { path: 'favoris', component: FavoritesComponent},
 
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },

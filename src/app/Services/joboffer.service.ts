@@ -3,13 +3,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JobOffer } from '../models/job-offer.model';
+import { ContractType } from '../models/job-offer.model';
+import { JobLocation } from '../models/job-offer.model';
+import { ExperienceLevel } from '../models/job-offer.model';
 
 // Add this interface export
 export interface JobOfferSearchDTO {
     keyword?: string;
-    contractType?: string;
-    location?: string;
-    experienceLevel?: string;
+    contractType?: ContractType | string;
+    location?: JobLocation | string;
+    experienceLevel?: ExperienceLevel | string;
 }
 
 @Injectable({

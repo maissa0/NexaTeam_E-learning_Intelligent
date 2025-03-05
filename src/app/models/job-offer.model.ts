@@ -7,7 +7,8 @@ export interface JobOffer {
     experienceLevel: ExperienceLevel;
     requiredSkills: string;
     createdAt: Date;
-  //  viewCount?: number; // Add this line
+    isFavorite: boolean;
+    viewCount: number; // Changed from optional to required property
 }
 
 export enum ContractType {

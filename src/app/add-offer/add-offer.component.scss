@@ -24,7 +24,26 @@
             width: 100%;
             max-width: 500px;
         }
+        .search-container {
+            width: 100%;
+            padding: 0.5rem;
+            
+            .search-grid {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+        }
         
+        :host ::ng-deep {
+            .p-dropdown {
+                width: 100%;
+            }
+            .p-button {
+                width: 100%;
+            }
+        }
         input {
             width: 100%;
         }

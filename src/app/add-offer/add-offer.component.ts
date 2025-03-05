@@ -29,13 +29,15 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { Router } from '@angular/router';
+import { JobOffersStatsComponent } from './job-offers-stats.component';
+
 
 @Component({
     selector: 'app-job-offers',
     templateUrl: './add-offer.component.html',
     styleUrls: ['./add-offer.component.scss'],
-    standalone: true, // Add this line
-    providers: [MessageService, ConfirmationService],
+    standalone: true,
+    providers: [MessageService, ConfirmationService], // Add ConfirmationService here
     imports: [
         CommonModule,
         HttpClientModule,
@@ -58,11 +60,13 @@ import { Router } from '@angular/router';
         InputNumberModule,
         TagModule,
         InputIconModule,
-        IconFieldModule
+        IconFieldModule,
+        JobOffersStatsComponent  // Add this line
     ],
 })
 export class AddOfferComponent implements OnInit {
     jobOfferDialog: boolean = false;
+    // Remove the duplicate declaration and combine them
     jobOffers = signal<JobOffer[]>([]);
     jobOffer: JobOffer = {
         id: '',
@@ -72,8 +76,9 @@ export class AddOfferComponent implements OnInit {
         location: JobLocation.REMOTE,
         experienceLevel: ExperienceLevel.JUNIOR,
         requiredSkills: '',
-       // enterpriseId: '',
-        createdAt: new Date()
+        createdAt: new Date(),
+        viewCount: 0,
+        isFavorite: false  // Add the missing required property
     };
     submitted: boolean = false;
 
@@ -186,9 +191,10 @@ export class AddOfferComponent implements OnInit {
             location: JobLocation.REMOTE,
             experienceLevel: ExperienceLevel.JUNIOR,
             requiredSkills: '',
-            //enterpriseId: '',
-            createdAt: new Date()
-        };
+            createdAt: new Date(),
+            viewCount: 0,
+            isFavorite: false  // Add this line
+          };
         this.submitted = false;
         this.jobOfferDialog = true;
     }

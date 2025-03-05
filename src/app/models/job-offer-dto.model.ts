@@ -1,4 +1,5 @@
 export interface JobOfferDto {
+  id?: number;
   title?: string;
   description?: string;
   location?: string;

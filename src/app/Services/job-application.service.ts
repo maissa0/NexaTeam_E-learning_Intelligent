@@ -37,7 +37,13 @@ export class JobApplicationService {
     return this.http.get(`${this.apiUrl}/all`);
   }
 
-
+  // Add view count increment method
+  incrementJobOfferViewCount(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}/view`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
   downloadFile(fileName: string, fileType: string): Observable<Blob> {
     return this.http.get(`${this.uploadUrl}/${fileName}`, {
       responseType: 'blob',

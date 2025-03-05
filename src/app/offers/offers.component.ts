@@ -7,6 +7,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
+import { FavoriteService } from '../Services/favorite.service';
 
 @Component({
   selector: 'app-offers',
@@ -24,13 +25,29 @@ export class OffersComponent implements OnInit {
 
   constructor(
     private offersService: OffersService, // Injectez OffersService
+    private favoriteService: FavoriteService,
     private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.loadJobOffers();
   }
-
+  // In your component where you need to check favorite status
+  checkFavoriteStatus(jobOfferId: string) {
+    const userId = 'current-user-id'; // Replace with actual user ID
+    this.favoriteService.isFavorite(userId, jobOfferId).subscribe({
+      next: (isFavorite) => {
+        // Update your UI based on isFavorite status
+        const offer = this.jobOffers().find(o => o.id === jobOfferId);
+        if (offer) {
+          offer.isFavorite = isFavorite;
+        }
+      },
+      error: (error) => {
+        console.error('Error checking favorite status:', error);
+      }
+    });
+  }
   // Charger les offres d'emploi depuis le backend
   loadJobOffers() {
     this.isLoading.set(true);
@@ -84,5 +101,58 @@ export class OffersComponent implements OnInit {
       detail: 'The job details dialog has been closed.',
       life: 3000,
     });
+  }
+  onToggleFavorite(offer: JobOffer) {
+    // Make sure you have the actual user ID from your auth service
+    const userId = '65f1c2e8a1b2c3d4e5f6a7b8'; // Replace this with actual user ID
+    
+    if (!offer || !offer.id) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Invalid job offer'
+      });
+      return;
+    }
+
+    if (offer.isFavorite) {
+      this.favoriteService.removeFromFavorites(userId, offer.id).subscribe({
+        next: () => {
+          offer.isFavorite = false;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Removed from favorites'
+          });
+        },
+        error: (error) => {
+          console.error('Error removing favorite:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to remove from favorites'
+          });
+        }
+      });
+    } else {
+      this.favoriteService.addToFavorites(userId, offer.id).subscribe({
+        next: () => {
+          offer.isFavorite = true;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Added to favorites'
+          });
+        },
+        error: (error) => {
+          console.error('Error adding favorite:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Failed to add to favorites'
+          });
+        }
+      });
+    }
   }
 }
