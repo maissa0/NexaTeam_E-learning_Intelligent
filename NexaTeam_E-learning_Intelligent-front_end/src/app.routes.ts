@@ -9,6 +9,10 @@ import { FooterFrontOfComponent } from './app/front_office/footer-front-of/foote
 import { ViewQuizComponent } from './app/pages/uikit/view-quiz.component';
 import { CreateTestComponent } from './app/pages/uikit/create-test.component';
 import { AddQuestionInQuizComponent } from './app/pages/uikit/add-question-in-quiz.component';
+import { UpdateQuizComponent } from './app/pages/uikit/update-quiz.component';
+import { StartQuizComponent } from './app/pages/landing/components/start-quiz.component';
+import { UserDashboardComponent } from './app/pages/landing/components/user-dashboard.component';
+import { ViewResultsComponent } from './app/pages/landing/components/view-results.component';
 
 export const appRoutes: Routes = [
     {
@@ -29,5 +33,12 @@ export const appRoutes: Routes = [
     { path: 'view/:id', component: ViewQuizComponent },
     { path: 'create-test', component: CreateTestComponent },
 { path: 'add-question/:id', component: AddQuestionInQuizComponent },
+{ path: 'update-quiz/:id', component: UpdateQuizComponent },
+{ path: 'start-quiz/:id', component: StartQuizComponent }, // Route avec paramètre ID
+{ path: 'user-dashboard', component: UserDashboardComponent },
+{ path: 'view-results', component: ViewResultsComponent },
+
+
+
     { path: '**', redirectTo: '/notfound' }
 ];

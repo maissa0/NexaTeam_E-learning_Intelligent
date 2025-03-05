@@ -4,8 +4,7 @@ import { ChartDemo } from './chartdemo';
 import { InputDemo } from './inputdemo';
 
 import { MessagesDemo } from './messagesdemo';
-import { Component } from '@angular/core';
-import { ViewQuizComponent } from './view-quiz.component';
+
 
 
 export default [

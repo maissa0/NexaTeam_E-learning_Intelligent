@@ -25,7 +25,7 @@ import { ButtonModule } from 'primeng/button';
                     />
                 </g>
             </svg>
-            <span class="text-surface-900 dark:text-surface-0 font-medium text-2xl leading-normal mr-20">SAKAI</span>
+            <span class="text-surface-900 dark:text-surface-0 font-medium text-2xl leading-normal mr-20">L'earn</span>
         </a>
 
         <a pButton [text]="true" severity="secondary" [rounded]="true" pRipple class="lg:!hidden" pStyleClass="@next" enterClass="hidden" leaveToClass="hidden" [hideOnOutsideClick]="true">
@@ -39,14 +39,27 @@ import { ButtonModule } from 'primeng/button';
                         <span>Home</span>
                     </a>
                 </li>
-                <li>
-                    <a (click)="router.navigate(['/landing'], { fragment: 'features' })" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
-                        <span>Features</span>
-                    </a>
-                </li>
+                <li class="relative group">
+    <a (click)="router.navigate(['/landing'], { fragment: 'features' })" 
+       pRipple 
+       class="px-4 py-3 text-surface-900 dark:text-surface-0 font-medium text-lg">
+        <span>Courses</span>
+    </a>
+    
+    <!-- Dropdown Menu -->
+    <ul class="absolute left-0 mt-2 hidden group-hover:block bg-white dark:bg-gray-800 shadow-md rounded-lg w-48">
+    <li>
+    <a [routerLink]="'/user-dashboard'"
+           class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+            Start Quiz
+        </a>
+    </li>
+</ul>
+
+
                 <li>
                     <a (click)="router.navigate(['/landing'], { fragment: 'highlights' })" pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
-                        <span>Highlights</span>
+                        <span>JobOffers</span>
                     </a>
                 </li>
                 <li>

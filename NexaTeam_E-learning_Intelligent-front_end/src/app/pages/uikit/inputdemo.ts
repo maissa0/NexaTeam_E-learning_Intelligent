@@ -88,9 +88,9 @@ import { ViewQuizComponent } from './view-quiz.component';
               </div>
     
               <div class="d-flex justify-content-between mt-3">
-                <a class="icon-link" [routerLink]="'update-quiz/' + quiz.id" title="Update">
-                  <i class="pi pi-pencil text-warning"></i>
-                </a>
+    <a class="icon-link" [routerLink]="['/update-quiz', quiz.id]" title="Update">
+        <i class="pi pi-pencil text-warning"></i>
+    </a>
                 <a class="icon-link" (click)="deleteQuiz(quiz.id)" title="Delete">
                   <i class="pi pi-trash text-danger"></i>
                 </a>
