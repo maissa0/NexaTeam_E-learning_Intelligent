@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { JobApplicationService } from '../../Services/job-application.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-job-applications-list',
@@ -34,17 +35,18 @@ export class JobApplicationsListComponent implements OnInit {
       }
     });
   }
+  getStatusClass(status: string | null): string {
+    if (!status) return 'status-pending'; // Default status class if status is null
 
-  getStatusClass(status: string): string {
     switch (status.toUpperCase()) {
       case 'PENDING':
         return 'status-pending';
-      case 'ACCEPTED':
-        return 'status-accepted';
+      case 'APPROVED':
+        return 'status-approved';
       case 'REJECTED':
         return 'status-rejected';
       default:
-        return '';
+        return 'status-pending';
     }
   }
   downloadFile(fileName: string, fileType: string): void {
@@ -62,5 +64,17 @@ export class JobApplicationsListComponent implements OnInit {
         alert('Failed to download file. Please try again.');
       }
     });
+  }
+  viewFile(fileUrl: string): string {
+    if (!fileUrl) return '';
+    
+    // Remove any 'file:///' prefix if present
+    fileUrl = fileUrl.replace('file:///', '');
+    
+    // Extract just the filename from the path
+    const fileName = fileUrl.split('\\').pop()?.split('/').pop();
+    
+    // Construct the proper API URL
+    return `${environment.apiUrl}/api/files/download/${fileName}`;
   }
 }

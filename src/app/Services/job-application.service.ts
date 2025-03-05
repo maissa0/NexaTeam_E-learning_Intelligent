@@ -1,44 +1,71 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class JobApplicationService {
   private apiUrl = 'http://localhost:8084/api/jobApp';
+  private uploadUrl = 'http://localhost:8084/api/uploads';
 
   constructor(private http: HttpClient) { }
 
-  submitApplication(formData: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/create`, formData, {
-      headers: new HttpHeaders({
-        'Accept': '*/*'
-      }),
-      reportProgress: true
-    });
+  submitApplication(jobApplicationDTO: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/create`, jobApplicationDTO)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  updateJobApplication(id: string, jobApplicationDTO: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update/${id}`, jobApplicationDTO)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getJobApplicationById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   getAllApplications(): Observable<any> {
     return this.http.get(`${this.apiUrl}/all`);
   }
 
+
   downloadFile(fileName: string, fileType: string): Observable<Blob> {
-    const endpoint = fileType === 'resume' ? 'download-resume' : 'download-cover-letter';
-    return this.http.get(`${this.apiUrl}/${endpoint}/${fileName}`, {
+    return this.http.get(`${this.uploadUrl}/${fileName}`, {
       responseType: 'blob',
       headers: new HttpHeaders({
         'Accept': 'application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
       })
-    });
+    }).pipe(
+      catchError(this.handleError)
+    );
   }
 
-  downloadCoverLetter(fileName: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/download-cover-letter/${fileName}`, {
-      responseType: 'blob',
-      headers: new HttpHeaders({
-        'Accept': 'application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-      })
-    });
+  uploadFile(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${this.uploadUrl}/upload`, formData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'Une erreur est survenue; veuillez réessayer plus tard.';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Erreur côté client: ${error.error.message}`;
+    } else {
+      errorMessage = `Erreur côté serveur: Code ${error.status}, ${error.error.message || error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage)); // Utilisez throwError(() => new Error(errorMessage))
   }
 }

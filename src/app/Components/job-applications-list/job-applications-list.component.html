@@ -20,8 +20,8 @@
       <div *ngFor="let application of applications" class="application-card">
         <div class="card-header">
           <h3>{{ application.name }}</h3>
-          <span [class]="'status-badge ' + getStatusClass(application.status)">
-            {{ application.status }}
+          <span [class]="'status-badge ' + getStatusClass(application.status || 'PENDING')">
+            {{ application.status || 'PENDING' }}
           </span>
         </div>
         
@@ -36,18 +36,24 @@
           </div>
           <div class="info-row">
             <i class="fas fa-file-alt"></i>
-            <span>Resume: {{ application.resume }}</span>
-            <button class="btn-download" (click)="downloadFile(application.resume, 'resume')">
+            <span>Resume: {{ application.resumeUrl ? 'Available' : 'Not available' }}</span>
+            <a *ngIf="application.resumeUrl" 
+               [href]="viewFile(application.resumeUrl)" 
+               target="_blank" 
+               class="btn-download">
               <i class="fas fa-download"></i> View Resume
-            </button>
+            </a>
           </div>
           
           <div class="info-row">
             <i class="fas fa-file-text"></i>
-            <span>Cover Letter: {{ application.coverLetter || 'Not provided' }}</span>
-            <button class="btn-download" *ngIf="application.coverLetter" (click)="downloadFile(application.coverLetter, 'coverLetter')">
+            <span>Cover Letter: {{ application.coverLetterUrl ? 'Available' : 'Not provided' }}</span>
+            <a *ngIf="application.coverLetterUrl" 
+               [href]="viewFile(application.coverLetterUrl)" 
+               target="_blank" 
+               class="btn-download">
               <i class="fas fa-download"></i> View Cover Letter
-            </button>
+            </a>
           </div>
           <div class="info-row">
             <i class="fas fa-calendar"></i>

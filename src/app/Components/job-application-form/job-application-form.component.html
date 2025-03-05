@@ -1,7 +1,6 @@
 <div class="container mt-4">
   <h2>Job Application Form</h2>
 
-  <!-- Messages -->
   <div *ngIf="errorMessage" class="alert alert-danger">
     {{ errorMessage }}
   </div>
@@ -32,42 +31,56 @@
       <label for="telephone" class="form-label">Phone Number</label>
       <input type="tel" class="form-control" id="telephone" formControlName="telephone">
       <div *ngIf="applicationForm.get('telephone')?.invalid && applicationForm.get('telephone')?.touched" class="text-danger">
-        <small>Please enter a valid 8-digit phone number.</small>
+        <small *ngIf="applicationForm.get('telephone')?.errors?.['required']">Phone number is required.</small>
+        <small *ngIf="applicationForm.get('telephone')?.errors?.['pattern']">Please enter a valid 8-digit phone number.</small>
       </div>
     </div>
 
     <div class="mb-3">
       <label for="resume" class="form-label">Resume</label>
-      <input type="file" 
-             class="form-control" 
-             id="resume" 
+      <input type="file"
+             class="form-control"
+             id="resume"
              (change)="onFileChange($event, 'resume')"
              accept=".pdf,.doc,.docx">
-      <div *ngIf="applicationForm.get('resume')?.invalid && applicationForm.get('resume')?.touched" class="text-danger">
-        <small>Resume is required.</small>
+      <div *ngIf="applicationForm.get('resumeUrl')?.value">
+        <a [href]="applicationForm.get('resumeUrl')?.value" 
+           target="_blank" 
+           class="resume-link">View Resume</a>
+      </div>
+      <div *ngIf="resumeFile" class="mt-2">
+        Selected Resume: {{ resumeFile.name }}
       </div>
     </div>
 
     <div class="mb-3">
       <label for="coverLetter" class="form-label">Cover Letter (Optional)</label>
-      <input type="file" 
-             class="form-control" 
-             id="coverLetter" 
+      <input type="file"
+             class="form-control"
+             id="coverLetter"
              (change)="onFileChange($event, 'coverLetter')"
              accept=".pdf,.doc,.docx">
+      <div *ngIf="coverLetterFile" class="mt-2">
+        Selected Cover Letter: {{ coverLetterFile.name }}
+      </div>
     </div>
 
     <div class="d-flex gap-2">
-      <button type="submit" 
-              class="btn btn-primary flex-grow-1" 
+      <button type="submit"
+              class="btn btn-primary flex-grow-1"
               [disabled]="!applicationForm.valid || isSubmitting">
         {{ isSubmitting ? 'Submitting...' : 'Submit Application' }}
       </button>
-      <button type="button" 
+      <button type="button"
               class="btn btn-secondary"
               (click)="resetForm()">
         Reset
       </button>
+    </div>
+    <div *ngIf="isLoading" class="mt-3">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </div>
   </form>
 </div>
