@@ -13,6 +13,7 @@ import { UpdateQuizComponent } from './app/pages/uikit/update-quiz.component';
 import { StartQuizComponent } from './app/pages/landing/components/start-quiz.component';
 import { UserDashboardComponent } from './app/pages/landing/components/user-dashboard.component';
 import { ViewResultsComponent } from './app/pages/landing/components/view-results.component';
+import { GeneratedQuizComponent } from './app/pages/uikit/generated-quiz.component';
 
 export const appRoutes: Routes = [
     {
@@ -37,6 +38,8 @@ export const appRoutes: Routes = [
 { path: 'start-quiz/:id', component: StartQuizComponent }, // Route avec paramètre ID
 { path: 'user-dashboard', component: UserDashboardComponent },
 { path: 'view-results', component: ViewResultsComponent },
+{ path: 'generated-quiz', component: GeneratedQuizComponent },  // Définissez la route
+
 
 
 

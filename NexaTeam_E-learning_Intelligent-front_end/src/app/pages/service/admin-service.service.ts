@@ -1,6 +1,6 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { throwError } from 'rxjs';
+import { catchError, delay, tap, throwError } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 
 
@@ -18,9 +18,36 @@ export class AdminService {
 
   constructor(private http: HttpClient) { }
 
-  createQuiz(QuizDto: any): Observable<any> {
-    return this.http.post(`${this.BASIC_URL}/api/quiz`, QuizDto);
+
+  private apiUrl = 'https://opentdb.com/api.php?amount=5&type=multiple';  // URL pour obtenir des questions trivia
+
+  generateQuizFromAPI(): Observable<any> {
+    return this.http.get(this.apiUrl).pipe(
+      delay(1000)  // Ajoutez un délai de 1 seconde entre les requêtes
+    ).pipe(
+      tap(data => {
+        console.log('Quiz généré:', data); // Log les données
+      }),
+      catchError(error => {
+        if (error.status === 429) {
+          console.error('Trop de requêtes, réessayez plus tard');
+          setTimeout(() => {
+            this.generateQuizFromAPI();  // Réessayer après un délai
+          }, 60000);  // Réessayer après 60 secondes
+        } else {
+          console.error('Erreur lors du chargement du quiz!', error);
+        }
+        // Renvoyer une valeur par défaut en cas d'erreur ou une erreur gérée
+        return throwError(error);
+      })
+    );
   }
+  
+
+createQuiz(QuizDto: any): Observable<any> {
+  return this.http.post(`${this.BASIC_URL}/api/quiz`, QuizDto);
+}
+
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred!';

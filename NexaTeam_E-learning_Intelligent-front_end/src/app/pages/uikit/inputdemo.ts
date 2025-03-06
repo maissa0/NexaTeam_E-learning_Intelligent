@@ -9,6 +9,8 @@ import { CardModule } from 'primeng/card';
 import { RouterModule } from '@angular/router';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ViewQuizComponent } from './view-quiz.component';
+import { QuizServiceService } from '../service/quiz-service.service';
+import { FormGroup } from '@angular/forms';
 
 
 
@@ -33,7 +35,7 @@ import { ViewQuizComponent } from './view-quiz.component';
     template: `<!-- Create Quiz Button -->
     <div class="text-center my-3">
       <button pButton type="button" class="p-button p-button-primary p-button-lg" 
-              (click)="openCreateQuizModal()" label="Create Quiz">
+              (click)="navigateToManualQuiz()" label="Create Quiz">
         <i class="pi pi-plus-circle"></i> Create Quiz
       </button>
     </div>
@@ -48,10 +50,12 @@ import { ViewQuizComponent } from './view-quiz.component';
                   (click)="navigateToManualQuiz()" label="Manually">
             <i class="pi pi-pencil"></i> Manually
           </button>
-          <button pButton class="p-button p-button-info p-button-lg" 
-                  (click)="generateQuiz()" label="Generate">
-            <i class="pi pi-cog"></i> Generate
-          </button>
+          <div class="form-item">
+  <button type="button" (click)="generateQuizAutomatically()" class="submit-button">Generate Quiz Automatically</button>
+</div>
+
+
+
         </div>
       </div>
     </p-dialog>
@@ -110,10 +114,14 @@ import { ViewQuizComponent } from './view-quiz.component';
 })
 
 export class InputDemo implements OnInit {
+  message:string='';
+  messageType:string='';
+      QuizForm!: FormGroup;
+  
     
-    constructor(private router: Router,private QuizService: AdminService, ) {}
+    constructor(private router: Router,private QuizService: AdminService, private quizS: QuizServiceService) {}
+    generatedQuiz: any;  // Variable pour stocker le quiz généré
     displayModal: boolean = false;
-
     selectedComponent: string | null = null;
     selectedQuizId: number = 0; // Donne une valeur par défaut
     showComponent(type: string, quizId: number) {
@@ -121,7 +129,14 @@ export class InputDemo implements OnInit {
       this.selectedComponent = type;
       this.selectedQuizId = quizId;
   }
-  
+ 
+  generateQuizAutomatically(): void {
+    // Logique pour générer le quiz
+    console.log('Génération automatique du quiz...');
+
+    // Naviguer vers le composant generated-quiz
+    this.router.navigate(['/generated-quiz']);
+  }
   
   navigateToManualQuiz() {
     this.displayModal = false;  // Close modal before navigating
@@ -132,17 +147,16 @@ export class InputDemo implements OnInit {
     openCreateQuizModal() {
         this.displayModal = true;
       }
+   
+      
       
   
-    // Placeholder function for generated quiz
-    generateQuiz() {
-      alert("Quiz generation feature is coming soon!");
-    }
     
     Quizes: Quiz[] = [];
     ngOnInit(): void {
       this.getAllQuiz();
   }
+  
   getAllQuiz(){
     this.QuizService.getAllQuiz().subscribe(
       

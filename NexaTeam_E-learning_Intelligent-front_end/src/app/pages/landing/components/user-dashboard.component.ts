@@ -9,7 +9,8 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-user-dashboard',
   imports: [RouterModule,CommonModule],
-  template: `<div class="main">
+  template: `
+ <div class="main">
   <div class="row" style="margin-bottom: 20px;">
     <div class="col-12 col-md-6 col-lg-4" *ngFor="let quiz of Quizes" style="margin: 20px;">
       <div class="card shadow-sm">
@@ -20,18 +21,26 @@ import { CommonModule } from '@angular/common';
           <p><strong>Time:</strong> <span class="badge bg-info">{{ getFormattedTime(quiz.time) }} seconds</span></p>
           <p><strong>Description:</strong> {{ quiz.descrption }}</p>
           <div class="d-flex justify-content-between">
-          <button class="btn btn-primary btn-sm" [routerLink]="['/start-quiz', quiz.id]">Start Quiz</button>
+            <button class="btn btn-primary btn-sm" [routerLink]="['/start-quiz', quiz.id]">Start Quiz</button>
+
           </div>
+          <!-- Nouveau bouton "Train with L'arn" -->
+          
         </div>
       </div>
     </div>
     <div class="text-center mt-4">
-    <a routerLink="/view-results" class="btn btn-outline-primary btn-lg">
-      <i class="fas fa-chart-line"></i> View Results
-    </a>
-  </div>
+  <a routerLink="/view-results" class="btn-train">
+    <i class="fas fa-chart-line"></i> View Results
+  </a>
+</div>
 
-  </div>`,
+    <div class="text-center mt-3">
+            <button class="btn-train" [routerLink]="'/generated-quiz'">Train with L'earn</button>
+          </div>
+  </div>
+</div>
+`,
   styles: `  /* Media query for smaller screens */
   @media (max-width: 768px) {
     .menu-container {
@@ -165,7 +174,47 @@ import { CommonModule } from '@angular/common';
   /* Hover effect for secondary button */
   .btn-secondary:hover {
     background-color: #7f8c8d;
-  }`
+  }
+  /* Style pour le bouton "Train with L'arn" */
+.btn-train {
+  background-color: #2ecc71;
+  color: white;
+  font-size: 1.1rem;
+  padding: 12px 25px;
+  border-radius: 30px;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.btn-train:hover {
+  background-color: #27ae60;
+  transform: translateY(-3px);
+}
+
+.btn-train:active {
+  transform: translateY(1px);
+}
+
+/* Centrer le bouton et lui donner une bonne marge */
+.text-center {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Mobile responsiveness: ajuster le bouton pour les petits écrans */
+@media (max-width: 768px) {
+  .btn-train {
+    width: 100%;
+    padding: 15px 30px;
+    font-size: 1rem;
+  }
+}
+
+  `
 })
 export class UserDashboardComponent {
   

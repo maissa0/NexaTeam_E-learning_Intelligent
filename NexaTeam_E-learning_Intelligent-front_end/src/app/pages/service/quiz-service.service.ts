@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Quiz } from '../Models/quiz';
 
 @Injectable({
@@ -22,4 +22,10 @@ export class QuizServiceService {
     }
     getQuizById(id: number): Observable<Quiz> {
       return this.http.get<Quiz>(`${this.BASIC_URL}/api/${id}`);
-    }}
+    }
+  
+    
+    
+    
+  }
+
