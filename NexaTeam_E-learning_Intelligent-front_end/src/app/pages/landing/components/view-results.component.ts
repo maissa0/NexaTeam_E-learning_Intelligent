@@ -8,44 +8,53 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
 
-<div style="padding: 20px;">
-  <!-- Display Quiz Name (Title) -->
-  <h2>{{ quizTitle }}</h2> <!-- This will now display the quiz title -->
+<table class="modern-table">
+  <thead>
+    <tr>
+      <th>Quiz</th>
+      <th>Utilisateur</th>
+      <th>Questions</th>
+      <th>Réponses Correctes</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of resultsData">
+      <td>{{ data.quizName }}</td>
+      <td>{{ data.userName }}</td>
+      <td>{{ data.totalQuestions }}</td>
+      <td>{{ data.correctAnswers }}</td>
+      <td>
+        {{ data.percentage }}%
+        <span *ngIf="data.percentage === 100" class="trophy">🏆</span>
+        <span *ngIf="data.percentage === 0" class="retry">❌</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-  <table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
-    <thead style="background-color: #f5f5f5;">
-      <tr>
-        <th style="padding: 10px;">Quiz Name</th>
-        <th style="padding: 10px;">User Name</th>
-        <th style="padding: 10px;">Total Question</th>
-        <th style="padding: 10px;">Correct Answers</th>
-        <th style="padding: 10px;">Percentage</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let data of resultsData" style="border-bottom: 1px solid #ddd;">
-        <td style="padding: 10px;">{{ data.quizName }}</td>
-        <td style="padding: 10px;">{{ data.userName }}</td>
-        <td style="padding: 10px;">{{ data.totalQuestions }}</td>
-        <td style="padding: 10px;">{{ data.correctAnswers }}</td>
-        <td style="padding: 10px;">{{ data.percentage }}%</td>
-      </tr>
-    </tbody>
-  </table>
-</div>`,
-  styles: `table {
+
+
+`,
+  styles: `.modern-table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
+    font-family: 'Arial', sans-serif;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   }
   
   thead {
-    background-color: #f5f5f5;
+    background-color: #007BFF;
+    color: white;
   }
   
   th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
+    padding: 12px 30px;
+    border-bottom: 1px solid #ddd;
   }
   
   tr:nth-child(even) {
@@ -53,16 +62,34 @@ import { CommonModule } from '@angular/common';
   }
   
   tr:hover {
-    background-color: #f1f1f1;
+    background-color: #eef5ff;
+    transition: 0.3s ease-in-out;
   }
   
   th {
     font-weight: bold;
   }
+  
+  .trophy {
+    color: gold;
+    font-size: 20px;
+    margin-left: 8px;
+  }
+  
+  .retry {
+    color: red;
+    font-size: 20px;
+    margin-left: 8px;
+  }
+  
+
   `
 })
 export class ViewResultsComponent {
   quizTitle: string = '';
+  message: string = '';
+  messageClass: string = '';
+  showMessage: boolean = false;
 
   resultsData:any;
   constructor(private quizService: AdminService){}
@@ -79,5 +106,6 @@ export class ViewResultsComponent {
 
   })
 }
+
 
 }

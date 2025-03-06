@@ -13,16 +13,6 @@ import { PricingWidget } from "./pricingwidget";
   selector: 'app-start-quiz',
   imports: [RouterModule, CommonModule, TopbarWidget, HeroWidget, FeaturesWidget, HighlightsWidget, FooterWidget, PricingWidget],
   template: `
-  <div class="bg-surface-0 dark:bg-surface-900">
-            <div id="home" class="landing-wrapper overflow-hidden">
-                <topbar-widget class="py-6 px-6 mx-0 md:mx-12 lg:mx-20 lg:px-20 flex items-center justify-between relative lg:static" />
-                <hero-widget />
-                <features-widget />
-                <highlights-widget />
-                <pricing-widget />
-                <footer-widget />
-            </div>
-        </div>
   <div style="margin: auto; width: 80%;">
   <div class="timer-container">
     <div class="timer">
