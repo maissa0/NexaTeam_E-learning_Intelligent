@@ -2,11 +2,28 @@ import { Component } from '@angular/core';
 import { QuizServiceService } from '../../service/quiz-service.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { TopbarWidget } from "./topbarwidget.component";
+import { HeroWidget } from "./herowidget";
+import { FeaturesWidget } from "./featureswidget";
+import { HighlightsWidget } from "./highlightswidget";
+import { FooterWidget } from "./footerwidget";
+import { PricingWidget } from "./pricingwidget";
 
 @Component({
   selector: 'app-start-quiz',
-  imports: [RouterModule,CommonModule],
-  template: `<div style="margin: auto; width: 80%;">
+  imports: [RouterModule, CommonModule, TopbarWidget, HeroWidget, FeaturesWidget, HighlightsWidget, FooterWidget, PricingWidget],
+  template: `
+  <div class="bg-surface-0 dark:bg-surface-900">
+            <div id="home" class="landing-wrapper overflow-hidden">
+                <topbar-widget class="py-6 px-6 mx-0 md:mx-12 lg:mx-20 lg:px-20 flex items-center justify-between relative lg:static" />
+                <hero-widget />
+                <features-widget />
+                <highlights-widget />
+                <pricing-widget />
+                <footer-widget />
+            </div>
+        </div>
+  <div style="margin: auto; width: 80%;">
   <div class="timer-container">
     <div class="timer">
       Time remaining: {{ getFormattedTime() }}

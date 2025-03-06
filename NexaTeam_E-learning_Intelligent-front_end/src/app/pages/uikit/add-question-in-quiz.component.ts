@@ -12,16 +12,16 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [CommonModule,
     ReactiveFormsModule
   ],
-  template: ` <div class="container">
+  template: `<div class="container">
   <div class="form-container">
-    <h2>Add Question</h2>
+    <h2>Add a New Question</h2>
     <div *ngIf="message" class="alert" [ngClass]="messageType === 'success' ? 'alert-success' : 'alert-danger'">
       {{ message }}
     </div>
     <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="questionText">Question</label>
-        <textarea id="questionText" formControlName="questionText" placeholder="Enter the question" required></textarea>
+        <textarea id="questionText" formControlName="questionText" placeholder="Type the question here" required></textarea>
       </div>
 
       <div class="form-group">
@@ -54,102 +54,154 @@ import { ReactiveFormsModule } from '@angular/forms';
           <option value="D">Option D</option>
         </select>
       </div>
+      
       <input type="hidden" formControlName="quizId">
-
-
+      
       <button type="submit" [disabled]="!questionForm.valid" class="submit-btn">Submit Question</button>
     </form>
   </div>
-</div>`,
+</div>
+`,
   styles: `/* Form Group */
-  .form-group {
-    margin-bottom: 18px;
-    text-align: left;
+ /* Global Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f7fb;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Form Container */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Form Styles */
+.form-container {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+/* Title */
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4CAF50;
+  margin-bottom: 20px;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* Labels */
+label {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Inputs, Select, and Textarea */
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 6px;
+  background-color: #f9f9f9;
+}
+
+/* Focus Styles */
+input:focus, textarea:focus, select:focus {
+  border-color: #4CAF50;
+  outline: none;
+  background-color: #fff;
+}
+
+/* Textarea specific */
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Button */
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover & Disabled Button */
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Alerts */
+.alert {
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 15px;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
   }
-  
-  label {
-    font-size: 14px;
-    color: #333;
-    margin-bottom: 8px;
-    display: block;
-    font-weight: 600;
+
+  h2 {
+    font-size: 22px;
   }
-  
-  input, select, textarea {
-    width: 100%;
-    padding: 12px;
-    font-size: 14px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    margin-top: 6px;
-  }
-  
-  textarea {
-    resize: vertical;
-    height: 120px;  /* Fixed height for textarea */
-  }
-  
-  input:focus, textarea:focus, select:focus {
-    border-color: #4CAF50;
-    outline: none;
-  }
-  
-  /* Button */
+
   button {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
+    font-size: 15px;
   }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
-  button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .container {
-      padding: 15px;
-    }
-  
-    h2 {
-      font-size: 20px;
-    }
-  
-    button {
-      font-size: 15px;
-    }
-  }
-  .notification {
-    text-align: center;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    margin-bottom: 15px;
-  }
-  
-  .success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-  }
-  
-  .error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-  }`
+}
+`
 })
 export class AddQuestionInQuizComponent  implements OnInit {
   message:string='';

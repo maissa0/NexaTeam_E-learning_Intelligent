@@ -71,11 +71,11 @@ import { FormGroup } from '@angular/forms';
               </div>
             </ng-template>
             <ng-template pTemplate="content">
-              <p><strong>Time:</strong> 
+            <p><strong>Time:</strong> 
                 <span class="badge bg-info p-2">{{ getFormattedTime(quiz.time) }} seconds</span>
               </p>
               <p><strong>Description:</strong> {{ quiz.descrption }}</p>
-    
+             
               <div class="d-flex justify-content-between mt-3">
               <button pButton class="p-button p-button-outlined p-button-primary p-button-sm" 
         [routerLink]="['/view', quiz.id]">
@@ -123,7 +123,8 @@ export class InputDemo implements OnInit {
     generatedQuiz: any;  // Variable pour stocker le quiz généré
     displayModal: boolean = false;
     selectedComponent: string | null = null;
-    selectedQuizId: number = 0; // Donne une valeur par défaut
+    selectedQuizId: number = 0; 
+    
     showComponent(type: string, quizId: number) {
       console.log("Quiz sélectionné :", quizId);
       this.selectedComponent = type;
@@ -163,7 +164,10 @@ export class InputDemo implements OnInit {
       (res: any) => {
         
         console.log("Quiz récupérés avec succès :", res);
-        this.Quizes = res; // Stocker les quiz récupérés
+        this.Quizes = res;
+        res.forEach((quiz: Quiz) => {
+          console.log(`Quiz ID: ${quiz.id}, Time: ${quiz.time}`);
+        }); // Stocker les quiz récupérés
       },
       (error) => {
         console.error("Erreur lors de la récupération des quiz :", error);
@@ -171,21 +175,40 @@ export class InputDemo implements OnInit {
     );
   }
   getFormattedTime(time: number): string {
+    // Vérifie si 'time' est un nombre valide et supérieur à 0
+    if (isNaN(time) || time <= 0) {
+      return 'Invalid Time'; // Affiche un message d'erreur si le temps est invalide
+    }
+    
     const minutes = Math.floor(time / 60);  // Convertit le temps en minutes
     const seconds = time % 60;              // Récupère les secondes restantes
-    return `${minutes} minutes ${seconds} seconds`;  // Utilise les backticks pour interpoler correctement
+    
+    return `${minutes} minute(s) ${seconds} seconde(s)`; // Retourne le temps formaté
+}
+
+  
+deleteQuiz(id: number) {
+  if (confirm("Are you sure you want to delete this quiz?")) {
+    this.QuizService.deleteQuiz(id).subscribe(
+      () => {
+        console.log(`Quiz avec ID ${id} supprimé`);
+
+        // Récupérer les quiz mis à jour depuis le backend
+        this.QuizService.getAllQuiz().subscribe(
+          (quizzes: any[]) => {
+            this.Quizes = quizzes; // Mettez à jour la liste des quiz dans le composant
+            console.log('Quiz mis à jour après suppression', this.Quizes);
+          },
+          (error) => {
+            console.error("Erreur lors de la récupération des quiz mis à jour :", error);
+          }
+        );
+      },
+      (error) => {
+        console.error("Erreur lors de la suppression du quiz :", error);
+      }
+    );
   }
-  deleteQuiz(id: number) {
-    if (confirm("Are you sure you want to delete this quiz?")) {
-      this.QuizService.deleteQuiz(id).subscribe(
-        () => {
-          console.log(`Quiz avec ID ${id} supprimé`);
-          this.QuizService.getAllQuiz(); // Récupérer les quiz mis à jour depuis le backend
-        },
-        (error) => {
-          console.error("Erreur lors de la suppression du quiz :", error);
-        }
-      );
-    }
-  }
+}
+
 }

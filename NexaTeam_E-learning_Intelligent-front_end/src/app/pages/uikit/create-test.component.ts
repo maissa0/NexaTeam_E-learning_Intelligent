@@ -34,7 +34,23 @@ import { CommonModule } from '@angular/common';
       <span *ngIf="QuizForm.get('title')?.errors?.['pattern']">Title cannot be only spaces.</span>    </div>
   </div>
 </div>
-
+<div class="form-item">
+  <label for="time" class="form-label">Time Per Question</label>
+  <div class="form-control">
+    <input 
+      type="number" 
+      id="time" 
+      formControlName="time" 
+      placeholder="Enter time in seconds" 
+      class="input-field" 
+      [value]="QuizForm.get('time')?.value"
+    />
+    <div *ngIf="QuizForm.get('time')?.invalid && QuizForm.get('time')?.touched" class="error-message">
+      <span *ngIf="QuizForm.get('time')?.errors?.['required']">Time is required.</span>
+      <span *ngIf="QuizForm.get('time')?.errors?.['pattern']">Enter a valid number.</span>
+    </div>
+  </div>
+</div>
 <!-- Description field -->
 <div class="form-item">
   <label for="descrption" class="form-label">descrption </label>
@@ -53,21 +69,8 @@ import { CommonModule } from '@angular/common';
 </div>
 
 <!-- Time field -->
-<div class="form-item">
-  <label for="time" class="form-label">Time Per Question</label>
-  <div class="form-control">
-    <input 
-      type="number" 
-      id="time" 
-      formControlName="time" 
-      placeholder="Enter time in seconds" 
-      class="input-field" 
-    />
-    <div *ngIf="QuizForm.get('time')?.invalid && QuizForm.get('time')?.touched" class="error-message">
-      <span *ngIf="QuizForm.get('time')?.errors?.['required']">Time is required.</span>
-      <span *ngIf="QuizForm.get('time')?.errors?.['pattern']">Enter a valid number.</span>    </div>
-  </div>
-</div>
+
+
     
         <!-- Submit button -->
         <div class="form-item">
@@ -164,17 +167,18 @@ export class CreateTestComponent  implements OnInit {
           Validators.required, 
           Validators.minLength(3)  // Ensure 'title' has a minimum length of 3 characters
         ]], 
+        time: ['', [
+          Validators.required, 
+          Validators.pattern('^[0-9]+$'),
+          Validators.min(1)  // Ensure time is a valid number
+        ]],
       
         descrption: ['', [
           Validators.required, 
           Validators.minLength(10)  // Ensure 'description' has a minimum length of 10 characters
         ]],
       
-        time: ['', [
-          Validators.required, 
-          Validators.pattern('^[0-9]+$'),
-          Validators.min(1)  // Ensure time is a valid number
-        ]]
+        
       });
       
     }
