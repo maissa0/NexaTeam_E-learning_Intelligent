@@ -1,0 +1,9 @@
+package tn.esprit.nexaback.persistance.repositories;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import tn.esprit.nexaback.persistance.entities.User;
+
+public interface UserRepository extends JpaRepository<User, Integer>{
+
+}
