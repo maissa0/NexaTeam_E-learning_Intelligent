@@ -1,0 +1,100 @@
+<div class="register-company-container">
+  <div class="card shadow-2 p-4">
+    <div class="register-company-header mb-4">
+      <h1 class="text-center mb-2">Register Your Company</h1>
+      <p class="text-center text-500">Complete the form below to register your company</p>
+      <div class="separator mb-4"></div>
+    </div>
+
+    <form [formGroup]="companyForm" (ngSubmit)="onSubmit()" class="p-fluid">
+      <!-- Company Logo -->
+      <div class="logo-upload-section text-center mb-4">
+        <div class="logo-preview" *ngIf="logoPreview">
+          <img [src]="logoPreview" alt="Company Logo Preview" class="company-logo-preview" />
+          <button pButton type="button" 
+                  icon="pi pi-times" 
+                  class="p-button-rounded p-button-danger p-button-sm remove-logo-btn" 
+                  (click)="removeLogo()"></button>
+        </div>
+        <div class="logo-placeholder" *ngIf="!logoPreview">
+          <i class="pi pi-building text-4xl text-300"></i>
+          <p class="mt-2 text-500">Upload your company logo</p>
+        </div>
+        <p-fileUpload mode="basic" 
+                      chooseLabel="Upload Logo" 
+                      accept="image/*" 
+                      [maxFileSize]="2000000" 
+                      [auto]="true"
+                      (uploadHandler)="onLogoSelect($event)"
+                      styleClass="mt-2 logo-upload-btn"
+                      chooseIcon="pi pi-upload"></p-fileUpload>
+        <small class="block text-500 mt-1">Maximum size: 2MB. Formats: JPG, PNG</small>
+      </div>
+
+      <!-- Company Information Form -->
+      <div class="grid">
+        <div class="col-12 field">
+          <label for="name" class="field-label">Company Name *</label>
+          <input pInputText 
+                id="name" 
+                formControlName="name" 
+                placeholder="Enter company name"
+                [ngClass]="{'ng-invalid ng-dirty': companyForm.get('name')?.invalid && companyForm.get('name')?.touched}" />
+          <small *ngIf="companyForm.get('name')?.invalid && companyForm.get('name')?.touched" class="p-error">
+            Company name is required
+          </small>
+        </div>
+
+        <div class="col-12 field">
+          <label for="emailCompany" class="field-label">Company Email *</label>
+          <input pInputText 
+                id="emailCompany" 
+                formControlName="emailCompany" 
+                placeholder="company@example.com"
+                [ngClass]="{'ng-invalid ng-dirty': companyForm.get('emailCompany')?.invalid && companyForm.get('emailCompany')?.touched}" />
+          <small *ngIf="companyForm.get('emailCompany')?.invalid && companyForm.get('emailCompany')?.touched" class="p-error">
+            <span *ngIf="companyForm.get('emailCompany')?.errors?.['required']">Company email is required</span>
+            <span *ngIf="companyForm.get('emailCompany')?.errors?.['email']">Please enter a valid email address</span>
+            <span *ngIf="companyForm.get('emailCompany')?.errors?.['maxlength']">Email must be less than 50 characters</span>
+          </small>
+        </div>
+
+        <div class="col-12 field">
+          <label for="address" class="field-label">Company Address</label>
+          <input pInputText 
+                id="address" 
+                formControlName="address" 
+                placeholder="Enter company address" />
+        </div>
+
+        <div class="col-12 field">
+          <label for="description" class="field-label">Company Description</label>
+          <textarea 
+                   id="description" 
+                   formControlName="description" 
+                   placeholder="Tell us about your company"
+                   rows="5"
+                   class="w-full p-inputtextarea"></textarea>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex justify-content-between align-items-center mt-4">
+        <button pButton type="button" 
+                label="Cancel" 
+                icon="pi pi-times" 
+                class="p-button-outlined"
+                (click)="navigateToCompany()"></button>
+        <button pButton type="submit" 
+                label="Register Company" 
+                icon="pi pi-check" 
+                [disabled]="isLoading"></button>
+      </div>
+    </form>
+
+    <!-- Loading Progress Bar -->
+    <p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{'height': '6px'}" class="mt-4"></p-progressBar>
+  </div>
+</div>
+
+<p-toast></p-toast> 

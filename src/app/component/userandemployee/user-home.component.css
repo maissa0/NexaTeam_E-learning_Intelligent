@@ -1,0 +1,58 @@
+/* User Home Component Styles */
+:host ::ng-deep {
+  /* Card styles */
+  .card {
+    background: var(--surface-card);
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),
+                0 1px 1px 0 rgba(0,0,0,.14),
+                0 1px 3px 0 rgba(0,0,0,.12);
+  }
+
+  /* Navigation styles */
+  .topbar-container {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+
+  /* Make navigation elements interactive */
+  ul li a:hover {
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  /* Style for the user icon */
+  .user-profile .p-button.p-button-rounded.p-button-text {
+    color: var(--primary-color);
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .user-profile .p-button.p-button-rounded.p-button-text:hover {
+    background: rgba(var(--primary-color-rgb), 0.04);
+  }
+
+  /* Card content styling */
+  .surface-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .surface-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Mobile responsive adjustments */
+  @media screen and (max-width: 992px) {
+    .navigation-menu ul {
+      padding: 1rem 0;
+    }
+    
+    .navigation-menu ul li {
+      padding: 0.5rem 0;
+    }
+  }
+} 

@@ -1,0 +1,173 @@
+<div class="company-dashboard">
+  <p-tabView (onChange)="onTabChange($event)">
+    <!-- Dashboard Tab -->
+    <p-tabPanel header="Dashboard">
+      <div class="dashboard-placeholder">
+        <div class="placeholder-content text-center">
+          <i class="pi pi-chart-bar text-6xl text-primary mb-3"></i>
+          <h2>Company Dashboard</h2>
+          <p class="text-500">This dashboard will show company metrics and KPIs.</p>
+          <p class="text-500">Coming soon!</p>
+        </div>
+      </div>
+    </p-tabPanel>
+    
+    <!-- Employees Tab -->
+    <p-tabPanel header="Employees">
+      <div class="card">
+        <p-toolbar styleClass="mb-4 gap-2">
+          <ng-template pTemplate="left">
+            <button pButton pRipple label="New Employee" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+          </ng-template>
+        </p-toolbar>
+
+        <p-table #dt [value]="employees" [rows]="10" [paginator]="true" 
+                [globalFilterFields]="['username','firstName','lastName','email']"
+                [tableStyle]="{'min-width': '60rem'}"
+                [loading]="loading"
+                [rowHover]="true" dataKey="id"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true">
+          <ng-template pTemplate="caption">
+            <div class="flex align-items-center justify-content-between">
+              <h5 class="m-0">Manage Employees</h5>
+              <span class="p-input-icon-left ml-auto">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" placeholder="Search..." />
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="id" style="min-width: 5rem">ID <p-sortIcon field="id"></p-sortIcon></th>
+              <th pSortableColumn="username" style="min-width: 10rem">Username <p-sortIcon field="username"></p-sortIcon></th>
+              <th pSortableColumn="firstName" style="min-width: 12rem">First Name <p-sortIcon field="firstName"></p-sortIcon></th>
+              <th pSortableColumn="lastName" style="min-width: 12rem">Last Name <p-sortIcon field="lastName"></p-sortIcon></th>
+              <th pSortableColumn="email" style="min-width: 16rem">Email <p-sortIcon field="email"></p-sortIcon></th>
+              <th style="min-width: 5rem">Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-employee>
+            <tr>
+              <td>{{employee.id}}</td>
+              <td>{{employee.username}}</td>
+              <td>{{employee.firstName}}</td>
+              <td>{{employee.lastName}}</td>
+              <td>{{employee.email}}</td>
+              <td>
+                <div class="flex">
+                  <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deleteEmployee(employee)"></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+              In total there are {{employees ? employees.length : 0}} employees.
+            </div>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6">No employees found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+</div>
+
+<!-- Employee Details Dialog -->
+<p-dialog [(visible)]="detailsEmployeeDialog" [style]="{width: '450px'}" header="Employee Details" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="content" *ngIf="selectedEmployee">
+    <div class="employee-details">
+      <div class="field">
+        <label>Username</label>
+        <p>{{selectedEmployee.username}}</p>
+      </div>
+      <div class="field">
+        <label>First Name</label>
+        <p>{{selectedEmployee.firstName}}</p>
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <p>{{selectedEmployee.lastName}}</p>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <p>{{selectedEmployee.email}}</p>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+  </ng-template>
+</p-dialog>
+
+<!-- Delete Employee Dialog -->
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-dialog [(visible)]="deleteEmployeeDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+  <div class="flex align-items-center justify-content-center">
+    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+    <span *ngIf="selectedEmployee">Are you sure you want to delete <b>{{selectedEmployee.firstName}} {{selectedEmployee.lastName}}</b>?</span>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteEmployeeDialog = false"></button>
+    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+  </ng-template>
+</p-dialog>
+
+<!-- New/Edit Employee Dialog -->
+<p-dialog [(visible)]="employeeDialog" [style]="{width: '500px'}" header="Employee Details" [modal]="true" styleClass="p-fluid employee-dialog">
+  <ng-template pTemplate="content">
+    <form [formGroup]="employeeForm" class="p-grid form-grid">
+      <div class="field">
+        <label for="username" class="form-label">Username <span class="required-star">*</span></label>
+        <div class="p-input-icon-right w-full">
+          <input type="text" pInputText id="username" formControlName="username" class="w-full" 
+                 [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('username')}" autofocus />
+          <i class="pi pi-user"></i>
+        </div>
+        <small *ngIf="isFieldInvalid('username')" class="p-error">{{getFieldError('username')}}</small>
+      </div>
+      
+      <div class="field">
+        <label for="email" class="form-label">Email <span class="required-star">*</span></label>
+        <div class="p-input-icon-right w-full">
+          <input type="email" pInputText id="email" formControlName="email" class="w-full"
+                 [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('email')}" />
+          <i class="pi pi-envelope"></i>
+        </div>
+        <small *ngIf="isFieldInvalid('email')" class="p-error">{{getFieldError('email')}}</small>
+      </div>
+      
+      <div class="field">
+        <label for="firstName" class="form-label">First Name <span class="required-star">*</span></label>
+        <div class="p-input-icon-right w-full">
+          <input type="text" pInputText id="firstName" formControlName="firstName" class="w-full"
+                 [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('firstName')}" />
+          <i class="pi pi-user-edit"></i>
+        </div>
+        <small *ngIf="isFieldInvalid('firstName')" class="p-error">{{getFieldError('firstName')}}</small>
+      </div>
+      
+      <div class="field">
+        <label for="lastName" class="form-label">Last Name <span class="required-star">*</span></label>
+        <div class="p-input-icon-right w-full">
+          <input type="text" pInputText id="lastName" formControlName="lastName" class="w-full"
+                 [ngClass]="{'ng-invalid ng-dirty': isFieldInvalid('lastName')}" />
+          <i class="pi pi-user-edit"></i>
+        </div>
+        <small *ngIf="isFieldInvalid('lastName')" class="p-error">{{getFieldError('lastName')}}</small>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-outlined" (click)="hideDialog()"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-success ml-2" (click)="saveEmployee()"></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast> 

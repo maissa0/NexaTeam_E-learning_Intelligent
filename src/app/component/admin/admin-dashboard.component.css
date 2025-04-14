@@ -1,0 +1,121 @@
+/* Admin Dashboard Styles */
+:host ::ng-deep {
+  .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+    border-color: var(--primary-color);
+  }
+  
+  .p-datatable .p-datatable-tbody > tr:hover {
+    background: var(--surface-hover);
+  }
+  
+  .p-datatable .p-column-title {
+    font-weight: 600;
+  }
+  
+  /* Table caption and search styling */
+  .p-datatable .p-datatable-header,
+  .p-table .p-datatable-header {
+    padding: 1rem;
+  }
+  
+  /* Ensure the title and search are properly spaced */
+  .p-datatable .p-datatable-header .flex.justify-content-between,
+  .p-table .p-datatable-header .flex.justify-content-between {
+    display: flex;
+    justify-content: space-between !important;
+  }
+  
+  /* Search input styling */
+  .p-input-icon-left {
+    width: 250px;
+    margin-left: auto; /* This pushes the search to the right */
+  }
+  
+  .p-input-icon-left input {
+    width: 100%;
+    padding-right: 2.5rem;
+  }
+  
+  /* Card styling */
+  .card {
+    padding: 1.5rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    background: var(--surface-card);
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 
+                0 1px 1px 0 rgba(0,0,0,.14), 
+                0 1px 3px 0 rgba(0,0,0,.12);
+  }
+  
+  .text-secondary {
+    color: var(--text-color-secondary);
+  }
+  
+  .p-dialog .p-dialog-content {
+    padding: 1rem;
+  }
+  
+  /* Company name and logo styles */
+  .company-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    display: inline-block;
+  }
+  
+  .company-logo-container {
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: rgba(0,0,0,0.03);
+  }
+  
+  /* Add a class that can be used for any text that might overflow */
+  .text-overflow-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Responsive adjustments */
+  @media screen and (max-width: 768px) {
+    .card {
+      padding: 1rem;
+    }
+    
+    /* Make search input responsive on mobile */
+    .p-input-icon-left {
+      width: 100%;
+      margin-top: 1rem;
+      margin-left: 0; /* Reset margin for mobile view */
+    }
+    
+    /* Reset flex direction for mobile view */
+    .p-datatable .p-datatable-header .flex.justify-content-between {
+      flex-direction: column;
+      align-items: stretch !important;
+    }
+    
+    .p-datatable-responsive .p-datatable-tbody > tr > td {
+      text-align: left;
+      display: block;
+      width: 100%;
+      float: left;
+      clear: left;
+      border: 0 none;
+    }
+    
+    .p-datatable-responsive .p-datatable-tbody > tr > td .p-column-title {
+      padding: 0.4rem;
+      min-width: 30%;
+      display: inline-block;
+      margin: -0.4rem 1rem -0.4rem -0.4rem;
+      font-weight: bold;
+    }
+    
+    /* For smaller screens, allow more width for company names */
+    .company-name {
+      max-width: calc(100% - 50px);
+    }
+  }
+} 

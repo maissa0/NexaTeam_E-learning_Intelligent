@@ -1,0 +1,16 @@
+<!-- Add a conditional display -->
+<div *ngIf="showLanding" style="padding: 50px; text-align: center;">
+  <h1>Simple User Landing Page</h1>
+  <p>This is a direct landing page embedded in the app component</p>
+  <div style="margin-top: 30px;">
+    <h2>Build Your CV</h2>
+    <p>Create a professional CV in minutes with our easy-to-use builder.</p>
+    <div style="margin-top: 20px;">
+      <button (click)="navigateToLogin()" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; margin-right: 10px; cursor: pointer;">Login</button>
+      <button (click)="navigateToTest()" style="display: inline-block; padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Test Page</button>
+    </div>
+  </div>
+</div>
+
+<!-- Keep the router outlet for other routes -->
+<router-outlet *ngIf="!showLanding"></router-outlet>

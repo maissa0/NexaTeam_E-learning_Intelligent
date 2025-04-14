@@ -1,0 +1,91 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Login</h2>
+    
+    <!-- Error message -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Regular login form -->
+    <form *ngIf="!show2FA" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          formControlName="username"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['username'].errors }"
+        />
+        <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
+          <div *ngIf="f['username'].errors['required']">Username is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+        />
+        <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+          <div *ngIf="f['password'].errors['required']">Password is required</div>
+          <div *ngIf="f['password'].errors['minlength']">
+            Password must be at least 6 characters
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group remember-me">
+        <input type="checkbox" id="rememberMe" formControlName="rememberMe">
+        <label for="rememberMe">Remember me</label>
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Login</span>
+          <span *ngIf="isLoading" class="spinner"></span>
+        </button>
+      </div>
+
+      <div class="form-group">
+        <a routerLink="/auth/forgot-password">Forgot password?</a>
+      </div>
+
+      <div class="form-group">
+        <p>Don't have an account? <a routerLink="/auth/register">Register</a></p>
+      </div>
+
+      <div class="form-group">
+        <p>Want to explore first? <a href="javascript:void(0)" (click)="goToLanding()">Visit our landing page</a></p>
+      </div>
+    </form>
+
+    <!-- 2FA form -->
+    <div *ngIf="show2FA" class="two-factor-form">
+      <h3>Two-Factor Authentication</h3>
+      <p>Please enter the 6-digit code from your authenticator app.</p>
+      
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control two-factor-input"
+          [(ngModel)]="twoFactorCode"
+          maxlength="6"
+          placeholder="Enter 6-digit code"
+        />
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary" (click)="onSubmit2FA()" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Verify</span>
+          <span *ngIf="isLoading" class="spinner"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,93 @@
+.register-company-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.register-company-header h1 {
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 1.75rem;
+}
+
+.separator {
+  height: 1px;
+  background-color: var(--surface-border);
+  width: 100%;
+}
+
+/* Logo Upload Section */
+.logo-upload-section {
+  padding: 1.5rem;
+  border-radius: 8px;
+  background-color: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  margin-bottom: 2rem;
+}
+
+.logo-placeholder {
+  border: 2px dashed var(--surface-border);
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 1rem;
+}
+
+.logo-preview {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.company-logo-preview {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  background-color: white;
+  padding: 8px;
+}
+
+.remove-logo-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 28px;
+  height: 28px;
+}
+
+.logo-upload-btn .p-button {
+  width: auto !important;
+}
+
+/* Form Fields */
+.field-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  color: var(--text-color);
+}
+
+.p-inputtext, .p-inputtextarea {
+  width: 100%;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 576px) {
+  .register-company-container {
+    padding: 1rem 0.5rem;
+  }
+  
+  .register-company-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .logo-placeholder {
+    padding: 1.5rem;
+  }
+  
+  .company-logo-preview {
+    width: 120px;
+    height: 120px;
+  }
+} 

@@ -1,0 +1,379 @@
+<div class="card">
+  <h2>Admin Dashboard</h2>
+  <p class="text-secondary mb-4">
+    Complete administrative control panel to manage requests, companies, teachers, and users.
+  </p>
+
+  <p-toast></p-toast>
+  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+  <!-- Action Dialog for Approvals/Rejections -->
+  <p-dialog [(visible)]="displayActionDialog" [style]="{width: '450px'}" [header]="actionDialogTitle" [modal]="true" styleClass="p-fluid">
+    <div class="text-center mb-3">
+      <i [class]="actionDialogIcon" style="font-size: 3rem; color: var(--primary-color);"></i>
+    </div>
+    <div class="field">
+      <label for="reason">Reason (Optional)</label>
+      <textarea id="reason" pInputTextarea [(ngModel)]="actionReason" rows="3" placeholder="Enter a reason for this action"></textarea>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="displayActionDialog = false"></button>
+      <button pButton pRipple [label]="actionType === 'approve' ? 'Approve' : 'Reject'" [icon]="actionType === 'approve' ? 'pi pi-check' : 'pi pi-times'" [class]="actionDialogButtonClass" (click)="onActionDialogSubmit()"></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-tabView>
+    <!-- Company Requests Tab -->
+    <p-tabPanel header="Company Requests">
+      <div class="card">
+        <p-table #companyRequestsTable [value]="companyRequests" [paginator]="true" [rows]="10" [loading]="isLoading"
+                styleClass="p-datatable-gridlines p-datatable-striped" [tableStyle]="{'min-width': '50rem'}"
+                [globalFilterFields]="['name', 'emailCompany']" [rowHover]="true">
+          <ng-template pTemplate="caption">
+            <div style="display: flex; width: 100%;">
+              <h5 class="m-0" style="flex: 1;">Company Requests</h5>
+              <div style="flex: 0 0 auto;">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" placeholder="Search..." 
+                        (input)="onGlobalFilter($event, companyRequestsTable)" />
+                </span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="name">Company <p-sortIcon field="name"></p-sortIcon></th>
+              <th pSortableColumn="emailCompany">Email <p-sortIcon field="emailCompany"></p-sortIcon></th>
+              <th>Address</th>
+              <th pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-request>
+            <tr>
+              <td>
+                <div class="flex align-items-center gap-3">
+                  <div class="company-logo-container" style="width: 40px; height: 40px; min-width: 40px; display: flex; align-items: center; justify-content: center;">
+                    <img *ngIf="request.logo" [src]="request.logo" alt="Company Logo" style="max-width: 100%; max-height: 100%;" class="shadow-1 border-round" />
+                  </div>
+                  <span class="company-name text-overflow-ellipsis">{{ request.name }}</span>
+                </div>
+              </td>
+              <td>{{ request.emailCompany }}</td>
+              <td>{{ request.address || 'N/A' }}</td>
+              <td>{{ request.createdAt | date:'medium' }}</td>
+              <td>
+                <p-tag [value]="request.status" 
+                      [severity]="getStatusSeverity(request.status)"></p-tag>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info p-button-text"
+                          (click)="viewCompanyDetails(request)" pTooltip="View Details"></button>
+                  <button *ngIf="request.status === 'PENDING'" pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-success p-button-text"
+                          (click)="approveCompanyRequest(request)" pTooltip="Approve"></button>
+                  <button *ngIf="request.status === 'PENDING'" pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text"
+                          (click)="rejectCompanyRequest(request)" pTooltip="Reject"></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="text-center p-4">No company requests found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-tabPanel>
+
+    <!-- Teacher Requests Tab -->
+    <p-tabPanel header="Teacher Requests">
+      <div class="card">
+        <p-table #teacherRequestsTable [value]="teacherRequests" [paginator]="true" [rows]="10" [loading]="isLoading"
+                styleClass="p-datatable-gridlines p-datatable-striped" [tableStyle]="{'min-width': '50rem'}"
+                [globalFilterFields]="['userName', 'email']" [rowHover]="true">
+          <ng-template pTemplate="caption">
+            <div style="display: flex; width: 100%;">
+              <h5 class="m-0" style="flex: 1;">Teacher Requests</h5>
+              <div style="flex: 0 0 auto;">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" placeholder="Search..." 
+                        (input)="onGlobalFilter($event, teacherRequestsTable)" />
+                </span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="userName">Username <p-sortIcon field="userName"></p-sortIcon></th>
+              <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+              <th>Name</th>
+              <th pSortableColumn="createdAt">Date <p-sortIcon field="createdAt"></p-sortIcon></th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-request>
+            <tr>
+              <td>{{ request.userName }}</td>
+              <td>{{ request.email }}</td>
+              <td>{{ (request.firstName || '') + ' ' + (request.lastName || '') }}</td>
+              <td>{{ request.createdAt | date:'medium' }}</td>
+              <td>
+                <p-tag [value]="request.status" 
+                      [severity]="getStatusSeverity(request.status)"></p-tag>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info p-button-text"
+                          (click)="viewTeacherDetails(request)" pTooltip="View Details"></button>
+                  <button *ngIf="request.status === 'PENDING'" pButton pRipple icon="pi pi-check" class="p-button-rounded p-button-success p-button-text"
+                          (click)="approveTeacherRequest(request)" pTooltip="Approve"></button>
+                  <button *ngIf="request.status === 'PENDING'" pButton pRipple icon="pi pi-times" class="p-button-rounded p-button-danger p-button-text"
+                          (click)="rejectTeacherRequest(request)" pTooltip="Reject"></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="text-center p-4">No teacher requests found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-tabPanel>
+    
+    <!-- Companies Tab -->
+    <p-tabPanel header="Companies">
+      <div class="card">
+        <p-table #companiesTable [value]="companies" [paginator]="true" [rows]="10" [loading]="isLoading"
+                styleClass="p-datatable-gridlines p-datatable-striped" [tableStyle]="{'min-width': '50rem'}"
+                [globalFilterFields]="['name', 'emailCompany']" [rowHover]="true">
+          <ng-template pTemplate="caption">
+            <div style="display: flex; width: 100%;">
+              <h5 class="m-0" style="flex: 1;">Registered Companies</h5>
+              <div style="flex: 0 0 auto;">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" placeholder="Search..." 
+                        (input)="onGlobalFilter($event, companiesTable)" />
+                </span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="name">Company <p-sortIcon field="name"></p-sortIcon></th>
+              <th pSortableColumn="emailCompany">Email <p-sortIcon field="emailCompany"></p-sortIcon></th>
+              <th>Address</th>
+              <th pSortableColumn="createdAt">Registration Date <p-sortIcon field="createdAt"></p-sortIcon></th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-company>
+            <tr>
+              <td>
+                <div class="flex align-items-center gap-3">
+                  <div class="company-logo-container" style="width: 40px; height: 40px; min-width: 40px; display: flex; align-items: center; justify-content: center;">
+                    <img *ngIf="company.logo" [src]="company.logo" alt="Company Logo" style="max-width: 100%; max-height: 100%;" class="shadow-1 border-round" />
+                  </div>
+                  <span class="company-name text-overflow-ellipsis">{{ company.name }}</span>
+                </div>
+              </td>
+              <td>{{ company.emailCompany }}</td>
+              <td>{{ company.address || 'N/A' }}</td>
+              <td>{{ company.createdAt | date:'medium' }}</td>
+              <td>
+                <div class="flex gap-2">
+                  <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info p-button-text"
+                          (click)="viewCompanyDetails(company)" pTooltip="View Details"></button>
+                  <button pButton pRipple icon="pi pi-users" class="p-button-rounded p-button-success p-button-text"
+                          (click)="viewCompanyEmployees(company)" pTooltip="View Employees"></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5" class="text-center p-4">No companies found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+      
+      <!-- Company Employees Dialog -->
+      <p-dialog [(visible)]="displayEmployeesDialog" [style]="{width: '70%'}" [header]="'Employees of ' + (selectedCompany?.name || '')" [modal]="true" styleClass="p-fluid">
+        <div *ngIf="companyEmployees.length > 0" class="card">
+          <p-table #employeesTable [value]="companyEmployees" [paginator]="true" [rows]="10"
+                  styleClass="p-datatable-gridlines" [tableStyle]="{'min-width': '50rem'}"
+                  [globalFilterFields]="['userName', 'email']" [rowHover]="true">
+            <ng-template pTemplate="caption">
+              <div style="display: flex; width: 100%;">
+                <h5 class="m-0" style="flex: 1;">Company Employees</h5>
+                <div style="flex: 0 0 auto;">
+                  <span class="p-input-icon-left">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" placeholder="Search..." 
+                          (input)="onGlobalFilter($event, employeesTable)" />
+                  </span>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="userName">Username <p-sortIcon field="userName"></p-sortIcon></th>
+                <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-employee>
+              <tr>
+                <td>{{ employee.userName }}</td>
+                <td>{{ employee.email }}</td>
+                <td>{{ (employee.firstName || '') + ' ' + (employee.lastName || '') }}</td>
+                <td>{{ employee.role?.roleName }}</td>
+                <td>
+                  <button pButton pRipple icon="pi pi-user-edit" class="p-button-rounded p-button-info p-button-text"
+                          (click)="viewUserDetails(employee)" pTooltip="View Details"></button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <div *ngIf="companyEmployees.length === 0" class="p-4 text-center">
+          <p>No employees found for this company.</p>
+        </div>
+        <ng-template pTemplate="footer">
+          <button pButton pRipple label="Close" icon="pi pi-times" class="p-button-text" (click)="displayEmployeesDialog = false"></button>
+        </ng-template>
+      </p-dialog>
+    </p-tabPanel>
+
+    <!-- Teachers Tab -->
+    <p-tabPanel header="Teachers">
+      <div class="card">
+        <p-table #teachersTable [value]="teachers" [paginator]="true" [rows]="10" [loading]="isLoading"
+                styleClass="p-datatable-gridlines p-datatable-striped" [tableStyle]="{'min-width': '50rem'}"
+                [globalFilterFields]="['userName', 'email', 'firstName', 'lastName']" [rowHover]="true">
+          <ng-template pTemplate="caption">
+            <div style="display: flex; width: 100%;">
+              <h5 class="m-0" style="flex: 1;">Registered Teachers</h5>
+              <div style="flex: 0 0 auto;">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" placeholder="Search..." 
+                        (input)="onGlobalFilter($event, teachersTable)" />
+                </span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="userName">Username <p-sortIcon field="userName"></p-sortIcon></th>
+              <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+              <th>Full Name</th>
+              <th>Status</th>
+              <th pSortableColumn="createdDate">Registration Date <p-sortIcon field="createdDate"></p-sortIcon></th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-teacher>
+            <tr>
+              <td>{{ teacher.userName }}</td>
+              <td>{{ teacher.email }}</td>
+              <td>{{ (teacher.firstName || '') + ' ' + (teacher.lastName || '') }}</td>
+              <td>
+                <p-tag 
+                  [value]="teacher.enabled ? 'Active' : 'Inactive'" 
+                  [severity]="teacher.enabled ? 'success' : 'danger'"></p-tag>
+              </td>
+              <td>{{ teacher.createdDate | date:'medium' }}</td>
+              <td>
+                <div class="flex gap-2">
+                  <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info p-button-text"
+                          (click)="viewUserDetails(teacher)" pTooltip="View Details"></button>
+                  <button pButton pRipple [icon]="teacher.enabled ? 'pi pi-lock' : 'pi pi-lock-open'" 
+                          [class]="teacher.enabled ? 'p-button-rounded p-button-warning p-button-text' : 'p-button-rounded p-button-success p-button-text'"
+                          (click)="toggleUserStatus(teacher)" 
+                          pTooltip="{{teacher.enabled ? 'Disable Account' : 'Enable Account'}}"></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="text-center p-4">No teachers found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-tabPanel>
+    
+    <!-- Users Tab -->
+    <p-tabPanel header="Users">
+      <div class="card">
+        <p-table #usersTable [value]="allUsers" [paginator]="true" [rows]="10" [loading]="isLoading"
+                styleClass="p-datatable-gridlines p-datatable-striped" [tableStyle]="{'min-width': '50rem'}"
+                [globalFilterFields]="['userName', 'email', 'firstName', 'lastName', 'role.roleName']" [rowHover]="true">
+          <ng-template pTemplate="caption">
+            <div style="display: flex; width: 100%;">
+              <h5 class="m-0" style="flex: 1;">All Users</h5>
+              <div style="flex: 0 0 auto;">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" placeholder="Search..." 
+                        (input)="onGlobalFilter($event, usersTable)" />
+                </span>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="userName">Username <p-sortIcon field="userName"></p-sortIcon></th>
+              <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+              <th>Full Name</th>
+              <th pSortableColumn="role.roleName">Role <p-sortIcon field="role.roleName"></p-sortIcon></th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-user>
+            <tr>
+              <td>{{ user.userName }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ (user.firstName || '') + ' ' + (user.lastName || '') }}</td>
+              <td>{{ user.role?.roleName }}</td>
+              <td>
+                <p-tag 
+                  [value]="user.enabled ? 'Active' : 'Inactive'" 
+                  [severity]="user.enabled ? 'success' : 'danger'"></p-tag>
+              </td>
+              <td>
+                <div class="flex gap-2">
+                  <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-info p-button-text"
+                          (click)="viewUserDetails(user)" pTooltip="View Details"></button>
+                  <button pButton pRipple [icon]="user.enabled ? 'pi pi-lock' : 'pi pi-lock-open'" 
+                          [class]="user.enabled ? 'p-button-rounded p-button-warning p-button-text' : 'p-button-rounded p-button-success p-button-text'"
+                          (click)="toggleUserStatus(user)" 
+                          pTooltip="{{user.enabled ? 'Disable Account' : 'Enable Account'}}"></button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="text-center p-4">No users found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+</div> 

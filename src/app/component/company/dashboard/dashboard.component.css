@@ -1,0 +1,178 @@
+.company-dashboard {
+  padding: 1rem;
+}
+
+/* Status badge styles */
+.employee-badge {
+  border-radius: 2px;
+  padding: 0.25rem 0.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.3px;
+}
+
+.status-active {
+  background-color: #C8E6C9;
+  color: #256029;
+}
+
+.status-inactive {
+  background-color: #FFCDD2;
+  color: #C63737;
+}
+
+/* Dashboard placeholder */
+.dashboard-placeholder {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--surface-ground);
+  border-radius: 4px;
+  padding: 2rem;
+}
+
+.placeholder-content {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.placeholder-content h2 {
+  color: var(--text-color);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+/* Employee Details Dialog */
+.employee-details .field {
+  margin-bottom: 1.5rem;
+}
+
+.employee-details label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+  color: var(--text-color-secondary);
+}
+
+.employee-details p {
+  margin: 0;
+  padding: 0.5rem 0;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .company-dashboard {
+    padding: 0.5rem;
+  }
+  
+  .dashboard-placeholder {
+    min-height: 200px;
+    padding: 1rem;
+  }
+}
+
+/* Add form validation styles */
+.p-fluid .p-inputtext.ng-invalid.ng-dirty {
+  border-color: var(--red-500);
+}
+
+.p-error {
+  color: var(--red-500);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Add required field marker */
+label.required::after {
+  content: "*";
+  color: var(--red-500);
+  margin-left: 0.25rem;
+}
+
+/* Form input adjustments */
+.p-dialog .p-dialog-content form .field {
+  margin-bottom: 1.5rem;
+}
+
+.p-dialog .p-dialog-content form .field:last-child {
+  margin-bottom: 0.5rem;
+}
+
+/* Form select styles */
+select.p-inputtext {
+  padding: 0.5rem;
+  height: 40px;
+}
+
+/* Form improvements */
+.employee-dialog .p-dialog-content {
+  padding: 1.5rem;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field {
+  margin-bottom: 0.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  display: block;
+  color: var(--text-color);
+  font-size: 0.875rem;
+}
+
+.required-star {
+  color: var(--red-500);
+  margin-left: 0.25rem;
+}
+
+/* Input with icons */
+.p-input-icon-right {
+  position: relative;
+}
+
+.p-input-icon-right i {
+  position: absolute;
+  top: 50%;
+  margin-top: -0.5rem;
+  right: 0.75rem;
+  color: var(--text-color-secondary);
+}
+
+.p-input-icon-right input:focus + i {
+  color: var(--primary-color);
+}
+
+/* Dialog footer */
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Make inputs uniform height */
+.p-inputtext {
+  height: 40px;
+  padding: 0.5rem 0.75rem;
+}
+
+/* Validation error styling improvement */
+.p-error {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+} 

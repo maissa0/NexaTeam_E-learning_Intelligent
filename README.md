@@ -1,61 +1,59 @@
-Gestion RH et e-learning en Microservices
+# Sakai19
 
-Overview
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
 
-Ce projet vise à développer une plateforme de gestion des ressources humaines et etudiant  en utilisant une architecture microservices. L'application permet la gestion des candidatures, des offres d'emploi , les cours et les quizs ,et intègre un système de matching intelligent basé sur l'IA.
+## Development server
 
-Features
+To start a local development server, run:
 
-Gestion des offres d'emploi
-Gestion des cours
+```bash
+ng serve
+```
 
-Gestion des quiz
-Gestion des feedbacks 
-Gestion des candidatures
-gestion des abonnements
-Système de matching IA entre offres et CV
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-Planification des entretiens en ligne
+## Code scaffolding
 
-Analyse et évaluation des candidatures
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
 
-Architecture microservices avec Spring Boot et Angular
+```bash
+ng generate component component-name
+```
 
-Tech Stack
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
-Frontend
+```bash
+ng generate --help
+```
 
-Angular
+## Building
 
-Tailwind CSS
+To build the project run:
 
+```bash
+ng build
+```
 
-Backend
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-Spring Boot
+## Running unit tests
 
-Spring Cloud Gateway
+To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
+```bash
+ng test
+```
 
-Eureka Service Discovery
+## Running end-to-end tests
 
-MongoDB
+For end-to-end (e2e) testing, run:
 
-Docker
+```bash
+ng e2e
+```
 
-Getting Started
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-Prérequis
+## Additional Resources
 
-Node.js et Angular CLI pour le frontend
-
-Java 17+ et Maven pour le backend
-
-Docker et Docker Compose
-Accéder à l'application
-
-Frontend : http://localhost:4200
-
-API Gateway : http://localhost:808
-
-
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

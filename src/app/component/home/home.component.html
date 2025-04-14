@@ -1,0 +1,57 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Welcome to Our Application</h1>
+      <p class="hero-description">
+        Sed blandit libero volutpat sed cras. Fames ac turpis egestas integer. 
+        Placerat in egestas erat. Imperdiet sed euismod nisi porta lorem mollis.
+      </p>
+      <button class="btn btn-primary">Get Started</button>
+    </div>
+    <div class="hero-image">
+      <img src="https://primefaces.org/cdn/templates/sakai/landing/screen-1.png" alt="Dashboard Preview" />
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2>Key Features</h2>
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let feature of features">
+        <div class="feature-icon">{{ feature.icon }}</div>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials-section">
+    <h2>What Our Users Say</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+        <div class="testimonial-content">
+          <p>"{{ testimonial.content }}"</p>
+        </div>
+        <div class="testimonial-author">
+          <img [src]="testimonial.image" alt="{{ testimonial.name }}" />
+          <div class="author-info">
+            <h4>{{ testimonial.name }}</h4>
+            <p>{{ testimonial.position }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <h2>Ready to Get Started?</h2>
+    <p>Join thousands of users who are already benefiting from our platform.</p>
+    <div class="cta-buttons">
+      <button class="btn btn-primary">Sign Up Now</button>
+      <button class="btn btn-secondary" routerLink="/auth/login">Login</button>
+    </div>
+  </section>
+</div> 

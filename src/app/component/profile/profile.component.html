@@ -1,0 +1,448 @@
+<!-- Simple Profile Page -->
+<div class="profile-container">
+  <div class="card shadow-2">
+    <div class="profile-header">
+      <div class="flex align-items-center">
+        <div class="profile-picture-wrapper">
+          <span class="profile-badge">Profile Picture</span>
+          <div class="profile-picture-container">
+            <img [src]="profilePictureUrl || 'assets/layout/images/avatar.png'" 
+                alt="Profile Picture" 
+                class="profile-image" />
+            <button type="button" class="camera-icon-button" (click)="fileInput.click()">
+              <i class="pi pi-camera"></i>
+            </button>
+            <input #fileInput type="file" style="display:none" accept="image/*" 
+                  (change)="updatePicture($any($event.target).files?.[0])">
+          </div>
+          <span class="user-role-badge">ROLE USER</span>
+          <div class="email-container">
+            <i class="pi pi-envelope"></i>
+            <span>{{ userProfile?.email || 'No email provided' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simplified Tab View -->
+    <div class="profile-tabs">
+      <ul class="profile-tab-list">
+        <li [class.active]="activeTab === 'profile'" (click)="activeTab = 'profile'">
+          <a>Profile Information</a>
+        </li>
+        <li [class.active]="activeTab === 'security'" (click)="activeTab = 'security'">
+          <a>Security</a>
+        </li>
+        <li [class.active]="activeTab === 'certificates'" (click)="activeTab = 'certificates'">
+          <a>Certificates</a>
+        </li>
+        <li [class.active]="activeTab === 'resumes'" (click)="activeTab = 'resumes'">
+          <a>Resumes</a>
+        </li>
+      </ul>
+
+      <!-- Profile Information Tab -->
+      <div class="profile-tab-content" *ngIf="activeTab === 'profile'">
+        <h2 class="profile-section-title">Profile Picture</h2>
+        <div class="profile-picture-options">
+          <div class="profile-picture-upload">
+            <button pButton type="button" label="Change Picture" icon="pi pi-camera" 
+                    class="p-button-success" (click)="fileInput.click()"></button>
+          </div>
+          <div class="profile-picture-remove">
+            <button pButton type="button" label="Remove Picture" icon="pi pi-trash" 
+                    class="p-button-danger" [disabled]="!profilePictureUrl" 
+                    (click)="onDeleteProfilePicture()"></button>
+          </div>
+        </div>
+
+        <h2 class="profile-section-title">Personal Information</h2>
+        <div class="profile-form">
+          <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input id="username" formControlName="username" class="form-control" readonly />
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input id="email" formControlName="email" class="form-control" />
+              <div *ngIf="profileForm.get('email')?.invalid && profileForm.get('email')?.touched" class="error-message">
+                Valid email is required
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input id="firstName" formControlName="firstName" class="form-control" />
+              </div>
+              
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" formControlName="lastName" class="form-control" />
+              </div>
+            </div>
+            
+            <div class="form-actions">
+              <button type="submit" class="btn btn-success" 
+                      [disabled]="profileForm.invalid || !profileForm.dirty || isLoading">
+                <i class="pi pi-check"></i> Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Security Tab -->
+      <div class="profile-tab-content" *ngIf="activeTab === 'security'">
+        <h2 class="profile-section-title">Change Password</h2>
+        <div class="profile-form">
+          <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()">
+            <div class="form-group">
+              <label for="currentPassword">Current Password</label>
+              <input type="password" id="currentPassword" formControlName="currentPassword" class="form-control" />
+              <div *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched" class="error-message">
+                Current password is required
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="newPassword">New Password</label>
+              <input type="password" id="newPassword" formControlName="newPassword" class="form-control" />
+              <div *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched" class="error-message">
+                New password is required (min 8 characters)
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control" />
+              <div *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched" class="error-message">
+                Confirm password is required
+              </div>
+              <div *ngIf="passwordForm.errors?.['passwordMismatch'] && passwordForm.get('confirmPassword')?.touched" class="error-message">
+                Passwords do not match
+              </div>
+            </div>
+            
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" 
+                      [disabled]="passwordForm.invalid || isLoading">
+                <i class="pi pi-lock"></i> Change Password
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <h2 class="profile-section-title">Two-Factor Authentication</h2>
+        <div class="security-option">
+          <div class="switch-container">
+            <div class="switch-label">
+              <h4>Two-Factor Authentication</h4>
+              <p class="switch-description">Add an extra layer of security to your account</p>
+            </div>
+            <div class="switch-toggle">
+              <div class="toggle-switch">
+                <input type="checkbox" id="twoFAToggle" [(ngModel)]="isTwoFactorEnabled" 
+                      (change)="onToggleTwoFactor()" [disabled]="isLoading" />
+                <label for="twoFAToggle"></label>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="qrCodeUrl" class="qr-code-container">
+            <img [src]="qrCodeUrl" alt="QR Code" class="qr-code" />
+            <p class="qr-instruction">Scan this QR code with your authenticator app</p>
+            <div class="verification-code-container">
+              <label for="verificationCode">Verification Code</label>
+              <input id="verificationCode" [(ngModel)]="verificationCode" 
+                    placeholder="Enter 6-digit code" class="form-control" />
+            </div>
+            <button class="btn btn-primary verify-btn" 
+                   (click)="onVerifyTwoFactor()" 
+                   [disabled]="!verificationCode || isLoading">
+              <i class="pi pi-check-circle"></i> Verify
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Certificates Tab -->
+      <div class="profile-tab-content" *ngIf="activeTab === 'certificates'">
+        <h2 class="profile-section-title">My Certificates</h2>
+        <div class="certificates-actions">
+          <button class="btn btn-primary mb-3" (click)="showAddCertificateDialog()">
+            <i class="pi pi-plus"></i> Add Certificate
+          </button>
+        </div>
+        <div *ngIf="certificates.length === 0" class="empty-state">
+          <i class="pi pi-file empty-icon"></i>
+          <h4>No Certificates Found</h4>
+          <p>You haven't uploaded any certificates yet.</p>
+          <button class="btn btn-outline-primary" 
+                (click)="showAddCertificateDialog()">
+            <i class="pi pi-plus"></i> Add Your First Certificate
+          </button>
+        </div>
+        <div *ngIf="certificates.length > 0" class="certificates-grid">
+          <div *ngFor="let cert of certificates" class="certificate-card">
+            <div class="certificate-header">
+              <i class="pi pi-file-pdf"></i>
+              <div class="certificate-actions">
+                <button class="btn-icon" (click)="onDownloadCertificate(cert)">
+                  <i class="pi pi-download"></i>
+                </button>
+                <button class="btn-icon btn-danger" (click)="onDeleteCertificate(cert)">
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </div>
+            <div class="certificate-content">
+              <h4 class="certificate-name">{{ cert.fileName }}</h4>
+              <div class="certificate-details">
+                <p><i class="pi pi-file"></i> {{ cert.fileType }}</p>
+                <p><i class="pi pi-tag"></i> {{ (cert.fileSize / 1024).toFixed(2) }} KB</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumes Tab -->
+      <div class="profile-tab-content" *ngIf="activeTab === 'resumes'">
+        <div *ngIf="resumes.length === 0" class="empty-state">
+          <i class="pi pi-file-pdf empty-icon"></i>
+          <h4>No Resumes Yet</h4>
+          <p>You haven't created any resumes yet. Get started by creating your first resume.</p>
+          <button class="btn btn-primary" routerLink="/pages/user/resume-builder">
+            <i class="pi pi-plus"></i> Create Resume
+          </button>
+        </div>
+        
+        <div *ngIf="resumes.length > 0" class="resumes-container">
+          <div class="resumes-header">
+            <h2 class="profile-section-title">My Resumes</h2>
+            <button class="btn btn-primary" routerLink="/pages/user/resume-builder">
+              <i class="pi pi-plus"></i> Create New Resume
+            </button>
+          </div>
+          
+          <div class="resumes-grid">
+            <div *ngFor="let resume of resumes" class="resume-card">
+              <div class="resume-header">
+                <h4 class="resume-title">
+                  {{ resume.name }}
+                </h4>
+                <span class="resume-date">
+                  {{ resume.job }}
+                </span>
+              </div>
+              <div class="resume-content">
+                <p class="resume-summary">{{ resume.summary ? (resume.summary | slice:0:100) + (resume.summary.length > 100 ? '...' : '') : 'No summary available' }}</p>
+                <div class="resume-skills">
+                  <span *ngFor="let skill of resume.skills?.slice(0,3)" class="skill-badge">
+                    {{ skill.name }}
+                  </span>
+                  <span *ngIf="resume.skills && resume.skills.length > 3" class="more-badge">
+                    +{{ resume.skills.length - 3 }} more
+                  </span>
+                </div>
+                <div class="resume-actions">
+                  <button class="btn btn-outline-primary" (click)="viewResume(resume)">
+                    <i class="pi pi-eye"></i> View
+                  </button>
+                  <button *ngIf="resume.id" class="btn btn-outline-success" (click)="generatePDF(resume.id)">
+                    <i class="pi pi-download"></i> Download PDF
+                  </button>
+                  <button *ngIf="resume.id" class="btn btn-outline-danger" (click)="deleteResume(resume.id)">
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast for notifications -->
+<p-toast></p-toast>
+
+<!-- Two-Factor Dialog -->
+<p-dialog header="Two-Factor Authentication" [(visible)]="showTwoFactorDialog" 
+          [modal]="true" [draggable]="false" [resizable]="false">
+  <div class="confirmation-dialog">
+    <p>Are you sure you want to {{ isTwoFactorEnabled ? 'enable' : 'disable' }} two-factor authentication?</p>
+    <div class="dialog-actions">
+      <button class="btn btn-secondary" (click)="showTwoFactorDialog = false; isTwoFactorEnabled = !isTwoFactorEnabled;">
+        Cancel
+      </button>
+      <button class="btn btn-primary" (click)="confirmToggleTwoFactor()">
+        Confirm
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- Certificate Dialog -->
+<p-dialog header="Add New Certificate" [(visible)]="showCertificateDialog" 
+          [modal]="true" [draggable]="false" [resizable]="false"
+          [style]="{width: '450px'}">
+  <div class="certificate-dialog p-3">
+    <div class="mb-4">
+      <h5 class="mb-2">Certificate Details</h5>
+      <div class="form-group mb-3">
+        <label for="certificateName" class="font-bold block mb-2">Certificate Name *</label>
+        <input id="certificateName" [(ngModel)]="certificateName" 
+             placeholder="e.g. AWS Solutions Architect" 
+             class="form-control w-full" />
+        <small class="text-secondary">Enter a name for your certificate.</small>
+      </div>
+      
+      <div class="form-group mb-3">
+        <label for="certificateSource" class="font-bold block mb-2">Certificate Source *</label>
+        <input id="certificateSource" [(ngModel)]="certificateSource" 
+             placeholder="e.g. Amazon Web Services, Udemy" 
+             class="form-control w-full" />
+        <small class="text-secondary">Where did you receive this certificate from?</small>
+      </div>
+    </div>
+    
+    <div class="certificate-file-upload mb-4">
+      <h5 class="mb-2">Certificate File</h5>
+      <label class="font-bold block mb-2">Upload Certificate *</label>
+      <div *ngIf="!selectedCertificateFile" class="upload-btn-wrapper">
+        <p-fileUpload #fileUpload mode="basic" chooseLabel="Select File" 
+                    [showUploadButton]="false" [showCancelButton]="false"
+                    accept=".pdf,.jpg,.jpeg,.png" 
+                    (onSelect)="selectedCertificateFile = $event.files[0]"
+                    [style]="{'width':'100%'}" 
+                    [maxFileSize]="5000000">
+        </p-fileUpload>
+        <small class="text-secondary block mt-2">Accepted formats: PDF, JPG, JPEG, PNG (Max size: 5MB)</small>
+      </div>
+      
+      <div *ngIf="selectedCertificateFile" class="selected-file mt-3 p-3 surface-border border-1 border-round">
+        <div class="file-info flex align-items-center justify-content-between">
+          <div class="flex align-items-center">
+            <i class="pi pi-file mr-2 text-primary" style="font-size: 1.5rem"></i>
+            <div class="file-details">
+              <span class="file-name font-medium">{{ selectedCertificateFile.name }}</span>
+              <p class="file-meta text-secondary mb-0">
+                {{ selectedCertificateFile.type }} - {{ (selectedCertificateFile.size / 1024).toFixed(2) }} KB
+              </p>
+            </div>
+          </div>
+          <button type="button" class="btn-icon" (click)="selectedCertificateFile = null; fileUpload.clear()">
+            <i class="pi pi-times"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Debug Section -->
+    <div class="debug-upload border-1 surface-border border-round p-3 mt-4" *ngIf="selectedCertificateFile && false">
+      <h5 class="mb-2">Debug Upload</h5>
+      <form #debugForm>
+        <div class="mb-2">
+          <label class="block mb-1">fromWhere:</label>
+          <input type="text" class="form-control w-full" name="fromWhere" [(ngModel)]="certificateSource">
+        </div>
+        <div class="mb-2">
+          <label class="block mb-1">name:</label>
+          <input type="text" class="form-control w-full" name="name" [(ngModel)]="certificateName">
+        </div>
+        <div class="mb-2">
+          <label class="block mb-1">File:</label>
+          <div class="text-secondary">{{ selectedCertificateFile.name }}</div>
+        </div>
+        <div class="flex justify-content-between align-items-center mt-3">
+          <span>Using direct XML HTTP Request</span>
+          <button type="button" class="p-button p-button-sm" (click)="testDirectUpload()">
+            Test Direct Upload
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div class="dialog-actions flex justify-content-end gap-2 mt-3 pt-3 border-top-1 surface-border">
+    <button type="button" class="btn btn-secondary" (click)="showCertificateDialog = false">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-primary" 
+            (click)="uploadFromDialog()" 
+            [disabled]="!selectedCertificateFile || !certificateSource">
+      <i class="pi pi-upload mr-1"></i> Upload Certificate
+    </button>
+  </div>
+</p-dialog>
+
+<!-- Resume Preview Dialog -->
+<p-dialog header="Resume Preview" [(visible)]="displayResumeDialog" 
+          [modal]="true" [draggable]="false" [resizable]="false" 
+          [style]="{width: '80vw', maxWidth: '900px'}">
+  <div class="simple-resume-preview" *ngIf="selectedResume">
+    <div class="resume-header">
+      <h2 class="resume-name">{{ selectedResume.name }}</h2>
+      <h3 class="resume-job">{{ selectedResume.job }}</h3>
+      
+      <div class="resume-contact-info">
+        <span *ngIf="selectedResume.address">{{ selectedResume.address }}</span>
+        <div class="contact-row">
+          <span *ngIf="selectedResume.phone">{{ selectedResume.phone }}</span>
+          <span *ngIf="selectedResume.phone && selectedResume.email"> · </span>
+          <span *ngIf="selectedResume.email">{{ selectedResume.email }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="resume-section" *ngIf="selectedResume.experience && selectedResume.experience.length > 0">
+      <h4 class="section-title">Experience</h4>
+      <div class="experience-item" *ngFor="let exp of selectedResume.experience">
+        <div class="item-header">
+          <h5 class="item-title">{{ exp.title }}</h5>
+          <span class="item-date">{{ exp.startDate }} - {{ exp.endDate || 'Present' }}</span>
+        </div>
+        <div class="item-subtitle">{{ exp.company }} - {{ exp.address }}</div>
+        <p class="item-description" *ngIf="exp.summary">{{ exp.summary }}</p>
+      </div>
+    </div>
+    
+    <div class="resume-section" *ngIf="selectedResume.education && selectedResume.education.length > 0">
+      <h4 class="section-title">Education</h4>
+      <div class="education-item" *ngFor="let edu of selectedResume.education">
+        <div class="item-header">
+          <h5 class="item-title">{{ edu.name }}</h5>
+          <span class="item-date">{{ edu.year }}</span>
+        </div>
+        <div class="item-subtitle" *ngIf="edu.qualification">{{ edu.qualification }}</div>
+        <div class="item-location" *ngIf="edu.address">{{ edu.address }}</div>
+      </div>
+    </div>
+    
+    <div class="resume-section" *ngIf="selectedResume.skills && selectedResume.skills.length > 0">
+      <h4 class="section-title">Skills</h4>
+      <div class="skills-list">
+        <div class="skill-item" *ngFor="let skill of selectedResume.skills">
+          <span class="skill-name">{{ skill.name }}</span>
+          <span class="skill-level" *ngIf="skill.level">{{ skill.level }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="dialog-actions">
+    <button class="btn btn-secondary" (click)="displayResumeDialog = false">
+      Close
+    </button>
+    <button class="btn btn-primary" 
+            (click)="handleDownloadClick()" 
+            [disabled]="!selectedResume">
+      <i class="pi pi-download"></i> Download
+    </button>
+  </div>
+</p-dialog>
