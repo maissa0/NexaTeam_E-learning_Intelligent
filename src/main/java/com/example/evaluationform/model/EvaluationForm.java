@@ -23,8 +23,7 @@ public class EvaluationForm {
     private String evaluatorId; // Recruiter or interviewer ID
     private String evaluatorName; // Name of the person evaluating
 
-    private Map<String, Integer> scores; // Key: "Technical Skills", "Communication", etc. | Value: Rating (1-10)
-
+    private Map<String, Integer> scores;
     private String overallFeedback; // Comments about the candidate
 
     private EvaluationStatus status; // Enum: PENDING, SUBMITTED, REVIEWED
