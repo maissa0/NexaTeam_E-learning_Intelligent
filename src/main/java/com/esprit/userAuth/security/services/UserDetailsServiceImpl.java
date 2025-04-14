@@ -1,8 +1,8 @@
 package com.esprit.userAuth.security.services;
 
 
-import com.esprit.userAuth.entities.User;
-import com.esprit.userAuth.repositories.UserRepository;
+import com.esprit.userAuth.entity.User;
+import com.esprit.userAuth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

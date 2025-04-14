@@ -1,7 +1,7 @@
 package com.esprit.userAuth.controller;
 
-import com.esprit.userAuth.entities.AuditLog;
-import com.esprit.userAuth.services.AuditLogService;
+import com.esprit.userAuth.entity.AuditLog;
+import com.esprit.userAuth.service.AuditLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,7 @@ public class AuditLogController {
     }
 
     @GetMapping("/cert/{id}")
-    public List<AuditLog> getCertificationAuditLogs(@PathVariable Long id){
+    public List<AuditLog> getCertificationAuditLogs(@PathVariable String id){
         return auditLogService.getAuditLogsForCertificationId(id);
     }
 

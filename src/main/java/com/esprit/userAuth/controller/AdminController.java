@@ -1,9 +1,10 @@
 package com.esprit.userAuth.controller;
 
+import com.esprit.userAuth.dtos.AdminUserCreationDTO;
 import com.esprit.userAuth.dtos.UserDTO;
-import com.esprit.userAuth.entities.Role;
-import com.esprit.userAuth.entities.User;
-import com.esprit.userAuth.services.UserService;
+import com.esprit.userAuth.entity.Role;
+import com.esprit.userAuth.entity.User;
+import com.esprit.userAuth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,6 +80,24 @@ public class AdminController {
             return ResponseEntity.ok("Password updated");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/create-admin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createAdminUser(@RequestBody AdminUserCreationDTO adminUserDTO) {
+        try {
+            User adminUser = userService.createAdminUser(
+                adminUserDTO.getUsername(),
+                adminUserDTO.getEmail(),
+                adminUserDTO.getPassword(),
+                adminUserDTO.getFirstName(),
+                adminUserDTO.getLastName()
+            );
+            
+            return ResponseEntity.ok("Admin user created successfully with ID: " + adminUser.getUserId());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating admin user: " + e.getMessage());
         }
     }
 

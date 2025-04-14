@@ -21,10 +21,13 @@ public class UserInfoResponse {
     private LocalDate accountExpiryDate;
     private boolean isTwoFactorEnabled;
     private List<String> roles;
+    private String firstName;
+    private String lastName;
+
 
     public UserInfoResponse(Long id, String username, String email, boolean accountNonLocked, boolean accountNonExpired,
                             boolean credentialsNonExpired, boolean enabled, LocalDate credentialsExpiryDate,
-                            LocalDate accountExpiryDate, boolean isTwoFactorEnabled, List<String> roles) {
+                            LocalDate accountExpiryDate, boolean isTwoFactorEnabled, List<String> roles, String firstName, String lastName) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -36,5 +39,8 @@ public class UserInfoResponse {
         this.accountExpiryDate = accountExpiryDate;
         this.isTwoFactorEnabled = isTwoFactorEnabled;
         this.roles = roles;
+        this.firstName = firstName;
+        this.lastName = lastName;
+
     }
 }

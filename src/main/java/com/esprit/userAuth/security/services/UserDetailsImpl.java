@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-import com.esprit.userAuth.entities.User;
+import com.esprit.userAuth.entity.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

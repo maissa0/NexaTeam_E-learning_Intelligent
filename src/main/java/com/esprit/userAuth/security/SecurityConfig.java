@@ -1,29 +1,38 @@
 package com.esprit.userAuth.security;
 
 
-import com.esprit.userAuth.entities.AppRole;
-import com.esprit.userAuth.entities.Role;
-import com.esprit.userAuth.entities.User;
-import com.esprit.userAuth.repositories.RoleRepository;
-import com.esprit.userAuth.repositories.UserRepository;
+import com.esprit.userAuth.config.OAuth2LoginSuccessHandler;
+import com.esprit.userAuth.entity.AppRole;
+import com.esprit.userAuth.entity.Role;
+import com.esprit.userAuth.entity.User;
+import com.esprit.userAuth.repository.RoleRepository;
+import com.esprit.userAuth.repository.UserRepository;
 import com.esprit.userAuth.security.jwt.AuthEntryPointJwt;
 import com.esprit.userAuth.security.jwt.AuthTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -38,42 +47,76 @@ public class SecurityConfig {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
 
+    @Autowired
+    @Lazy
+    OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
     }
 
     @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf ->
-                csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/api/auth/public/**")
-        );
-        //http.csrf(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests((requests)
-<<<<<<< HEAD
-                -> requests
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")//genere auto ROLE_
-                .requestMatchers("/api/csrf-token").permitAll()
-                .requestMatchers("/api/auth/public/**").permitAll()
-                .anyRequest().authenticated());
-=======
-                        -> requests
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/csrf-token").permitAll()
-                        .requestMatchers("/api/auth/public/**").permitAll()
-                        .requestMatchers("/oauth2/**").permitAll()
-                        .anyRequest().authenticated())
-                .oauth2Login(oauth -> {
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
-                });
->>>>>>> 65d5bd8 (oauth2 first attempt)
-        http.exceptionHandling(exception
-                -> exception.authenticationEntryPoint(unauthorizedHandler));
-        http.addFilterBefore(authenticationJwtTokenFilter(),
-                UsernamePasswordAuthenticationFilter.class);
-        http.formLogin(withDefaults());
-        http.httpBasic(withDefaults());
+    @Bean
+    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        // First, disable CSRF for all public endpoints
+        http.csrf(csrf -> csrf.disable());
+        
+        // Configure CORS
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        
+        // Configure request authorization
+        http.authorizeHttpRequests(requests -> requests
+                // Public endpoints - no authentication required
+                .requestMatchers("/api/auth/public/**").permitAll()
+                .requestMatchers("/api/companies/public/**").permitAll()
+                .requestMatchers("/api/csrf-token").permitAll()
+                .requestMatchers("/oauth2/**").permitAll()
+                // Allow access to error endpoints
+                .requestMatchers("/error/**").permitAll()
+                .requestMatchers("/error").permitAll()
+                
+                // Admin endpoints
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                
+                // Authenticated endpoints
+                .requestMatchers("/api/auth/profile/**").authenticated()
+                .requestMatchers("/api/profile/**").authenticated()
+                .requestMatchers("/api/certs/**").authenticated()
+                
+                // Company endpoints
+                .requestMatchers("/api/companies/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/company/**").hasRole("COMPANY")
+                
+                // All other endpoints require authentication
+                .anyRequest().authenticated()
+        );
+        
+        // Configure OAuth2 login
+        http.oauth2Login(oauth2 -> oauth2.successHandler(oAuth2LoginSuccessHandler));
+        
+        // Configure exception handling
+        http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
+        
+        // Set session management to stateless - JWT doesn't use sessions
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        
+        // Add JWT token filter before UsernamePasswordAuthenticationFilter
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        
+        // Return the built http security object
         return http.build();
     }
 

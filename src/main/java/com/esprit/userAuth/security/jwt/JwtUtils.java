@@ -1,5 +1,6 @@
 package com.esprit.userAuth.security.jwt;
 
+import com.esprit.userAuth.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -7,12 +8,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
@@ -33,10 +37,15 @@ public class JwtUtils {
         return null;
     }
 
-    public String generateTokenFromUsername(UserDetails userDetails) {
+    public String generateTokenFromUsername(UserDetailsImpl userDetails) {
         String username = userDetails.getUsername();
+        String roles = userDetails.getAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .collect(Collectors.joining(","));
         return Jwts.builder()
                 .subject(username)
+                .claim("roles", roles)
+                .claim("is2faEnabled", userDetails.is2faEnabled())
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key())
@@ -71,5 +80,25 @@ public class JwtUtils {
         }
         return false;
     }
+
+    public static String getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            logger.warn("AuthUtil: No authentication found in SecurityContext.");
+            return null;
+        }
+
+        String username = authentication.getName();
+        logger.info("AuthUtil: Current authenticated user: {}", username);
+
+        if ("anonymousUser".equals(username)) {
+            logger.warn("AuthUtil: User is anonymous!");
+            return null;
+        }
+
+        return username;
+    }
+
 }
 

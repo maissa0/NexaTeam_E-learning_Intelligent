@@ -1,12 +1,12 @@
 package com.esprit.userAuth.config;
 
-import com.esprit.userAuth.entities.AppRole;
-import com.esprit.userAuth.entities.Role;
-import com.esprit.userAuth.entities.User;
-import com.esprit.userAuth.repositories.RoleRepository;
+import com.esprit.userAuth.entity.AppRole;
+import com.esprit.userAuth.entity.Role;
+import com.esprit.userAuth.entity.User;
+import com.esprit.userAuth.repository.RoleRepository;
 import com.esprit.userAuth.security.jwt.JwtUtils;
 import com.esprit.userAuth.security.services.UserDetailsImpl;
-import com.esprit.userAuth.services.UserService;
+import com.esprit.userAuth.service.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,9 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -116,6 +114,13 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         String email = (String) attributes.get("email");
         System.out.println("OAuth2LoginSuccessHandler: " + username + " : " + email);
 
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>(oauth2User.getAuthorities().stream()
+                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
+                .collect(Collectors.toList()));
+        User user = userService.findByEmail(email).orElseThrow(
+                () -> new RuntimeException("User not found"));
+        authorities.add(new SimpleGrantedAuthority(user.getRole().getRoleName().name()));
+
         // Create UserDetailsImpl instance
         UserDetailsImpl userDetails = new UserDetailsImpl(
                 null,
@@ -123,9 +128,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                 email,
                 null,
                 false,
-                oauth2User.getAuthorities().stream()
-                        .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
-                        .collect(Collectors.toList())
+                authorities
         );
 
         // Generate JWT token

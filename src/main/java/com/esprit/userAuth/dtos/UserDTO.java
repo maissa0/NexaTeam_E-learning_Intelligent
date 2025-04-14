@@ -1,6 +1,6 @@
 package com.esprit.userAuth.dtos;
 
-import com.esprit.userAuth.entities.Role;
+import com.esprit.userAuth.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,4 +27,5 @@ public class UserDTO {
     private Role role;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+    private String profilePicture;
 }
