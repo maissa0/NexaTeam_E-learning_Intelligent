@@ -10,7 +10,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { CalendarModule } from 'primeng/calendar'; // ✅ Import Date Picker
+import { CalendarModule } from 'primeng/calendar'; 
 import { Interview, InterviewStatus } from '../models/interview.model';
 import InterviewService from '../service/interview.service';
 import { DropdownModule } from 'primeng/dropdown'; 
@@ -88,31 +88,31 @@ import { DropdownModule } from 'primeng/dropdown';
           [style]="{ width: '700px' }" [modal]="true" [closable]="true">
     <div class="p-fluid" style="padding: 20px;">
         
-        <!-- Application ID Field -->
+       
         <div class="p-field" style="margin-bottom: 20px;">
             <label for="applicationId" class="p-text-bold" style="display: block; margin-bottom: 5px;">Application ID:</label>
             <input id="applicationId" pInputText [(ngModel)]="interview.applicationId" 
                    required class="p-inputtext p-d-block" [style]="{ width: '100%', height: '40px', padding: '8px' }" />
         </div>
         
-        <!-- Scheduled Date Field -->
+      
         <div class="p-field" style="margin-bottom: 20px;">
             <label for="scheduledDateTime" class="p-text-bold" style="display: block; margin-bottom: 5px;">Scheduled Date:</label>
             <p-calendar id="scheduledDateTime" [(ngModel)]="interview.scheduledDateTime" 
                         [showTime]="true" hourFormat="24" dateFormat="yy-mm-dd" showIcon 
-                        appendTo="body" [style]="{ width: '100%' }" />
+                        [minDate]="today" appendTo="body" [style]="{ width: '100%' }" />
         </div>
 
-        <!-- Status Dropdown -->
-        <div class="p-field" style="margin-bottom: 40px;">  <!-- ✅ Added more margin -->
+       
+        <div class="p-field" style="margin-bottom: 40px;">  
             <label for="status" class="p-text-bold" style="display: block; margin-bottom: 5px;">Status:</label>
             <p-dropdown id="status" [(ngModel)]="interview.status" 
                         [options]="statuses" optionLabel="label" optionValue="value"
                         placeholder="Select Status" [style]="{ width: '100%' }" />
         </div>
 
-        <!-- Buttons Container -->
-        <div class="p-d-flex p-jc-end p-ai-center" style="margin-top: 20px; gap: 10px;">  <!-- ✅ Fixed spacing -->
+        
+        <div class="p-d-flex p-jc-end p-ai-center" style="margin-top: 20px; gap: 10px;">  
             <p-button label="Cancel" icon="pi pi-times" class="p-button-text" 
                       (click)="interviewDialog = false" [style]="{ width: '110px', height: '40px' }" />
             <p-button label="Save" icon="pi pi-check" class="p-button-primary" 
@@ -132,15 +132,17 @@ import { DropdownModule } from 'primeng/dropdown';
     `
 })
 export class Interviews implements OnInit {
+    today: Date = new Date();
     interviewDialog: boolean = false;
     interviews = signal<Interview[]>([]);
     interview: Interview = {
         interviewId: '',
         applicationId: '',
-        scheduledDateTime: new Date().toISOString(), // ✅ Default to current date
+        scheduledDateTime: '', 
         meetingLink: '',
         recordingLink: '',
-        status: InterviewStatus.SCHEDULED
+        status: InterviewStatus.SCHEDULED,
+        createdAt: '',  
     };
     
     selectedInterviews!: Interview[] | null;
@@ -172,12 +174,14 @@ export class Interviews implements OnInit {
 
     openNew() {
         this.interview = {
-            interviewId: '',
+            
             applicationId: '',
-            scheduledDateTime: new Date().toISOString(), // ✅ Default date on create
+            scheduledDateTime: new Date().toISOString(), 
             meetingLink: '',
             recordingLink: '',
-            status: InterviewStatus.SCHEDULED
+            status: InterviewStatus.SCHEDULED,
+            createdAt: new Date().toISOString(),
+
         };
         this.submitted = false;
         this.interviewDialog = true;
