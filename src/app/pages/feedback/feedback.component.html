@@ -1,0 +1,102 @@
+<div class="card">
+  <div class="grid grid-cols-12 gap-8">
+    <div class="font-semibold text-xl"></div>
+
+    <app-stats-widget class="contents" />
+  </div>
+  <div class="flex justify-between">
+    <div></div>
+    <p-button label="Visit as Admin"  [routerLink]="'/admin/feedbacks'"/>
+  </div>
+  <div style="display: flex; gap: 20px;">
+    <div style="flex: 2;">
+      <div class="flex justify-between items-center mb-4">
+        <div class="font-semibold text-xl">Feedbacks</div>
+        <div class="flex gap-4">
+          <span *ngIf="sortField === 'likedByUsers' && sortOrder === -1">Most Liked</span>
+          <span *ngIf="sortField === 'likedByUsers' && sortOrder === 1">Least Liked</span>
+          <span *ngIf="sortField !== 'likedByUsers'">Likes</span>
+
+          <i class="pi" [ngClass]="{
+                  'pi-sort-alt': sortField !== 'likedByUsers',
+                  'pi-sort-amount-up-alt': sortField === 'likedByUsers' && sortOrder === 1,
+                  'pi-sort-amount-down': sortField === 'likedByUsers' && sortOrder === -1
+                }" style="font-size: 1rem" (click)="setSortField('likedByUsers')">
+          </i>
+
+          <span *ngIf="sortField === 'dateDeCreation' && sortOrder === -1">Most Recent</span>
+          <span *ngIf="sortField === 'dateDeCreation' && sortOrder === 1">Oldest</span>
+          <span *ngIf="sortField !== 'dateDeCreation'">Date</span>
+
+          <i class="pi" [ngClass]="{
+                  'pi-sort-alt': sortField !== 'dateDeCreation',
+                  'pi-sort-amount-up-alt': sortField === 'dateDeCreation' && sortOrder === -1,
+                  'pi-sort-amount-down': sortField === 'dateDeCreation' && sortOrder === 1
+                }" style="font-size: 1rem" (click)="setSortField('dateDeCreation')">
+          </i>
+        </div>
+
+      </div>
+      <div *ngFor="let feedback of feedbacks; let i=index" >
+        <div *ngIf="showAll || i<maxFeedbacksToShow" class="feedback-item"
+        style="display: flex; margin-bottom: 20px;">
+
+          <p-avatar class="mr-2" label="V" size="large" [style]="{ 'background-color': '#2196F3', color: '#ffffff' }"
+            shape="circle"></p-avatar>
+
+          <div style="flex: 1; display: flex; flex-direction: column;">
+            <div style="display: flex; gap: 1rem; align-items: center;">
+              <div class="username" style="font-weight: bold;">Username</div>
+              <p-rating [(ngModel)]="feedback.emotion" [readonly]="true" [disabled]="true"></p-rating>
+            </div>
+
+            <div class="feedback-text" style="margin-top: 10px;">
+              {{ feedback.feedback }}
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end">
+            <p-button icon="pi pi-heart" [severity]="isLikedByUser(feedback) ? 'danger' : 'help'"
+              (click)="toggleLike(feedback.id)" rounded>
+            </p-button>
+            <span class="ml-2">{{ feedback.likedByUsers?.length || 0 }}</span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="feedbacks.length>=maxFeedbacksToShow">
+      <p-button *ngIf="!showAll" label="See More" icon="pi pi-chevron-down" (click)="toggleShowMore()">
+      </p-button>
+
+      <p-button *ngIf="showAll" label="See Less" icon="pi pi-chevron-up" (click)="toggleShowMore()">
+      </p-button>
+    </div>
+    </div>
+
+    <div style="flex: 1; padding: 10px; border-left: 1px solid #ddd;">
+      <div class="font-semibold text-xl mb-4">Write Your Feedback</div>
+<div class="flex flex-col mb-4 gap-1">
+  <label for="feedbackText">Feedback</label>
+  <textarea 
+    pTextarea 
+    id="feedbackText" 
+    style="width: 100%;" 
+    rows="4" 
+    [(ngModel)]="newFeedback.feedback"
+    [placeholder]="feedbackInvalid ? 'Invalid' : ''"
+    [class.ng-dirty]="feedbackInvalid"
+    [class.ng-invalid]="feedbackInvalid"
+  ></textarea>
+
+  <p-message *ngIf="feedbackInvalid" severity="error" variant="simple" size="small">
+    {{ feedbackErrorMessage }}
+  </p-message>
+</div>
+<div style="margin-top: 10px;">
+  <p-button label="Submit" icon="pi pi-check" (click)="submitFeedback()"></p-button>
+</div>
+
+    </div>
+  </div>
+
+</div>
+<app-recommondation/>
