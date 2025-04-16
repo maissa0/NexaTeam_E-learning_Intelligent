@@ -129,41 +129,72 @@ import { ActivatedRoute, Router } from '@angular/router';
             </div>
 
             <!-- View Mode: Scores Section -->
-            <div *ngIf="isViewMode" class="scores-section mt-4">
-                <h3 class="m-0 mb-3">Scores</h3>
-                
-                <div class="grid">
-                    <div *ngFor="let score of getScoresArray()" class="col-12 md:col-6 lg:col-4 mb-3">
-                        <p-card>
-                            <ng-template pTemplate="title">
-                                <div class="flex justify-content-between align-items-center">
-                                    <span class="font-bold">{{score.category}}</span>
-                                    <span class="text-xl font-bold" 
+            <div *ngIf="isViewMode" class="evaluation-view">
+                <div class="surface-card p-4 shadow-2 border-round">
+                    <!-- Header -->
+                    <div class="text-center mb-5">
+                        <h2 class="text-3xl font-semibold mb-2">Evaluation Summary</h2>
+                        <div class="text-600">Application ID: {{evaluationForm.applicationId}}</div>
+                        <div class="text-600">Evaluator: {{evaluationForm.evaluatorName}}</div>
+                    </div>
+
+                    <!-- Scores Grid -->
+                    <div class="grid">
+                        <div *ngFor="let score of getScoresArray()" class="col-12 md:col-6 xl:col-4 mb-4">
+                            <div class="surface-card p-3 border-round shadow-1 h-full">
+                                <div class="flex align-items-center justify-content-between">
+                                    <span class="text-xl font-medium">{{score.category}}</span>
+                                    <div class="score-badge" 
                                         [ngClass]="{
-                                            'text-green-500': score.value >= 70,
-                                            'text-yellow-500': score.value >= 50 && score.value < 70,
-                                            'text-red-500': score.value < 50
+                                            'bg-green-100 text-green-700': score.value >= 70,
+                                            'bg-yellow-100 text-yellow-700': score.value >= 50 && score.value < 70,
+                                            'bg-red-100 text-red-700': score.value < 50
                                         }">
                                         {{score.value}}/100
-                                    </span>
+                                    </div>
                                 </div>
-                            </ng-template>
-                        </p-card>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final Score -->
+                    <div class="mt-5 mb-5">
+                        <div class="surface-card p-4 border-round shadow-2">
+                            <h3 class="text-2xl font-semibold text-center mb-4">Final Score</h3>
+                            <div class="flex justify-content-center">
+                                <div class="final-score"
+                                    [ngClass]="{
+                                        'bg-green-100 text-green-700': getFinalScore() >= 70,
+                                        'bg-yellow-100 text-yellow-700': getFinalScore() >= 50 && getFinalScore() < 70,
+                                        'bg-red-100 text-red-700': getFinalScore() < 50
+                                    }">
+                                    <span class="score-value">{{getFinalScore()}}</span>
+                                    <span class="score-max">/100</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Section -->
+                    <div class="mt-5">
+                        <div class="surface-card p-4 border-round shadow-2">
+                            <h3 class="text-2xl font-semibold mb-3">Overall Feedback</h3>
+                            <p class="text-lg line-height-3 text-700">
+                                {{evaluationForm.overallFeedback || 'No feedback provided.'}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Back Button -->
+                    <div class="flex justify-content-center mt-5">
+                        <p-button 
+                            label="Back to Interviews" 
+                            icon="pi pi-arrow-left" 
+                            (onClick)="navigateBack()"
+                            styleClass="p-button-rounded">
+                        </p-button>
                     </div>
                 </div>
-            </div>
-
-            <!-- Overall Feedback -->
-            <div class="field mt-4">
-                <label for="overallFeedback" class="font-bold block mb-2">Overall Feedback</label>
-                <textarea 
-                    id="overallFeedback" 
-                    pInputTextarea 
-                    [(ngModel)]="evaluationForm.overallFeedback" 
-                    [rows]="5"
-                    [disabled]="isViewMode"
-                    class="w-full">
-                </textarea>
             </div>
 
             <!-- Submit Button - only in create mode -->
@@ -173,15 +204,6 @@ import { ActivatedRoute, Router } from '@angular/router';
                     icon="pi pi-check" 
                     (onClick)="submitEvaluation()"
                     [disabled]="questions.length === 0">
-                </p-button>
-            </div>
-
-            <!-- Back Button - only in view mode -->
-            <div *ngIf="isViewMode" class="flex justify-content-end mt-4">
-                <p-button 
-                    label="Back to Interviews" 
-                    icon="pi pi-arrow-left" 
-                    (onClick)="navigateBack()">
                 </p-button>
             </div>
         </div>
@@ -225,7 +247,35 @@ import { ActivatedRoute, Router } from '@angular/router';
                 </p-button>
             </ng-template>
         </p-dialog>
-    `
+    `,
+    styles: [`
+        .evaluation-view {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .score-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .final-score {
+            padding: 1.5rem 3rem;
+            border-radius: 1rem;
+            text-align: center;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .final-score .score-value {
+            font-size: 3.5rem;
+            margin-right: 0.5rem;
+        }
+        .final-score .score-max {
+            font-size: 1.5rem;
+            opacity: 0.8;
+        }
+    `]
 })
 export class EvaluationFormComponent implements OnInit {
     evaluationForm: EvaluationForm = {
@@ -405,7 +455,23 @@ export class EvaluationFormComponent implements OnInit {
         });
     }
 
-    // Add this method to convert scores object to array for display
+    getPerformanceLabel(): string {
+        const score = this.getFinalScore();
+        if (score >= 90) return 'Outstanding';
+        if (score >= 80) return 'Excellent';
+        if (score >= 70) return 'Good';
+        if (score >= 50) return 'Average';
+        return 'Needs Improvement';
+    }
+
+    getFinalScore(): number {
+        const scores = this.getScoresArray();
+        if (scores.length === 0) return 0;
+        
+        const sum = scores.reduce((acc, score) => acc + score.value, 0);
+        return Math.round(sum / scores.length);
+    }
+
     getScoresArray(): { category: string, value: number }[] {
         if (!this.evaluationForm.scores) return [];
         
