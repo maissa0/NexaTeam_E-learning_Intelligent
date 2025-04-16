@@ -15,8 +15,9 @@ import { OverlayDemo } from './overlaydemo';
 import { TreeDemo } from './treedemo';
 import { MenuDemo } from './menudemo';
 import { Interviews } from './interviews';
+import { EvaluationFormComponent } from './evaluation-form.component';
 
-export default [
+export const routes: Routes = [
     { path: 'button', data: { breadcrumb: 'Button' }, component: ButtonDemo },
     { path: 'charts', data: { breadcrumb: 'Charts' }, component: ChartDemo },
     { path: 'file', data: { breadcrumb: 'File' }, component: FileDemo },
@@ -33,5 +34,8 @@ export default [
     { path: 'tree', data: { breadcrumb: 'Tree' }, component: TreeDemo },
     { path: 'menu', data: { breadcrumb: 'Menu' }, component: MenuDemo },
     { path: 'interviews', data: { breadcrumb: 'Interviews' }, component: Interviews },
+    { path: 'evaluation-form', data: { breadcrumb: 'Evaluation Form' }, component: EvaluationFormComponent },
     { path: '**', redirectTo: '/notfound' }
-] as Routes;
+];
+
+export default routes;

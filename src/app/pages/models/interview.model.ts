@@ -6,6 +6,7 @@ export interface Interview {
     recordingLink?: string;
     status: InterviewStatus;
     createdAt?: string;
+    hasEvaluation?: boolean;
   }
   
   export enum InterviewStatus {

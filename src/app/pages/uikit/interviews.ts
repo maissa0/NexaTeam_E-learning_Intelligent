@@ -14,6 +14,9 @@ import { CalendarModule } from 'primeng/calendar';
 import { Interview, InterviewStatus } from '../models/interview.model';
 import InterviewService from '../service/interview.service';
 import { DropdownModule } from 'primeng/dropdown'; 
+import { Router } from '@angular/router';
+import { EvaluationFormService } from '../service/evaluation-form.service';
+import { map, catchError, forkJoin, of } from 'rxjs';
 
 
 @Component({
@@ -55,6 +58,7 @@ import { DropdownModule } from 'primeng/dropdown';
                     <th>Meeting Link</th>
                     <th>Recording Link</th>
                     <th>Status</th>
+                    <th>Evaluation</th>
                     <th>Actions</th>
                 </tr>
             </ng-template>
@@ -76,6 +80,20 @@ import { DropdownModule } from 'primeng/dropdown';
                         <span *ngIf="!interview.recordingLink">No Link</span>
                     </td>
                     <td>{{ interview.status }}</td>
+                    <td>
+                        <p-button *ngIf="!interview.hasEvaluation"
+                            icon="pi pi-plus"
+                            label="Create"
+                            severity="success"
+                            (onClick)="navigateToEvaluation(interview, 'create')">
+                        </p-button>
+                        <p-button *ngIf="interview.hasEvaluation"
+                            icon="pi pi-eye"
+                            label="View"
+                            severity="info"
+                            (onClick)="navigateToEvaluation(interview, 'view')">
+                        </p-button>
+                    </td>
                     <td>
                         <p-button icon="pi pi-pencil" (click)="editInterview(interview)" />
                         <p-button icon="pi pi-trash" severity="danger" (click)="deleteInterview(interview)" />
@@ -150,7 +168,7 @@ export class Interviews implements OnInit {
     statuses = [
         { label: 'Scheduled', value: 'SCHEDULED' },
         { label: 'Completed', value: 'COMPLETED' },
-        { label: 'Cancelled', value: 'CANCELLED' }
+        { label: 'Canceled', value: 'CANCELED' }
     ];
     
 
@@ -158,8 +176,10 @@ export class Interviews implements OnInit {
 
     constructor(
         private interviewService: InterviewService,
+        private evaluationFormService: EvaluationFormService,
         private messageService: MessageService,
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
+        private router: Router
     ) {}
 
     ngOnInit() {
@@ -168,7 +188,19 @@ export class Interviews implements OnInit {
 
     loadInterviews() {
         this.interviewService.getAllInterviews().subscribe((data) => {
-            this.interviews.set(data);
+            // Check each interview for existing evaluation
+            const interviewsWithEvalStatus = data.map(interview => {
+                return this.evaluationFormService.getEvaluationFormByApplicationId(interview.applicationId)
+                    .pipe(
+                        map(() => ({ ...interview, hasEvaluation: true })),
+                        catchError(() => of({ ...interview, hasEvaluation: false }))
+                    );
+            });
+
+            // Wait for all checks to complete
+            forkJoin(interviewsWithEvalStatus).subscribe(interviews => {
+                this.interviews.set(interviews);
+            });
         });
     }
 
@@ -238,5 +270,14 @@ export class Interviews implements OnInit {
             }
             this.interviewDialog = false;
         }
+    }
+
+    navigateToEvaluation(interview: Interview, mode: 'create' | 'view') {
+        this.router.navigate(['/uikit/evaluation-form'], {
+            queryParams: {
+                applicationId: interview.applicationId,
+                mode: mode
+            }
+        });
     }
 }
