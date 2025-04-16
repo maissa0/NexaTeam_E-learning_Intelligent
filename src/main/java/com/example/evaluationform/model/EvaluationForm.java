@@ -16,17 +16,17 @@ import java.util.Map;
 public class EvaluationForm {
 
     @Id
-    private String evaluationId;  // MongoDB uses String (ObjectId)
+    private String evaluationId;
 
-    private String applicationId; // Link to the interview being evaluated
+    private String applicationId;
 
-    private String evaluatorId; // Recruiter or interviewer ID
-    private String evaluatorName; // Name of the person evaluating
+    private String evaluatorId;
+    private String evaluatorName;
 
     private Map<String, Integer> scores;
-    private String overallFeedback; // Comments about the candidate
+    private String overallFeedback;
 
-    private EvaluationStatus status; // Enum: PENDING, SUBMITTED, REVIEWED
+    private EvaluationStatus status;
 
     private LocalDateTime createdAt;
 }

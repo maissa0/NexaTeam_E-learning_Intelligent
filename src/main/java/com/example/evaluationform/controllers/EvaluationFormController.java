@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/evaluationForms")
 public class EvaluationFormController {
 
@@ -20,6 +21,12 @@ public class EvaluationFormController {
     public ResponseEntity<EvaluationForm> createEvaluationForm(@RequestBody EvaluationForm evaluationForm) {
         EvaluationForm createdEvaluationForm = evaluationFormService.createEvaluationForm(evaluationForm);
         return ResponseEntity.ok(createdEvaluationForm);
+    }
+
+    @GetMapping("/getByApplicationId/{applicationId}")
+    public ResponseEntity<EvaluationForm> getEvaluationFormByApplicationId(@PathVariable String applicationId) {
+        Optional<EvaluationForm> evaluationForm = evaluationFormService.getEvaluationFormByApplicationId(applicationId);
+        return evaluationForm.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/getbyId/{id}")

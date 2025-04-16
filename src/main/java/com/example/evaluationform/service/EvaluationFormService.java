@@ -40,6 +40,12 @@ public class EvaluationFormService implements EvaluationFormInterface {
         }
     }
 
+
+        public Optional<EvaluationForm> getEvaluationFormByApplicationId(String applicationId) {
+            return evaluationFormRepository.findByApplicationId(applicationId);
+        }
+
+
     @Override
     public void deleteEvaluationForm(String evaluationId) {
         evaluationFormRepository.deleteById(evaluationId);

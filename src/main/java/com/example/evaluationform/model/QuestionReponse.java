@@ -6,6 +6,6 @@ import lombok.Data;
 public class QuestionReponse {
     private String category;
     private String question;
-    private Integer mark; // nullable, user sets later
+    private Integer mark;
 }
 

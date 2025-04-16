@@ -8,7 +8,7 @@ import lombok.Data;
 public class OllamaRawResponse {
     private String model;
     private String created_at;
-    private String response; // this is the actual stringified JSON you want
+    private String response;
     private boolean done;
     private String done_reason;
 }
