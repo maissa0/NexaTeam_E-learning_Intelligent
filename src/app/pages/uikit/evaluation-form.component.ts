@@ -39,53 +39,67 @@ import { ActivatedRoute, Router } from '@angular/router';
         <p-confirmDialog></p-confirmDialog>
 
         <div class="card">
-            <div class="flex justify-content-between align-items-center mb-4">
-                <h2 class="m-0">Evaluation Form</h2>
+            <div class="flex justify-content-between align-items-center mb-5">
+                <h2 class="m-0">{{ isViewMode ? 'Evaluation Details' : 'Evaluation Form' }}</h2>
+                <p-button *ngIf="!isViewMode"
+                    label="Generate Questions" 
+                    icon="pi pi-refresh" 
+                    (onClick)="generateQuestions()"
+                    [loading]="isGenerating"
+                    severity="info">
+                </p-button>
             </div>
             
             <div class="grid">
                 <div class="col-12 md:col-6">
                     <div class="field">
-                        <label for="evaluatorName">Evaluator Name</label>
-                        <input id="evaluatorName" type="text" pInputText [(ngModel)]="evaluationForm.evaluatorName" class="w-full">
+                        <label for="evaluatorName" class="font-bold">Evaluator Name</label>
+                        <input id="evaluatorName" type="text" pInputText 
+                            [(ngModel)]="evaluationForm.evaluatorName" 
+                            [disabled]="isViewMode"
+                            class="w-full">
                     </div>
                 </div>
                 
                 <div class="col-12 md:col-6">
                     <div class="field">
-                        <label for="applicationId">Application ID</label>
-                        <input id="applicationId" type="text" pInputText [(ngModel)]="evaluationForm.applicationId" class="w-full">
+                        <label for="applicationId" class="font-bold">Application ID</label>
+                        <input id="applicationId" type="text" pInputText 
+                            [(ngModel)]="evaluationForm.applicationId" 
+                            [disabled]="true"
+                            class="w-full">
                     </div>
                 </div>
             </div>
 
             <p-divider></p-divider>
 
-            <!-- Questions Section -->
-            <div class="questions-section mt-4">
+            <!-- Create Mode: Questions Section -->
+            <div *ngIf="!isViewMode" class="questions-section mt-4">
                 <div class="flex justify-content-between align-items-center mb-4">
                     <h3 class="m-0">Interview Questions</h3>
-                    <div class="flex gap-2" *ngIf="!isViewMode">
-                        <p-button 
-                            label="Generate Questions" 
-                            icon="pi pi-refresh" 
-                            (onClick)="generateQuestions()"
-                            [loading]="isGenerating"
-                            severity="info">
-                        </p-button>
-                        <p-button 
-                            label="Add Question" 
-                            icon="pi pi-plus" 
-                            (onClick)="showAddQuestionDialog()"
-                            severity="success">
-                        </p-button>
-                    </div>
+                    <p-button 
+                        label="Add Question" 
+                        icon="pi pi-plus" 
+                        (onClick)="showAddQuestionDialog()"
+                        severity="success">
+                    </p-button>
                 </div>
 
-                <!-- Questions List -->
                 <div *ngFor="let question of questions; let i = index" class="mb-4">
                     <p-card [style]="{'background': '#f8f9fa'}">
                         <div class="grid">
+                            <div class="col-12 mb-3">
+                                <div class="flex justify-content-between align-items-center">
+                                    <span class="font-bold text-lg text-primary">Category: {{question.category}}</span>
+                                    <p-button 
+                                        icon="pi pi-trash" 
+                                        (onClick)="confirmDeleteQuestion(i)"
+                                        severity="danger" 
+                                        text>
+                                    </p-button>
+                                </div>
+                            </div>
                             <div class="col-12 md:col-9">
                                 <p class="text-lg line-height-3 m-0">{{question.question}}</p>
                             </div>
@@ -98,9 +112,7 @@ import { ActivatedRoute, Router } from '@angular/router';
                                         [min]="0"
                                         [max]="100"
                                         [style]="{'width': '100px'}"
-                                        [inputStyle]="{'width': '100px'}"
                                         [showButtons]="true"
-                                        [disabled]="isViewMode"
                                         buttonLayout="horizontal"
                                         spinnerMode="horizontal"
                                         [step]="5"
@@ -116,7 +128,30 @@ import { ActivatedRoute, Router } from '@angular/router';
                 </div>
             </div>
 
-            <p-divider></p-divider>
+            <!-- View Mode: Scores Section -->
+            <div *ngIf="isViewMode" class="scores-section mt-4">
+                <h3 class="m-0 mb-3">Scores</h3>
+                
+                <div class="grid">
+                    <div *ngFor="let score of getScoresArray()" class="col-12 md:col-6 lg:col-4 mb-3">
+                        <p-card>
+                            <ng-template pTemplate="title">
+                                <div class="flex justify-content-between align-items-center">
+                                    <span class="font-bold">{{score.category}}</span>
+                                    <span class="text-xl font-bold" 
+                                        [ngClass]="{
+                                            'text-green-500': score.value >= 70,
+                                            'text-yellow-500': score.value >= 50 && score.value < 70,
+                                            'text-red-500': score.value < 50
+                                        }">
+                                        {{score.value}}/100
+                                    </span>
+                                </div>
+                            </ng-template>
+                        </p-card>
+                    </div>
+                </div>
+            </div>
 
             <!-- Overall Feedback -->
             <div class="field mt-4">
@@ -125,19 +160,28 @@ import { ActivatedRoute, Router } from '@angular/router';
                     id="overallFeedback" 
                     pInputTextarea 
                     [(ngModel)]="evaluationForm.overallFeedback" 
-                    [rows]="5" 
-                    class="w-full"
-                    [disabled]="isViewMode">
+                    [rows]="5"
+                    [disabled]="isViewMode"
+                    class="w-full">
                 </textarea>
             </div>
 
-            <!-- Submit Button -->
+            <!-- Submit Button - only in create mode -->
             <div *ngIf="!isViewMode" class="flex justify-content-end mt-4">
                 <p-button 
                     label="Submit Evaluation" 
                     icon="pi pi-check" 
                     (onClick)="submitEvaluation()"
                     [disabled]="questions.length === 0">
+                </p-button>
+            </div>
+
+            <!-- Back Button - only in view mode -->
+            <div *ngIf="isViewMode" class="flex justify-content-end mt-4">
+                <p-button 
+                    label="Back to Interviews" 
+                    icon="pi pi-arrow-left" 
+                    (onClick)="navigateBack()">
                 </p-button>
             </div>
         </div>
@@ -151,6 +195,10 @@ import { ActivatedRoute, Router } from '@angular/router';
             [draggable]="false" 
             [resizable]="false">
             <div class="grid p-fluid">
+                <div class="col-12 mb-3">
+                    <label for="newCategory" class="font-bold block mb-2">Category</label>
+                    <input id="newCategory" type="text" pInputText [(ngModel)]="newQuestion.category">
+                </div>
                 <div class="col-12">
                     <label for="newQuestionText" class="font-bold block mb-2">Question</label>
                     <textarea 
@@ -246,11 +294,11 @@ export class EvaluationFormComponent implements OnInit {
             .subscribe({
                 next: (evaluation) => {
                     this.evaluationForm = evaluation;
-                    // Convert scores back to questions array
-                    this.questions = Object.entries(evaluation.scores).map(([question, mark]) => ({
-                        category: '', // We don't need category anymore
-                        question: question,
-                        mark: mark
+                    // Convert scores back to questions
+                    this.questions = Object.entries(evaluation.scores).map(([category, score]) => ({
+                        category,
+                        question: '', // You might want to store the actual questions in your backend
+                        mark: score
                     }));
                 },
                 error: (error) => {
@@ -290,31 +338,11 @@ export class EvaluationFormComponent implements OnInit {
     }
 
     submitEvaluation() {
-        if (!this.evaluationForm.applicationId || !this.evaluationForm.evaluatorName) {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'Please fill in all required fields (Evaluator Name and Application ID)'
-            });
-            return;
-        }
-
-        if (this.questions.length === 0) {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'Please add at least one question before submitting'
-            });
-            return;
-        }
-
-        // Store questions and their marks directly
-        this.evaluationForm.scores = this.questions.reduce((acc, question) => {
-            acc[question.question] = question.mark || 0;
+        // Convert questions marks to scores map
+        this.evaluationForm.scores = this.questions.reduce((acc, q) => {
+            acc[q.category] = q.mark || 0;
             return acc;
         }, {} as { [key: string]: number });
-
-        console.log('Submitting evaluation form:', this.evaluationForm);
 
         this.evaluationFormService.createEvaluationForm(this.evaluationForm)
             .subscribe({
@@ -324,10 +352,8 @@ export class EvaluationFormComponent implements OnInit {
                         summary: 'Success',
                         detail: 'Evaluation submitted successfully'
                     });
-                    this.resetForm();
                 },
                 error: (error) => {
-                    console.error('Error submitting evaluation:', error);
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error',
@@ -347,16 +373,13 @@ export class EvaluationFormComponent implements OnInit {
     }
 
     isNewQuestionValid(): boolean {
-        return this.newQuestion.question.trim().length > 0;
+        return this.newQuestion.category.trim().length > 0 && 
+               this.newQuestion.question.trim().length > 0;
     }
 
     addQuestion() {
-        if (this.newQuestion.question.trim()) {
-            this.questions.push({
-                category: '',
-                question: this.newQuestion.question.trim(),
-                mark: 0
-            });
+        if (this.isNewQuestionValid()) {
+            this.questions.push({ ...this.newQuestion });
             this.showAddDialog = false;
             this.messageService.add({
                 severity: 'success',
@@ -382,17 +405,18 @@ export class EvaluationFormComponent implements OnInit {
         });
     }
 
-    resetForm() {
-        this.evaluationForm = {
-            applicationId: '',
-            evaluatorId: '',
-            evaluatorName: '',
-            scores: {},
-            overallFeedback: '',
-            status: EvaluationStatus.PENDING,
-            createdAt: new Date().toISOString()
-        };
-        this.questions = [];
-        this.showAddDialog = false;
+    // Add this method to convert scores object to array for display
+    getScoresArray(): { category: string, value: number }[] {
+        if (!this.evaluationForm.scores) return [];
+        
+        return Object.entries(this.evaluationForm.scores).map(([category, value]) => ({
+            category,
+            value
+        }));
+    }
+
+    // Add back navigation
+    navigateBack() {
+        this.router.navigate(['/uikit/interviews']);
     }
 } 

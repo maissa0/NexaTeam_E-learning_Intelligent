@@ -9,7 +9,7 @@ export interface EvaluationForm {
     applicationId: string;
     evaluatorId: string;
     evaluatorName: string;
-    scores: { [question: string]: number }; // Changed from category to question
+    scores: { [key: string]: number }; // Map<String, Integer> in Java becomes an object with string keys and number values
     overallFeedback: string;
     status: EvaluationStatus;
     createdAt: string; // LocalDateTime will be handled as string in frontend
