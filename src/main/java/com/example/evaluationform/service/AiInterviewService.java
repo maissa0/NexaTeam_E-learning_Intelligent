@@ -62,13 +62,17 @@ public class AiInterviewService {
 
     private String buildPrompt(JobOfferRequest request) {
         return String.format("""
-            You are an expert technical interviewer.
-            Generate 10 interview questions for the following role:
-            Job Title: %s
-            Description: %s
-            Required Skills: %s
-            Return the questions in JSON array format with fields: 'category' and 'question'.
-            """,
+                        You are an expert technical interviewer.
+                        Generate 10 interview questions for the following role:
+                        Job Title: %s
+                        Description: %s
+                        Required Skills: %s
+                        Return the questions in JSON array format with fields: 'category' and 'question'.
+                                    Important formatting rules:
+                                    - Do not use any punctuation in the questions
+                                 
+                                    - Keep questions concise and clear
+                        """,
                 request.getTitle(),
                 request.getDescription(),
                 String.join(", ", request.getRequiredSkills()));
