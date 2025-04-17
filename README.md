@@ -1,61 +1,184 @@
-Gestion RH et e-learning en Microservices
+# NexaTeam E-learning Platform - Architecture Microservices
 
-Overview
+## Vue d'ensemble
+Ce projet est une plateforme d'e-learning construite avec une architecture microservices. Chaque service est conçu pour être indépendant et gérer une fonctionnalité spécifique de la plateforme. Cette architecture permet une grande scalabilité, une maintenance facilitée et un développement agile.
 
-Ce projet vise à développer une plateforme de gestion des ressources humaines et etudiant  en utilisant une architecture microservices. L'application permet la gestion des candidatures, des offres d'emploi , les cours et les quizs ,et intègre un système de matching intelligent basé sur l'IA.
+## Architecture Technique
 
-Features
+### Architecture Globale
+```
+┌─────────────────┐     ┌──────────────┐
+│  API Gateway    │     │   Frontend    │
+└────────┬────────┘     └──────┬───────┘
+         │                     │
+         └──────────┬─────────┘
+                    │
+    ┌───────────────┼───────────────┐
+    │               │               │
+┌─────────┐   ┌─────────┐    ┌─────────┐
+│ Service │   │ Service │    │ Service │
+│    1    │   │    2    │    │    N    │
+└─────────┘   └─────────┘    └─────────┘
+```
 
-Gestion des offres d'emploi
-Gestion des cours
+### Technologies Principales
+- **Frontend**: React.js avec TypeScript
+- **Backend**: Spring Boot (Java) pour les microservices
+- **Base de données**: 
+  - MongoDB pour les données non structurées
+  - PostgreSQL pour les données relationnelles
+- **Communication**: 
+  - REST APIs
+  - Message Broker (RabbitMQ) pour la communication asynchrone
+- **Conteneurisation**: Docker
+- **Orchestration**: Kubernetes
+- **CI/CD**: Jenkins
 
-Gestion des quiz
-Gestion des feedbacks 
-Gestion des candidatures
-gestion des abonnements
-Système de matching IA entre offres et CV
+## Services disponibles
 
-Planification des entretiens en ligne
+### 1. Service d'apprentissage intelligent (NexaTeam_E-learning_Intelligent)
+- **Technologies**: Spring Boot, TensorFlow
+- **Base de données**: MongoDB
+- **Fonctionnalités**:
+  - Gestion du contenu d'apprentissage
+  - Système de recommandation personnalisé
+  - Interface utilisateur dédiée
+  - Analyse des performances d'apprentissage
 
-Analyse et évaluation des candidatures
+### 2. Service de Quiz
+- **Technologies**: Spring Boot
+- **Base de données**: PostgreSQL
+- **Fonctionnalités**:
+  - Création et gestion des quiz
+  - Évaluation des connaissances
+  - Suivi des résultats
+  - Génération de rapports
 
-Architecture microservices avec Spring Boot et Angular
+### 3. Service de Paiement
+- **Technologies**: Spring Boot, Stripe API
+- **Base de données**: PostgreSQL
+- **Sécurité**: Chiffrement des données sensibles
+- **Fonctionnalités**:
+  - Gestion des transactions
+  - Intégration des systèmes de paiement
+  - Historique des paiements
+  - Facturation automatique
 
-Tech Stack
+### 4. Service d'Offres d'Emploi
+- **Technologies**: Spring Boot
+- **Base de données**: MongoDB
+- **Fonctionnalités**:
+  - Publication des offres d'emploi
+  - Recherche et filtrage des offres
+  - Candidatures
+  - Matching automatique
 
-Frontend
+### 5. Service d'Entretiens
+- **Technologies**: Spring Boot
+- **Base de données**: PostgreSQL
+- **Fonctionnalités**:
+  - Planification des entretiens
+  - Gestion des rendez-vous
+  - Suivi des entretiens
+  - Notifications automatiques
 
-Angular
+### 6. Service d'Abonnement
+- **Technologies**: Spring Boot
+- **Base de données**: PostgreSQL
+- **Fonctionnalités**:
+  - Gestion des abonnements
+  - Plans tarifaires
+  - Renouvellements automatiques
+  - Gestion des privilèges
 
-Tailwind CSS
+## Infrastructure
 
+### Conteneurisation
+Chaque service est conteneurisé avec Docker :
+```bash
+# Structure des conteneurs
+├── docker-compose.yml
+└── services/
+    ├── learning/
+    │   └── Dockerfile
+    ├── quiz/
+    │   └── Dockerfile
+    └── ...
+```
 
-Backend
+### Déploiement
+- Kubernetes pour l'orchestration des conteneurs
+- Configuration des ressources par service
+- Auto-scaling basé sur la charge
+- Load balancing automatique
 
-Spring Boot
+## Installation et Démarrage
 
-Spring Cloud Gateway
+1. Prérequis :
+```bash
+- Docker et Docker Compose
+- Java 17+
+- Node.js 16+
+- Maven ou Gradle
+```
 
+2. Cloner le repository :
+```bash
+git clone https://github.com/votre-organisation/NexaTeam-E-learning.git
+cd NexaTeam-E-learning
+```
 
-Eureka Service Discovery
+3. Configuration de l'environnement :
+```bash
+# Copier les fichiers d'environnement
+cp .env.example .env
+# Configurer les variables d'environnement
+```
 
-MongoDB
+4. Démarrer les services :
+```bash
+# Avec Docker Compose
+docker-compose up -d
 
-Docker
+# Sans Docker (développement)
+# Pour chaque service :
+cd service-directory
+./mvnw spring-boot:run
+```
 
-Getting Started
+## Monitoring et Logging
+- Prometheus pour la collecte des métriques
+- Grafana pour la visualisation
+- ELK Stack pour la gestion des logs
+- Alerting automatisé
 
-Prérequis
+## Documentation API
+- Swagger UI disponible pour chaque service
+- Documentation détaillée des endpoints
+- Exemples de requêtes et réponses
 
-Node.js et Angular CLI pour le frontend
+## Contribution
+1. Fork le projet
+2. Créer une branche pour votre fonctionnalité
+3. Commiter vos changements
+4. Pousser vers la branche
+5. Ouvrir une Pull Request
 
-Java 17+ et Maven pour le backend
+### Standards de Code
+- Tests unitaires requis
+- Couverture de code minimale : 80%
+- Respect des conventions de code
+- Documentation des APIs obligatoire
 
-Docker et Docker Compose
-Accéder à l'application
+## Sécurité
+- Authentication JWT
+- Autorisation basée sur les rôles
+- Chiffrement des données sensibles
+- HTTPS obligatoire
+- Protection contre les attaques CSRF/XSS
 
-Frontend : http://localhost:4200
+## Licence
+[À définir]
 
-API Gateway : http://localhost:808
-
-
+## Contact
+Pour toute question ou suggestion, contactez l'équipe de développement. 
