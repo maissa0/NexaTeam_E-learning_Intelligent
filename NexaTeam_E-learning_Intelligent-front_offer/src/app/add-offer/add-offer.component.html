@@ -1,0 +1,205 @@
+<div class="main-container">
+    <div class="header-section">
+        <div class="header-content">
+            <h1>Job Offers Management</h1>
+            <p>Manage and track all job opportunities in one place</p>
+        </div>
+        <div class="quick-stats">
+            <div class="stat-card">
+                <span class="stat-value">{{jobOffers().length}}</span>
+                <span class="stat-label">Total Offers</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{{getThisMonthOffers()}}</span>
+                <span class="stat-label">This Month</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="toolbar-container">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <button pButton pRipple label="Add New Offer" icon="pi pi-plus" class="p-button-success" (click)="openNew()"></button>
+                </ng-template>
+            
+                <ng-template pTemplate="right">
+                    <div class="flex gap-2">
+                        <p-dropdown [options]="contractTypes" 
+                                  [(ngModel)]="searchCriteria.contractType"
+                                  (ngModelChange)="searchOffers()"
+                                  placeholder="Contract Type"
+                                  [showClear]="true"
+                                  styleClass="w-12rem">
+                        </p-dropdown>
+                        
+                        <p-dropdown [options]="jobLocations" 
+                                  [(ngModel)]="searchCriteria.location"
+                                  (ngModelChange)="searchOffers()"
+                                  placeholder="Location"
+                                  [showClear]="true"
+                                  styleClass="w-12rem">
+                        </p-dropdown>
+                        
+                        <p-dropdown [options]="experienceLevels" 
+                                  [(ngModel)]="searchCriteria.experienceLevel"
+                                  (ngModelChange)="searchOffers()"
+                                  placeholder="Experience Level"
+                                  [showClear]="true"
+                                  styleClass="w-12rem">
+                        </p-dropdown>
+                    </div>
+                </ng-template>
+            </p-toolbar>
+        </div>
+
+        <div class="table-section">
+            <p-table #dt [value]="jobOffers()" 
+                [rows]="10" 
+                [paginator]="true" 
+                [globalFilterFields]="['title','description','contractType','location','experienceLevel','requiredSkills']" 
+                [tableStyle]="{'min-width': '75rem'}" 
+                [rowHover]="true" 
+                dataKey="id"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+                [showCurrentPageReport]="true"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="text-center" style="min-width:200px" pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
+                        <th class="text-center" style="min-width:300px" pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+                        <th class="text-center" style="min-width:150px" pSortableColumn="contractType">Contract Type <p-sortIcon field="contractType"></p-sortIcon></th>
+                        <th class="text-center" style="min-width:150px" pSortableColumn="location">Location <p-sortIcon field="location"></p-sortIcon></th>
+                        <th class="text-center" style="min-width:150px" pSortableColumn="experienceLevel">Experience <p-sortIcon field="experienceLevel"></p-sortIcon></th>
+                        <th class="text-center" style="min-width:200px" pSortableColumn="requiredSkills">Required Skills <p-sortIcon field="requiredSkills"></p-sortIcon></th>
+                        <th class="text-center" style="min-width:150px" pSortableColumn="createdAt">Created At <p-sortIcon field="createdAt"></p-sortIcon></th>
+                        <th class="text-center" style="min-width:100px">Actions</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-offer>
+                    <tr>
+                        <td>{{offer.title}}</td>
+                        <td>
+                            <div class="description-container">
+                                <p class="description-preview" [pTooltip]="offer.description">
+                                    {{offer.description | slice:0:150}}{{offer.description?.length > 150 ? '...' : ''}}
+                                </p>
+                                <button pButton 
+                                        type="button" 
+                                        icon="pi pi-eye" 
+                                        class="p-button-text p-button-rounded p-button-sm view-description"
+                                        (click)="viewFullDescription(offer)"
+                                        pTooltip="Voir la description complète">
+                                </button>
+                            </div>
+                        </td>
+                        <td class="text-center"><p-tag [value]="offer.contractType"></p-tag></td>
+                        <td class="text-center">{{offer.location}}</td>
+                        <td class="text-center">{{offer.experienceLevel}}</td>
+                        <td class="skills-cell">{{offer.requiredSkills}}</td>
+                        <td class="text-center">{{offer.createdAt | date:'medium'}}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button pButton pRipple icon="pi pi-users" 
+                                        class="p-button-rounded p-button-info mr-2" 
+                                        (click)="viewApplicants(offer.id)"
+                                        pTooltip="View Applicants"></button>
+                                <button pButton pRipple icon="pi pi-pencil" 
+                                        class="p-button-rounded p-button-success mr-2" 
+                                        (click)="editJobOffer(offer)"></button>
+                                <button pButton pRipple icon="pi pi-trash" 
+                                        class="p-button-rounded p-button-danger" 
+                                        (click)="deleteJobOffer(offer)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div class="stats-section">
+            <p-card styleClass="stats-card">
+                <div class="stats-header">Contract Type Distribution</div>
+                <div class="stats-content">
+                    <p-chart type="line" 
+                            [data]="contractTypeData" 
+                            [options]="contractTypeOptions">
+                    </p-chart>
+                </div>
+            </p-card>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="jobOfferDialog" [style]="{width: '700px'}" header="Job Offer Details" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="form-grid">
+            <div class="field">
+                <label for="title">Title</label>
+                <input type="text" pInputText id="title" [(ngModel)]="jobOffer.title" required autofocus />
+                <small class="p-error" *ngIf="submitted && !jobOffer.title">Title is required.</small>
+            </div>
+
+            <div class="field">
+                <label for="contractType">Contract Type</label>
+                <p-dropdown id="contractType" [options]="contractTypes" [(ngModel)]="jobOffer.contractType" optionLabel="label" optionValue="value"></p-dropdown>
+            </div>
+
+            <div class="field">
+                <label for="location">Location</label>
+                <p-dropdown id="location" [options]="jobLocations" [(ngModel)]="jobOffer.location" optionLabel="label" optionValue="value"></p-dropdown>
+            </div>
+
+            <div class="field">
+                <label for="experienceLevel">Experience Level</label>
+                <p-dropdown id="experienceLevel" [options]="experienceLevels" [(ngModel)]="jobOffer.experienceLevel" optionLabel="label" optionValue="value"></p-dropdown>
+            </div>
+
+            <div class="field">
+                <label for="skills">Required Skills</label>
+                <textarea id="skills" pInputTextarea [(ngModel)]="jobOffer.requiredSkills" required rows="3" cols="20"></textarea>
+                <small class="p-error" *ngIf="submitted && !jobOffer.requiredSkills">Required skills are required.</small>
+            </div>
+
+            <div class="field col-12">
+                <div class="description-header">
+                    <label for="description">Description</label>
+                    <button pButton 
+                            type="button" 
+                            icon="pi pi-refresh" 
+                            class="p-button-text p-button-rounded p-button-sm generate-button"
+                            [loading]="isGeneratingDescription"
+                            (click)="generateDescription()"
+                            pTooltip="Générer une description"
+                            tooltipPosition="top">
+                    </button>
+                </div>
+                <textarea 
+                    id="description" 
+                    pInputTextarea 
+                    [(ngModel)]="jobOffer.description" 
+                    [rows]="5" 
+                    [cols]="30"
+                    class="generated-description"
+                    [autoResize]="true"
+                    required>
+                </textarea>
+                <small class="p-error" *ngIf="submitted && !jobOffer.description">La description est requise.</small>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="jobOfferDialog = false"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveJobOffer()"></button>
+    </ng-template>
+</p-dialog>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+<p-toast></p-toast>
+
+<p-dialog header="Description complète" [(visible)]="fullDescriptionDialog" [style]="{width: '50vw'}" [modal]="true">
+    <div class="generated-description full-description" *ngIf="selectedOffer">
+        {{selectedOffer.description}}
+    </div>
+</p-dialog>

@@ -1,0 +1,151 @@
+<div class="offers-container">
+  <header class="page-header">
+    <div class="header-content">
+      <h1>My Favorite Job Offers</h1>
+      <div class="header-actions">
+        <p-button 
+          label="Back to Offers" 
+          icon="pi pi-arrow-left" 
+          (click)="navigateToOffers()"
+          styleClass="p-button-rounded p-button-outlined p-button-info">
+        </p-button>
+      </div>
+    </div>
+  </header>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner">
+      <div class="spinner-inner">
+        <div class="spinner-circle"></div>
+        <div class="spinner-circle"></div>
+        <div class="spinner-circle"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="job-cards-container" *ngIf="!isLoading">
+    <div *ngIf="favorites.length === 0" class="no-offers-message">
+      <div class="p-message p-message-info w-full">
+        <div class="p-message-text">
+          <i class="pi pi-info-circle"></i>
+          You haven't added any job offers to your favorites yet.
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div *ngFor="let favorite of favorites" class="col-12 md:col-6 lg:col-4">
+        <div class="job-card">
+          <div class="card-header">
+            <button class="favorite-button" (click)="removeFromFavorites(favorite.jobOfferId)">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+
+          <div class="card-content">
+            <h3 class="job-title">{{ favorite.title }}</h3>
+            
+            <div class="job-details">
+              <span class="location">
+                <i class="pi pi-map-marker"></i>
+                {{ favorite.location }}
+              </span>
+              <span class="contract-type">
+                <i class="pi pi-briefcase"></i>
+                {{ favorite.contractType }}
+              </span>
+            </div>
+
+            <div class="card-footer">
+              <span class="posted-date">
+                <i class="pi pi-calendar"></i>
+                Posted {{ favorite.createdAt | date:'dd/MM/yyyy' }}
+              </span>
+              <p-button 
+                label="View Details" 
+                (click)="openJobDetails(favorite.jobOfferId)"
+                styleClass="p-button-rounded p-button-info">
+              </p-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog [header]="selectedJobDetails?.title" [(visible)]="displayJobDetails" [modal]="true"
+  [style]="{width: '50vw'}" [breakpoints]="{'960px': '75vw'}" [draggable]="false" [resizable]="false">
+  <p-accordion>
+    <p-accordion-panel value="0">
+      <p-accordion-header>
+        <i class="pi pi-file"></i>
+        Description du poste
+      </p-accordion-header>
+      <p-accordion-content>
+        <p class="m-0">
+          {{ selectedJobDetails?.description || 'Aucune description disponible.' }}
+        </p>
+      </p-accordion-content>
+    </p-accordion-panel>
+
+    <p-accordion-panel value="1">
+      <p-accordion-header>
+        <i class="pi pi-list"></i>
+        Exigences
+      </p-accordion-header>
+      <p-accordion-content>
+        <p class="m-0">
+          <strong>Compétences requises:</strong> {{ selectedJobDetails?.requiredSkills || 'Aucune exigence spécifiée.' }}
+        </p>
+      </p-accordion-content>
+    </p-accordion-panel>
+
+    <p-accordion-panel value="2">
+      <p-accordion-header>
+        <i class="pi pi-info-circle"></i>
+        Informations complémentaires
+      </p-accordion-header>
+      <p-accordion-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <i class="pi pi-briefcase"></i>
+            <strong>Type de contrat:</strong> {{ selectedJobDetails?.contractType }}
+          </div>
+          <div class="info-item">
+            <i class="pi pi-map-marker"></i>
+            <strong>Lieu:</strong> {{ selectedJobDetails?.location }}
+          </div>
+          <div class="info-item">
+            <i class="pi pi-user"></i>
+            <strong>Niveau d'expérience:</strong> {{ selectedJobDetails?.experienceLevel }}
+          </div>
+          <div class="info-item">
+            <i class="pi pi-calendar"></i>
+            <strong>Date de publication:</strong> {{ selectedJobDetails?.createdAt | date: 'dd/MM/yyyy' }}
+          </div>
+        </div>
+      </p-accordion-content>
+    </p-accordion-panel>
+  </p-accordion>
+  
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+      <p-button 
+        label="Postuler" 
+        icon="pi pi-send"
+        styleClass="p-button-success p-button-rounded mr-2" 
+        (onClick)="applyForJob()">
+      </p-button>
+      <p-button 
+        label="Fermer" 
+        icon="pi pi-times"
+        styleClass="p-button-outlined p-button-rounded p-button-secondary" 
+        (onClick)="closeJobDetails()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>
+

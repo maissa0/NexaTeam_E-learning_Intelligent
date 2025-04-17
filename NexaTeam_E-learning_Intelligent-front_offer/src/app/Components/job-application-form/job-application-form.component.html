@@ -1,0 +1,169 @@
+<div class="application-form-container">
+  <div class="form-header">
+    <h1>Job Application</h1>
+    <p class="subtitle">Fill in your information to apply for this position</p>
+  </div>
+
+  <!-- Alerts -->
+  <div class="alerts-container">
+    <div *ngIf="errorMessage" class="alert alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+    <div *ngIf="successMessage" class="alert alert-success">
+      <i class="fas fa-check-circle"></i>
+      <span>{{ successMessage }}</span>
+    </div>
+  </div>
+
+  <!-- Application Form -->
+  <form [formGroup]="applicationForm" (ngSubmit)="onSubmit()" class="application-form">
+    <!-- Personal Information Section -->
+    <div class="form-section">
+      <h2>Personal Information</h2>
+      
+      <div class="form-group">
+        <label for="name">
+          <i class="fas fa-user"></i>
+          Full Name
+        </label>
+        <input type="text" 
+               id="name" 
+               formControlName="name" 
+               [class.invalid]="applicationForm.get('name')?.invalid && applicationForm.get('name')?.touched">
+        <div class="validation-message" *ngIf="applicationForm.get('name')?.invalid && applicationForm.get('name')?.touched">
+          <small *ngIf="applicationForm.get('name')?.errors?.['required']">
+            <i class="fas fa-exclamation-triangle"></i> Name is required
+          </small>
+          <small *ngIf="applicationForm.get('name')?.errors?.['minlength']">
+            <i class="fas fa-exclamation-triangle"></i> Name must be at least 3 characters
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">
+          <i class="fas fa-envelope"></i>
+          Email Address
+        </label>
+        <input type="email" 
+               id="email" 
+               formControlName="email"
+               [class.invalid]="applicationForm.get('email')?.invalid && applicationForm.get('email')?.touched">
+        <div class="validation-message" *ngIf="applicationForm.get('email')?.invalid && applicationForm.get('email')?.touched">
+          <small *ngIf="applicationForm.get('email')?.errors?.['required']">
+            <i class="fas fa-exclamation-triangle"></i> Email is required
+          </small>
+          <small *ngIf="applicationForm.get('email')?.errors?.['email']">
+            <i class="fas fa-exclamation-triangle"></i> Please enter a valid email address
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="telephone">
+          <i class="fas fa-phone"></i>
+          Phone Number
+        </label>
+        <input type="tel" 
+               id="telephone" 
+               formControlName="telephone"
+               [class.invalid]="applicationForm.get('telephone')?.invalid && applicationForm.get('telephone')?.touched">
+        <div class="validation-message" *ngIf="applicationForm.get('telephone')?.invalid && applicationForm.get('telephone')?.touched">
+          <small *ngIf="applicationForm.get('telephone')?.errors?.['required']">
+            <i class="fas fa-exclamation-triangle"></i> Phone number is required
+          </small>
+          <small *ngIf="applicationForm.get('telephone')?.errors?.['pattern']">
+            <i class="fas fa-exclamation-triangle"></i> Please enter a valid 8-digit phone number
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documents Section -->
+    <div class="form-section">
+      <h2>Documents</h2>
+      
+      <div class="form-group file-upload">
+        <label for="resume">
+          <i class="fas fa-file-pdf"></i>
+          Resume
+        </label>
+        <div class="file-input-container">
+          <input type="file"
+                 id="resume"
+                 (change)="onFileChange($event, 'resume')"
+                 accept=".pdf,.doc,.docx"
+                 class="file-input">
+          <div class="file-input-overlay">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Choose file or drag & drop</span>
+            <small>PDF, DOC, DOCX (Max 10MB)</small>
+          </div>
+        </div>
+        <div *ngIf="resumeFile" class="selected-file">
+          <i class="fas fa-file-alt"></i>
+          <span>{{ resumeFile.name }}</span>
+          <button type="button" class="btn-remove" (click)="removeFile('resume')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div *ngIf="applicationForm.get('resumeUrl')?.value" class="file-preview">
+          <a [href]="applicationForm.get('resumeUrl')?.value" target="_blank" class="btn-preview">
+            <i class="fas fa-eye"></i>
+            Preview Resume
+          </a>
+        </div>
+      </div>
+
+      <div class="form-group file-upload">
+        <label for="coverLetter">
+          <i class="fas fa-file-alt"></i>
+          Cover Letter (Optional)
+        </label>
+        <div class="file-input-container">
+          <input type="file"
+                 id="coverLetter"
+                 (change)="onFileChange($event, 'coverLetter')"
+                 accept=".pdf,.doc,.docx"
+                 class="file-input">
+          <div class="file-input-overlay">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Choose file or drag & drop</span>
+            <small>PDF, DOC, DOCX (Max 10MB)</small>
+          </div>
+        </div>
+        <div *ngIf="coverLetterFile" class="selected-file">
+          <i class="fas fa-file-alt"></i>
+          <span>{{ coverLetterFile.name }}</span>
+          <button type="button" class="btn-remove" (click)="removeFile('coverLetter')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="submit"
+              class="btn-submit"
+              [class.loading]="isSubmitting"
+              [disabled]="!applicationForm.valid || isSubmitting">
+        <i class="fas" [class.fa-paper-plane]="!isSubmitting" [class.fa-spinner]="isSubmitting"></i>
+        <span>{{ isSubmitting ? 'Submitting...' : 'Submit Application' }}</span>
+      </button>
+      <button type="button"
+              class="btn-reset"
+              (click)="resetForm()">
+        <i class="fas fa-undo"></i>
+        <span>Reset Form</span>
+      </button>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="loader"></div>
+      <span>Processing your application...</span>
+    </div>
+  </form>
+</div>

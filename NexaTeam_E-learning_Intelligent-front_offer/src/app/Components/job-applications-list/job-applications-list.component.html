@@ -1,0 +1,120 @@
+<div class="applications-dashboard">
+  <!-- Header Section -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>Job Applications </h1>
+      <p class="subtitle">Track and manage all job applications</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="loader"></div>
+      <p>Loading applications...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div *ngIf="error" class="error-container">
+      <div class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        <p>{{ error }}</p>
+      </div>
+    </div>
+
+    <!-- Applications Grid -->
+    <div *ngIf="!loading && !error" class="applications-grid">
+      <!-- Application Card -->
+      <div *ngFor="let application of applications" class="application-card" [class.expanded]="application.isExpanded">
+        <!-- Card Header -->
+        <div class="card-header">
+          <div class="applicant-info">
+            <h3>{{ application.name }}</h3>
+            <span [class]="'status-badge ' + getStatusClass(application.status)">
+              {{ application.status || 'PENDING' }}
+            </span>
+          </div>
+          <button class="expand-button" (click)="application.isExpanded = !application.isExpanded">
+            <i class="fas" [class.fa-chevron-down]="!application.isExpanded" [class.fa-chevron-up]="application.isExpanded"></i>
+          </button>
+        </div>
+
+        <!-- Card Content -->
+        <div class="card-content">
+          <!-- Contact Information -->
+          <div class="info-section">
+            <h4>Contact Information</h4>
+            <div class="info-grid">
+              <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <div class="info-text">
+                  <label>Email</label>
+                  <span>{{ application.email }}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-phone"></i>
+                <div class="info-text">
+                  <label>Phone</label>
+                  <span>{{ application.telephone }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Documents -->
+          <div class="documents-section">
+            <h4>Documents</h4>
+            <div class="documents-grid">
+              <!-- Resume -->
+              <div class="document-item">
+                <i class="fas fa-file-pdf"></i>
+                <div class="document-info">
+                  <label>Resume</label>
+                  <span>{{ application.resumeUrl ? 'Available' : 'Not available' }}</span>
+                </div>
+                <button *ngIf="application.resumeUrl" 
+                        class="btn-view" 
+                        (click)="viewFile(application.resumeUrl)">
+                  <i class="fas fa-eye"></i>
+                  View
+                </button>
+              </div>
+
+              <!-- Cover Letter -->
+              <div class="document-item">
+                <i class="fas fa-file-alt"></i>
+                <div class="document-info">
+                  <label>Cover Letter</label>
+                  <span>{{ application.coverLetterUrl ? 'Available' : 'Not provided' }}</span>
+                </div>
+                <button *ngIf="application.coverLetterUrl" 
+                        class="btn-view" 
+                        (click)="viewFile(application.coverLetterUrl)">
+                  <i class="fas fa-eye"></i>
+                  View
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Application Details -->
+          <div class="details-section">
+            <div class="submission-date">
+              <i class="fas fa-calendar"></i>
+              <span>Submitted: {{ application.submissionDate | date:'medium' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Applications Message -->
+    <div *ngIf="!loading && !error && applications.length === 0" class="no-data">
+      <i class="fas fa-inbox"></i>
+      <h3>No Applications Yet</h3>
+      <p>There are currently no job applications to display.</p>
+    </div>
+  </div>
+</div>
